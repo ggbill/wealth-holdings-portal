@@ -15,7 +15,8 @@
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "nodemon -x ts-node backend/main.ts",
     "start:frontend": "cd frontend && npm start",
-    "serve": "cd backend && node build/server.js"
+    "serve": "cd backend && node build/server.js",
+    "heroku-prebuild": "cd backend && npm install --dev"
   },
   "dependencies": {
     "ts-node": "^8.4.1",
