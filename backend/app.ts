@@ -1,13 +1,10 @@
-// import * as express from 'express';
-// import * as cors from 'cors';
-// import * as bodyparser from 'body-parser';
-// import { requestLoggerMiddleware } from './request.logger.middleware';
+import * as express from 'express';
+import * as cors from 'cors';
+import * as bodyparser from 'body-parser';
+import { requestLoggerMiddleware } from './request.logger.middleware';
 
-const express = require("express");
-const cors = require("cors");
-const bodyparser = require("body-parser");
 const path = require('path');
-const requestLoggerMiddleware = require ("./request.logger.middleware");
+
 
 const seasonsRouter = require('./routes/seasons');
 const fixturesRouter = require('./routes/fixtures');

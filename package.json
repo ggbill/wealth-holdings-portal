@@ -1,31 +1,23 @@
 {
   "name": "lenton-lightning-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/server.js",
   "engines": {
-      "node": "10.15.0",
-      "npm": "6.4.1"
+    "node": "10.15.0",
+    "npm": "6.4.1"
   },
   "scripts": {
-    "build-ts": "tsc",
-    "postinstall": "npm run build-ts",
-    "start": "npm run serve",
-    "serve": "node dist/server.js",
-    "server": "nodemon -x ts-node main.ts",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "install": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm build",
+    "build:frontend": "cd frontend && npm build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "nodemon -x ts-node backend/main.ts",
+    "start:frontend": "cd frontend && npm start",
+    "serve": "cd backend && node build/server.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@types/cors": "^2.8.6",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongodb": "^3.3.2",
-    "mongoose": "^5.7.1",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
@@ -35,6 +27,7 @@
     "@types/mongoose": "^5.5.18",
     "@types/node": "^12.7.7",
     "concurrently": "^4.1.2",
-    "nodemon": "^1.19.2"
+    "nodemon": "^1.19.2",
+    "typescript": "^3.4.5"
   }
 }

@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-// import * as mongoose from 'mongoose'
+import * as mongoose from 'mongoose'
 import { Schema, Document } from 'mongoose';
 import Team, { ITeam } from './team.model';
 import Season, { ISeason } from './season.model';
