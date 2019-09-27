@@ -2,6 +2,10 @@
   "name": "lenton-lightning-api",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+      "node": "10.15.0",
+      "npm": "6.4.1"
+  },
   "scripts": {
     "start": "tsc && node main.ts",
     "server": "nodemon -x ts-node main.ts",
