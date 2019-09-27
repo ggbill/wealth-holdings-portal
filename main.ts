@@ -12,7 +12,7 @@ server.on('error', (err) => {
 });
 
 server.on('listening', async () => {
-    console.info(`Listening on port ${PORT}`);
+    console.info(`Listening on this port ${PORT}`);
     mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/lightning", {
         useNewUrlParser: true,
         useFindAndModify: false
