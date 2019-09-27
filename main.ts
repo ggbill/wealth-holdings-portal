@@ -1,6 +1,10 @@
-import { app } from './app';
-import * as http from 'http';
-import * as mongoose from 'mongoose';
+// import { app } from './app';
+// import * as http from 'http';
+// import * as mongoose from 'mongoose';
+
+const app = require("./app");
+const http = require("http");
+const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 8080;
 const server = http.createServer(app);
