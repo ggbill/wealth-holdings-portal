@@ -12,4 +12,4 @@ console.info(msg);
 next();
 }
  
-export { requestLoggerMiddleware };
+export default requestLoggerMiddleware;

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { PlayerController } from '../controllers/player.controller';
 
 const router = require('express').Router();
-module.exports = router;
 
 router.get('/', async (request: Request, response: Response) => {
     try {
@@ -51,4 +50,6 @@ router.post('/create', async (request: Request, response: Response) => {
         console.error("Error: ", err)
     }
 });
+
+export default router;
 
