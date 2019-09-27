@@ -2,7 +2,7 @@
 // import * as http from 'http';
 // import * as mongoose from 'mongoose';
 
-const app = require("./app");
+const app = require("./app.ts");
 const http = require("http");
 const mongoose = require("mongoose");
 
