@@ -26,12 +26,21 @@ app.use('/fixtures', fixturesRouter);
 app.use('/players', playersRouter);
 app.use('/teams', teamsRouter);
 
-if (process.env.NODE_ENV === 'production'){
-    app.use(express.static( '../frontend/build '));
+if (process.env.NODE_ENV === 'production') {
+    // app.use(express.static( '../frontend/build '));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'frontend', 'build', 'server.js'));
-    })
+    // app.get('*', (req, res) => {
+    //     res.sendFile(path.join(__dirname, 'frontend', 'build', 'server.js'));
+    // })
+    // Declare the path to frontend's static assets
+    
+    app.use(express.static(path.resolve("..", "frontend", "build")));
+
+    // Intercept requests to return the frontend's static entry point
+    app.get("*", (_, response) => {
+        response.sendFile(path.resolve("..", "frontend", "build", "index.html"));
+    });
+
 }
 
 export default app; 
