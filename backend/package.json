@@ -1,7 +1,10 @@
 {
-  "name": "lenton-lightning-api",
+  "name": "lenton-lightning-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "The nodeJS backend of the Lenton Lightning App",
+  "repository": {
+    "url": "https://github.com/ggbill/lenton-lightning"
+  },
   "main": "dist/server.js",
   "engines": {
     "node": "10.15.0",
@@ -11,7 +14,7 @@
     "start": "webpack --watch",
     "build": "webpack --config webpack.config.js"
   },
-  "author": "",
+  "author": "Bill Hamilton",
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.6",

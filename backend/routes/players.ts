@@ -29,7 +29,7 @@ router.get('/:id', async (request: Request, response: Response) => {
 
 router.put('/:id', async (request: Request, response: Response) => {
     try {
-        const result = await PlayerController.UpdatePlayer(request.params.id, request.body.player);
+        const result = await PlayerController.UpdatePlayer(request.params.id, request.body);
         response.json(result);
         response.end();
     }catch (err){
@@ -39,9 +39,9 @@ router.put('/:id', async (request: Request, response: Response) => {
     }
 });
 
-router.post('/create', async (request: Request, response: Response) => {
+router.post('/', async (request: Request, response: Response) => {
     try {
-        const result = await PlayerController.CreatePlayer(request.body.player);
+        const result = await PlayerController.CreatePlayer(request.body);
         response.json(result);
         response.end();
     }catch (err){

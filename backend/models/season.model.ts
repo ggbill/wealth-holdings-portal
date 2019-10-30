@@ -1,13 +1,18 @@
 import * as mongoose from 'mongoose'
 import { Schema, Document } from 'mongoose';
 import Team, {ITeam} from './team.model';
+import Fixture, { IFixture } from './fixture.model';
+import Player, { IPlayer } from './player.model'
 
 export interface ISeason extends Document {
-    name: String,
-    location: String,
+    name: string,
+    location: string,
     startDate: Date,
     endDate: Date,
-    teams: ITeam[];
+    teamList: ITeam[],
+    playerList: ITeam[],
+    fixtureList: IFixture[]
+    isActive: boolean
 }
 
 const SeasonSchema: Schema = new Schema({
@@ -15,7 +20,10 @@ const SeasonSchema: Schema = new Schema({
   location: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  teams: [{ type: Schema.Types.ObjectId, ref: Team }]
+  teamList: [{ type: Schema.Types.ObjectId, ref: Player }],
+  playerList: [{ type: Schema.Types.ObjectId, ref: Team }],
+  fixtureList: [{ type: Schema.Types.ObjectId, ref: Fixture }],
+  isActive: {type: Boolean, required: true}
 });
 
 // Export the model and return your ISeason interface

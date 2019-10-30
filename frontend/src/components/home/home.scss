@@ -1,0 +1,21 @@
+.header-section{
+    background-color: #E4FF1A;
+    height: 280px;
+    text-align: center;
+    padding: 48px;
+
+    .hero-image {
+        img {
+            height: 180px;
+        }
+    } 
+}
+
+.last-next-fixture-section{
+    position: relative;
+    top: -70px;
+    padding: 0 48px 0 48px;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+

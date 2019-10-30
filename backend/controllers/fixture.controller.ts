@@ -7,70 +7,92 @@ export namespace FixtureController {
     export async function GetFixtures(): Promise<IFixture[]> {
         return new Promise((resolve: (result: IFixture[]) => void, reject: (error: Error) => void) => {
             Fixture
-                .find({}, function (err, result) {
+                .find({ isActive: true }, function (err, result) {
                     if (err) {
                         console.error("Error: " + err);
                     }
                     resolve(result);
                 })
-                .populate('season opposition players motm scorers penaltyScorers'); // expands the nested objects in the output
+                .populate('opposition players.player'); // expands the nested objects in the output
+                // .populate({
+                //     path: 'players',
+                //     model: 'FixturePlayer',
+                //     populate: [{
+                //         path: 'player',
+                //         model: 'Player'
+                //     }]
+                // })
+                // .populate({
+                //     path: 'opposition',
+                //     model: 'Team'
+                // })
+        });
+    }
+
+    export async function GetFixturesForSeason(seasonId: string): Promise<IFixture[]> {
+        return new Promise((resolve: (result: IFixture[]) => void, reject: (error: Error) => void) => {
+            Fixture
+                .find({seasonId: seasonId, isActive: true }, function (err, result) {
+                    if (err) {
+                        console.error("Error: " + err);
+                    }
+                    resolve(result);
+                })
+                .populate('opposition players.player'); // expands the nested objects in the output
         });
     }
 
     export async function GetFixtureById(id: string): Promise<IFixture> {
         return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
-            Fixture.findById(id, function (err, result) {
+            Fixture.findById({ _id: id, isActive: true }, function (err, result) {
                 if (err) {
                     console.error("Error: " + err);
                 }
                 resolve(result);
             })
-                .populate('season opposition players motm scorers penaltyScorers'); // expands the nested team objects in the output
+                .populate('opposition players.player'); // expands the nested objects in the output
+                // .populate({
+                //     path: 'players',
+                //     model: 'FixturePlayer',
+                //     populate: [{
+                //         path: 'player',
+                //         model: 'Player'
+                //     }]
+                // })
+                // .populate({
+                //     path: 'opposition',
+                //     model: 'Team'
+                // })
         });
     }
 
     export async function CreateFixture(fixture: IFixture): Promise<IFixture> {
         return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
-            console.log(fixture);
             Fixture.create({
                 fixtureType: fixture.fixtureType,
                 kickoffDateTime: fixture.kickoffDateTime,
-                isWin: fixture.isWin,
+                result: fixture.result,
                 goalsAgainst: fixture.goalsAgainst,
+                oppositionOwnGoals: fixture.oppositionOwnGoals,
                 isPenalties: fixture.isPenalties,
                 penaltiesAgainst: fixture.penaltiesAgainst,
-                season: fixture.season,
-                opposition: fixture.opposition,
+                opposition: fixture.opposition._id,
                 players: fixture.players,
-                motm: fixture.motm,
-                scorers: fixture.scorers,
-                pentaltyScorers: fixture.pentaltyScorers
-            }, function (err, result: IFixture) {
+                isActive: true
+            }, function (err, result) {      
                 if (err) {
                     console.error("Error: " + err);
                 }
-                resolve(result);
-            });
+                resolve(GetFixtureById(result._id));
+            })
+                
         });
     }
 
     export async function UpdateFixture(id: string, fixture: IFixture): Promise<IFixture> {
         return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
-            Fixture.findByIdAndUpdate(id, {
-                fixtureType: fixture.fixtureType,
-                kickoffDateTime: fixture.kickoffDateTime,
-                isWin: fixture.isWin,
-                goalsAgainst: fixture.goalsAgainst,
-                isPenalties: fixture.isPenalties,
-                penaltiesAgainst: fixture.penaltiesAgainst,
-                season: fixture.season,
-                opposition: fixture.opposition,
-                players: fixture.players,
-                motm: fixture.motm,
-                scorers: fixture.scorers,
-                pentaltyScorers: fixture.pentaltyScorers
-            }, function (err, result) {
-                if (err){
+            Fixture.findByIdAndUpdate(id, { ...fixture }, function (err, result) {
+                if (err) {
                     console.error("Error: " + err);
                 }
                 resolve(result);

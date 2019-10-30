@@ -17,7 +17,6 @@ router.get('/', async (request: Request, response: Response) => {
 
 router.get('/:id', async (request: Request, response: Response) => {
     try {
-        console.log(request.params.id)
         const result = await FixtureController.GetFixtureById(request.params.id);
         response.json(result);
         response.end();
@@ -29,10 +28,8 @@ router.get('/:id', async (request: Request, response: Response) => {
 });
 
 router.put('/:id', async (request: Request, response: Response) => {
-    console.log("id: " + request.params.id);
-    console.log("body: " + JSON.stringify(request.body))
     try {
-        const result = await FixtureController.UpdateFixture(request.params.id, request.body.fixture);
+        const result = await FixtureController.UpdateFixture(request.params.id, request.body);
         response.json(result);
         response.end();
     }catch (err){
@@ -42,10 +39,9 @@ router.put('/:id', async (request: Request, response: Response) => {
     }
 });
 
-router.post('/create', async (request: Request, response: Response) => {
-    console.log("body: " + JSON.stringify(request.body))
+router.post('/', async (request: Request, response: Response) => {
     try {
-        const result = await FixtureController.CreateFixture(request.body.fixture);
+        const result = await FixtureController.CreateFixture(request.body);
         response.json(result);
         response.end();
     }catch (err){

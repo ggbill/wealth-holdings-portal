@@ -6,7 +6,7 @@ export namespace PlayerController {
     export async function GetPlayers(): Promise<IPlayer[]> {
         return new Promise((resolve: (result: IPlayer[]) => void, reject: (error: Error) => void) => {
             Player
-                .find({}, function (err, result) {
+                .find({isActive: true}, function (err, result) {
                     if (err) {
                         console.error("Error: " + err);
                     }
@@ -17,7 +17,7 @@ export namespace PlayerController {
 
     export async function GetPlayerById(id: string): Promise<any> {
         return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
-            Player.findById(id, function (err, result) {
+            Player.findById({_id: id, isActive: true}, function (err, result) {
                 if (err) {
                     console.error("Error: " + err);
                 }
@@ -31,7 +31,8 @@ export namespace PlayerController {
             Player.create({
                 firstName: player.firstName,
                 surname: player.surname,
-                imageUrl: player.imageUrl
+                imageUrl: player.imageUrl,
+                isActive: true
             }, function (err, result: IPlayer) {
                 if (err) {
                     console.error("Error: " + err);
@@ -43,11 +44,7 @@ export namespace PlayerController {
 
     export async function UpdatePlayer(id: string, player: IPlayer): Promise<IPlayer> {
         return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
-            Player.findByIdAndUpdate(id, {
-                firstName: player.firstName,
-                surname: player.surname,
-                imageUrl: player.imageUrl
-            }, function (err, result) {
+            Player.findByIdAndUpdate(id, {...player}, function (err, result) {
                 if (err) {
                     console.error("Error: " + err);
                 }
@@ -55,5 +52,4 @@ export namespace PlayerController {
             });
         });
     }
-
 }

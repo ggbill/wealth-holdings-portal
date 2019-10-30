@@ -1,0 +1,27 @@
+.fixture .button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fixturePlayer-input-wrapper{
+    border: solid 1px black;
+}
+
+.fixture-dialog-content{
+    display: flex;
+    flex-direction: column;
+    .MuiFormControl-root{
+        margin-bottom: 12px;
+    }
+    .table-wrapper{
+        max-height: 100px;
+    } 
+}
+
+.fixture-player-dialog-content{
+    display: flex;
+    flex-direction: column;
+    .MuiFormControl-root{
+        margin-bottom: 12px;
+    }
+}

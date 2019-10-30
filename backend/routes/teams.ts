@@ -17,7 +17,6 @@ router.get('/', async (request: Request, response: Response) => {
 
 router.get('/:id', async (request: Request, response: Response) => {
     try {
-        console.log(request.params.id)
         const result = await TeamController.GetTeamById(request.params.id);
         response.json(result);
         response.end();
@@ -30,7 +29,7 @@ router.get('/:id', async (request: Request, response: Response) => {
 
 router.put('/:id', async (request: Request, response: Response) => {
     try {
-        const result = await TeamController.UpdateTeam(request.params.id, request.body.team);
+        const result = await TeamController.UpdateTeam(request.params.id, request.body);
         response.json(result);
         response.end();
     }catch (err){
@@ -40,9 +39,9 @@ router.put('/:id', async (request: Request, response: Response) => {
     }
 });
 
-router.post('/create', async (request: Request, response: Response) => {
+router.post('/', async (request: Request, response: Response) => {
     try {
-        const result = await TeamController.CreateTeam(request.body.team);
+        const result = await TeamController.CreateTeam(request.body);
         response.json(result);
         response.end();
     }catch (err){

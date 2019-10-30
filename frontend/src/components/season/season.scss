@@ -1,0 +1,66 @@
+
+.season-results-summary-table{
+    padding: 24px;
+
+    table{
+        display: flex;
+        flex-grow: 1;
+        border-collapse: collapse;
+        // border: solid 1px black;
+
+        tbody {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        tr{
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+        }
+
+        tr.fixture-row:not(:last-child){
+            border-bottom: 1px solid rgb(236, 236, 236);
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        td.score-cell{
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-grow: 0.1;
+        }
+
+        td.team-cell{
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-basis: 0;
+
+            .team-name{
+                font-weight: bold;
+                font-size: 1.2em;
+                padding-bottom: 10px;
+            }
+
+            .scorers{
+                padding-bottom: 10px;
+            }
+
+            tr.scorer-row{
+                padding-left: 8px;
+            }
+
+            tr.motm-row{
+                padding-left: 8px;
+                font-style: italic;
+            }
+        }
+
+        td.opposition{
+            text-align: right;
+        }
+    }
+}
