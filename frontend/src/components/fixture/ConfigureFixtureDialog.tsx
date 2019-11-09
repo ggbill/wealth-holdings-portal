@@ -19,9 +19,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FixturePlayerTable from './FixturePlayerTable';
+import { ObjectID } from 'bson';
 
-const ObjectID = require("mongodb").ObjectID;
-type ObjectID = typeof import("mongodb").ObjectID;
+// const ObjectID = require("mongodb").ObjectID;
+// type ObjectID = typeof import("mongodb").ObjectID;
 
 interface InputProps {
     isFixtureDialogOpen: boolean,

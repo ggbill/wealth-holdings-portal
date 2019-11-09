@@ -30,6 +30,7 @@
     "@material-ui/styles": "^4.5.0",
     "@types/auth0-js": "^9.10.6",
     "auth0-js": "^9.11.3",
+    "bson": "^4.0.2",
     "clsx": "^1.0.4",
     "date-fns": "^2.1.0",
     "lodash": "^4.17.15",
