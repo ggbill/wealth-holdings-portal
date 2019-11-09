@@ -1,10 +1,10 @@
-import React from "react"
-import PlayerTable from "./PlayerTable"
+import React, { useState } from "react"
 import './player.scss'
 import useFetch from "../../hooks/useFetch"
 import PlayerCard from "./PlayerCard"
-import { Box, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { Box, Select, FormControl, InputLabel, MenuItem, Button } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import ConfigurePlayerDialog from "./ConfigurePlayerDialog";
 
 interface SeasonStat {
     seasonName: string,
@@ -46,7 +46,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const PlayerAdmin = () => {
+interface InputProps {
+    auth: any
+}
+
+const PlayerAdmin = (props: InputProps) => {
+
+    const { isAuthenticated } = props.auth;
 
     const classes = useStyles();
 
@@ -58,24 +64,19 @@ const PlayerAdmin = () => {
         "http://localhost:8080/seasons"
     );
 
-    const [playerList, setPlayerList] = React.useState<App.Player[]>([]);
-    const [playerCareerStatList, setPlayerCareerStatList] = React.useState<PlayerCareerStat[]>([]);
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [error, setError] = React.useState<string>("");
-    const [orderBy, setOrderBy] = React.useState<string>("CAPS");
-
-
-    const getPlayerList = (): void => {
-        setLoading(true)
-        playersApi.get(null)
-            .then(data => {
-                setPlayerList(data)
-                setLoading(false)
-            })
-            .catch((err: Error) => {
-                setError(err.message)
-            })
-    }
+    const [playerList, setPlayerList] = useState<App.Player[]>([]);
+    const [playerCareerStatList, setPlayerCareerStatList] = useState<PlayerCareerStat[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
+    const [orderBy, setOrderBy] = useState<string>("CAPS");
+    const [isAddPlayerDialogOpen, setIsAddPlayerDialogOpen] = useState<boolean>(false);
+    const [player, setPlayer] = useState({
+        _id: "",
+        firstName: "",
+        surname: "",
+        imageUrl: "",
+        isActive: true
+    });
 
     const GetAllPlayerCareerStats = (): void => {
         setLoading(true)
@@ -93,7 +94,8 @@ const PlayerAdmin = () => {
         setLoading(true)
         playersApi.post(player)
             .then(data => {
-                getPlayerList();
+
+                GetAllPlayerCareerStats()
                 setLoading(false)
             })
             .catch((err: Error) => {
@@ -106,7 +108,7 @@ const PlayerAdmin = () => {
         setLoading(true)
         playersApi.put(player._id, player)
             .then(data => {
-                getPlayerList();
+                GetAllPlayerCareerStats();
                 setLoading(false)
             })
             .catch((err: Error) => {
@@ -117,12 +119,13 @@ const PlayerAdmin = () => {
 
     const deletePlayer = (id): void => {
         let playerToDelete;
-        playerList.forEach(player => {
-            if (player._id === id) {
-                playerToDelete = player;
+        playerCareerStatList.forEach(playerCareerStat => {
+            if (playerCareerStat.player._id === id) {
+                playerToDelete = playerCareerStat.player;
                 playerToDelete.isActive = false;
             }
         });
+
         updatePlayer(playerToDelete);
     }
 
@@ -155,8 +158,26 @@ const PlayerAdmin = () => {
         setPlayerOrder(event.target.value as string, playerCareerStatList)
     };
 
+    const clearPlayerObject = () => {
+        setPlayer({
+            _id: "",
+            firstName: "",
+            surname: "",
+            imageUrl: "",
+            isActive: true
+        })
+    }
+
+    const handleAddPlayerDialogOpen = () => {
+        setIsAddPlayerDialogOpen(true)
+    };
+
+    const handleAddPlayerDialogClose = () => {
+        setIsAddPlayerDialogOpen(false)
+        clearPlayerObject()
+    };
+
     React.useEffect(() => {
-        getPlayerList();
         GetAllPlayerCareerStats();
         // eslint-disable-next-line react-hooks/exhaustive-deps       
     }, []);
@@ -198,16 +219,29 @@ const PlayerAdmin = () => {
                                 caps={item.capTotal}
                                 goals={item.goalTotal}
                                 winPercentage={(item.winTotal / item.capTotal * 100)}
+                                auth={props.auth}
+                                deletePlayer={deletePlayer}
+                                updatePlayer={updatePlayer}
+                                createPlayer={createPlayer}
                             />
                         </div>
                     ))}
                 </Box>
             </div>
-            <PlayerTable
-                players={playerList}
-                deletePlayer={deletePlayer}
+            {isAuthenticated() &&
+                <Button onClick={handleAddPlayerDialogOpen} color="primary">
+                    Add
+            </Button>
+            }
+
+            {/* Create Player Dialog */}
+            <ConfigurePlayerDialog
+                handleClose={handleAddPlayerDialogClose}
                 updatePlayer={updatePlayer}
                 createPlayer={createPlayer}
+                isDialogOpen={isAddPlayerDialogOpen}
+                player={player}
+                isCreatePlayerDialog={true}
             />
         </div>
     )

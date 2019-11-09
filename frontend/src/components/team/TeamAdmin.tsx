@@ -79,7 +79,7 @@ const TeamAdmin = () => {
     }
 
     return (
-        <div className="team">
+        <div className="content team">
             <h2>Team List</h2>
             <CreateTeamTable
                 teams={teamList}

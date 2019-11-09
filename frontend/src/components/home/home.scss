@@ -1,21 +1,30 @@
-.header-section{
-    background-color: #E4FF1A;
-    height: 280px;
-    text-align: center;
-    padding: 48px;
+.hero-image {
+    img {
+        height: 150px;
+        margin: 0 0 48px 0;
+    }
+} 
 
-    .hero-image {
-        img {
-            height: 180px;
-        }
-    } 
+.position-relative{
+    position: relative;
+    top: -70px;
 }
 
 .last-next-fixture-section{
-    position: relative;
-    top: -70px;
-    padding: 0 48px 0 48px;
-    max-width: 1080px;
-    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+.fixture-card-div{
+    margin-bottom: 6px;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .hero-image{
+        img {
+            height: 100px;
+            margin: 0 0 48px 0;
+        }
+    }
 }
 

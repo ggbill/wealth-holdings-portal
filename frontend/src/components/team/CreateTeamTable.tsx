@@ -87,17 +87,14 @@ const CreateTeamTable = (props: InputProps) => {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell align="right">Name</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {props.teams.map((item: App.Team) => (
                             <TableRow key={item._id}>
-                                <TableCell component="th" scope="row">
-                                    {item._id}
-                                </TableCell>
-                                <TableCell align="right">{item.name}</TableCell>
+                                <TableCell>{item.name}</TableCell>
                                 <TableCell align="right">
                                     <Button variant="text" onClick={() => handleEditTeamDialogOpen(item)}>
                                         <EditIcon />

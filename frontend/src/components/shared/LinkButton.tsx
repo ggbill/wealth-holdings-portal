@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import Button from "@material-ui/core/Button"
-import '../App.scss'
+import '../../App.scss'
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({

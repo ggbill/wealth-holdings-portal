@@ -25,3 +25,223 @@
         margin-bottom: 12px;
     }
 }
+
+.fixture-card{
+    display: flex;
+    flex-direction: row;
+
+    .desktop-view{
+        display: block;
+    }
+
+    .mobile-view{
+        display: none;
+    }
+
+    .MuiCard-root{
+        width: 100%;
+    }
+
+    .MuiCardContent-root{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .team-name{
+        font-weight: bold;
+        font-size: 1.2em;
+        padding-bottom: 10px;
+    }
+
+    .score{
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2em;
+        flex-grow: 0.1;
+    }
+
+    .scorers{
+        padding-bottom: 10px;
+        margin-left: 8px;
+        a{
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+
+    .motm{
+        font-style: italic;
+        margin-left: 8px;
+        a{
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+
+    .left-content{
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+
+    .centre-content{
+        display: flex;
+        flex-grow: 1;
+        flex-basis: 0;
+        justify-content: center;
+    }
+
+    .right-content{
+        flex-grow: 1;
+        flex-basis: 0;
+        text-align: right;
+    }
+
+    .kickoff-wrapper{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .score-wrapper{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        padding-bottom: 10px;
+    }
+
+    .score-kickoff-wrapper{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 1;
+    }
+}
+
+.last-next-fixture-section{
+    flex-grow: 1;
+
+    .MuiPaper-root{
+        padding: 16px;
+        flex-grow: 1;
+        flex-basis: 0;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 12px;
+        &:first-child{
+            margin-right: 12px;
+        }
+    }
+
+    .row{
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .score{
+        font-size: 1.4em;
+    }
+
+    .mobile-view{
+        display: none;
+    }
+
+    .desktop-view{
+        display: flex;
+    }
+
+    .win {
+        color: #2b9813;
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+
+    .loss{
+        color: red;
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+    
+    .draw {
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .last-next-fixture-section{
+        .MuiBox-root{
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .MuiPaper-root:first-child{
+            margin-right: 0;
+        }
+    }
+
+    .fixture-card{
+        .MuiCardContent-root{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            >div:not(:last-child){
+                padding-bottom: 12px;
+
+            }
+        }
+
+        .team-name, .scorers{
+            padding-bottom: 0
+        }
+
+        .left-content, .centre-content{
+            padding-bottom: 12px; 
+            text-align: center          
+        }
+
+        .right-content{
+            text-align: center;
+        }
+
+        .desktop-view{
+            display: none;
+        }
+
+        .mobile-view{
+            display: flex;
+            justify-content: center;
+        }
+
+        .lightning-wrapper{
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .last-next-fixture-section{
+        .label{
+            display: none;
+        }
+
+        .scores{
+            flex-direction: column;
+        }
+
+        .desktop-view{
+            display: none;
+        }
+
+        .mobile-view{
+            display: unset;
+        }
+    }
+}

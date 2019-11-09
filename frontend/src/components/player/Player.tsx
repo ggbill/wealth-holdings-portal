@@ -2,6 +2,7 @@ import React from "react"
 import './player.scss'
 import useFetch from "../../hooks/useFetch"
 import PlayerCareerStatsTable from "./PlayerCareerStatsTable";
+import PlayerHeader from "./PlayerHeader";
 
 const Player = ({ match }) => {
 
@@ -54,8 +55,11 @@ const Player = ({ match }) => {
 
     return (
         <>
-            <h3>Name: {player.firstName} {player.surname}</h3>
-            <PlayerCareerStatsTable playerId={player._id} />
+
+            <PlayerHeader player={player} />
+            <div className="content">
+                <PlayerCareerStatsTable playerId={player._id} />
+            </div>
         </>
     )
 }

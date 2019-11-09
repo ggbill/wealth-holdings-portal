@@ -1,48 +1,6 @@
-import './home.scss'
 import React, { useState } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { Paper, Grid, Box } from '@material-ui/core'
 import moment from 'moment'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            flexGrow: 1,
-            margin: '0 12px 12px 12px',
-            minWidth: 300,
-            fontWeight: "bold"
-
-        },
-        win: {
-            color: "#2b9813",
-            fontWeight: "bold",
-            fontSize: "1.4em"
-        },
-        loss: {
-            color: "red",
-            fontWeight: "bold",
-            fontSize: "1.4em"
-        },
-        draw: {
-            fontWeight: "bold",
-            fontSize: "1.4em"
-        },
-        score: {
-            fontSize: "1.4em"
-        },
-        row: {
-            height: 40,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-        }
-    }),
-);
 
 interface InputProps {
     fixtureList: App.Fixture[];
@@ -166,15 +124,13 @@ const LastNextFixturesSection = (props: InputProps) => {
         return goalsScored
     }
 
-    const classes = useStyles();
-
     const getResultClass = () => {
         if (previousFixture.result == "WIN") {
-            return classes.win
+            return "win"
         } else if (previousFixture.result == "LOSS") {
-            return classes.loss
+            return "loss"
         } else {
-            return classes.draw
+            return "draw"
         }
     }
 
@@ -202,7 +158,7 @@ const LastNextFixturesSection = (props: InputProps) => {
 
         previousFixture.players.forEach(fixturePlayer => {
             if (fixturePlayer.goalCount > topScorer.goalCount) {
-                if (fixturePlayer.goalCount > 1){
+                if (fixturePlayer.goalCount > 1) {
                     isMoreThanOneGoalScored = true
                 }
                 topScorerList = []
@@ -237,11 +193,11 @@ const LastNextFixturesSection = (props: InputProps) => {
         });
 
         return (
-            <div className={classes.row}>
+            <div className="row">
                 <span style={{ display: isMoreThanOneGoalScored ? 'flex' : 'none' }}>{topScorerListString}</span>
             </div>
 
-        ) 
+        )
     }
 
     React.useEffect(() => {
@@ -250,31 +206,61 @@ const LastNextFixturesSection = (props: InputProps) => {
     }, [props.fixtureList]);
 
     return (
-        <div className={classes.root} >
-            <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly" alignItems="center">
-                <Paper className={classes.paper}>
+        <div className="last-next-fixture-section" >
+            {/* <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly" alignItems="center"> */}
+            <Box display="flex" flexDirection="row" justifyContent="space-evenly" alignItems="center">
+                <Paper>
                     <h2>Latest Result</h2>
-                    <div className={classes.row}>
-                        <span>Lenton Lightning <span className={getResultClass()}>{calculateGoalsScored()}</span> - <span className={classes.score}>{previousFixture.goalsAgainst}</span> {previousFixture.opposition.name}</span>
+                    <div className="row desktop-view">
+                        <span className="lightning-score">
+                            Lenton Lightning&nbsp;
+                            <span className={getResultClass()}>
+                                {calculateGoalsScored()}
+                            </span>
+                        </span>
+                        <span>
+                            &nbsp;-&nbsp;
+                        </span>
+                        <span className="opposition-score">
+                            <span className="score">
+                                {previousFixture.goalsAgainst}&nbsp;
+                            </span>
+                            {previousFixture.opposition.name}
+                        </span>
                     </div>
-                    <div className={classes.row}>
+                    <div className="mobile-view">
+                        <div className="row">
+                            <span className="lightning-score">
+                                Lenton Lightning:&nbsp;
+                            <span className={getResultClass()}>
+                                    {calculateGoalsScored()}
+                                </span>
+                            </span>
+                        </div>
+                        <div className="row">
+                            <span className="opposition-score">
+                                {previousFixture.opposition.name}:&nbsp;
+                                <span className="score">
+                                    {previousFixture.goalsAgainst}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div className="row">
                         <span>MOTM: {getMotm()}</span>
                     </div>
                     {getTopScorers()}
-                    {/* <div className={classes.row}>
-                        <span>{getTopScorers()}</span>
-                    </div> */}
                 </Paper>
-                <Paper className={classes.paper}>
+                <Paper>
                     <h2>Next Fixture</h2>
-                    <div className={classes.row}>
-                        <span>Opposition: {nextFixture.opposition.name}</span>
+                    <div className="row">
+                        <span className="label">Opposition:&nbsp;</span><span>{nextFixture.opposition.name}</span>
                     </div>
-                    <div className={classes.row}>
-                        <span>Kickoff: {moment(nextFixture.kickoffDateTime).format("HH:mm D/MM/YYYY")}</span>
+                    <div className="row">
+                        <span className="label">Kickoff:&nbsp;</span><span>{moment(nextFixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
                     </div>
-                    <div className={classes.row}>
-                        <span>Fixture Type: {nextFixture.fixtureType}</span>
+                    <div className="row">
+                        <span className="label">Fixture Type:&nbsp;</span><span>{nextFixture.fixtureType}</span>
                     </div>
                 </Paper>
             </Box>

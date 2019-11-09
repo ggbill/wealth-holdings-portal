@@ -122,23 +122,6 @@ class FixtureAdmin extends Component<{}, FixtureState> {
             })
     }
 
-    // getPlayers = (): void => {
-    //     fetch('http://localhost:8080/players/', {
-    //         method: 'GET',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //         }
-    //     })
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             this.setState({ playerList: data })
-    //         })
-    //         .catch(error => {
-    //             console.log(`something didnt work: ${error}`);
-    //         })
-    // }
-
     getTeams = (): void => {
         fetch('http://localhost:8080/teams/', {
             method: 'GET',

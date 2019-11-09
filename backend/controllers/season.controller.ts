@@ -11,6 +11,7 @@ const moment = require('moment')
 interface SeasonStat {
     seasonName: string,
     seasonId: string,
+    seasonStartDate: Date,
     capCount: number,
     goalCount: number,
     motmCount: number,
@@ -154,7 +155,7 @@ export namespace SeasonController {
             // Create first instance of each player
             season.fixtureList.forEach((fixture: IFixture) => {
                 fixture.players.forEach((fixturePlayer: IFixturePlayer) => {
-                    let playerSeasonStat: PlayerSeasonStat = { player: {}, seasonStat: { seasonName: "", seasonId: "", capCount: 0, goalCount: 0, motmCount: 0, winCount: 0, lossCount: 0 } };
+                    let playerSeasonStat: PlayerSeasonStat = { player: {}, seasonStat: { seasonName: "", seasonId: "", seasonStartDate: new Date(), capCount: 0, goalCount: 0, motmCount: 0, winCount: 0, lossCount: 0 } };
 
                     var index = playerSeasonStatList.findIndex(x => x.player._id === fixturePlayer.player._id)
 
@@ -200,6 +201,7 @@ export namespace SeasonController {
                 let seasonStat: SeasonStat = {
                     seasonName: season.name,
                     seasonId: season._id,
+                    seasonStartDate: season.startDate,
                     capCount: 0,
                     goalCount: 0,
                     lossCount: 0,
@@ -260,6 +262,7 @@ export namespace SeasonController {
                     let seasonStat: SeasonStat = {
                         seasonName: season.name,
                         seasonId: season._id,
+                        seasonStartDate: season.startDate,
                         capCount: 0,
                         goalCount: 0,
                         lossCount: 0,

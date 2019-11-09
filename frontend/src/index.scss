@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+html, body, #root {
+    height: 100%
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
+    background-color: #F1F1F1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+}
+
+.MuiTableCell-root{
+    font-family: 'Quicksand', sans-serif!important;
+}
+
+

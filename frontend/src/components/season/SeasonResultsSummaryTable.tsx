@@ -84,13 +84,11 @@ const generateMotm = (fixture: App.Fixture) => {
 
     if (fixture.players.length) {
         fixture.players.forEach(fixturePlayer => {
-            if (fixturePlayer.goalCount > 0) {
-                if (fixturePlayer.isMotm) {
-                    motm = `MoTM: ${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
-                }
+            if (fixturePlayer.isMotm) {
+                motm = `MoTM: ${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
             }
         })
-    } 
+    }
     return motm
 }
 
