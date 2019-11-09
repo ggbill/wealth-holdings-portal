@@ -1,8 +1,3 @@
-// const ObjectID = require("mongodb").ObjectID;
-// type ObjectID= typeof import("mongodb").ObjectID;
-
-// TODO - set all _ids to type ObjectID
-
 declare module App {
 
     interface Season{
