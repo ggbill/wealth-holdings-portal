@@ -36,10 +36,10 @@ const PlayerCareerStatsTable = (props: InputProps) => {
         }
     }
 
-    
-
+    const url = process.env.PUBLIC_URL || "http://localhost:8080"
+  
     const getPlayerCareerStats = (): void => {
-        fetch(`http://localhost:8080/seasons/${props.playerId}/playerCareerStats`, {
+        fetch(`${url}/${props.playerId}/playerCareerStats`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

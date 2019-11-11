@@ -8,8 +8,6 @@ const useFetch = (collection: string) => {
     const url = process.env.PUBLIC_URL || "http://localhost:8080"
     const stub = `${url}/${collection}`
 
-    console.log(`stub: ${stub}`)
-
     const defaultHeader = {
         Accept: "application/json",
         "Content-Type": "application/json"
