@@ -17,9 +17,7 @@ const SeasonAdmin = (props: InputProps) => {
 
     const { isAuthenticated } = props.auth;
 
-    const seasonsApi = useFetch(
-        "http://localhost:8080/seasons"
-    );
+    const seasonsApi = useFetch("seasons");
 
     const [season, setSeason] = useState<App.Season>({
         _id: "",

@@ -8,9 +8,7 @@ import _ from "lodash"
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-const seasonsApi = useFetch(
-    "http://localhost:8080/seasons"
-);
+const seasonsApi = useFetch("seasons");
 
 interface SeasonStat {
     season: {},

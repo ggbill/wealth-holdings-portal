@@ -25,9 +25,7 @@ const Home = () => {
 
     const classes = useStyles();
 
-    const seasonsApi = useFetch(
-        "http://localhost:8080/seasons"
-    );
+    const seasonsApi = useFetch("seasons");
 
     const [currentSeason, setCurrentSeason] = useState<App.Season>({
         _id: "",

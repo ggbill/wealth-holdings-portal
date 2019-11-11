@@ -9,9 +9,7 @@ const Fixture = ({ match }) => {
         match.params.id
     );
 
-    const fixturesApi = useFetch(
-        "http://localhost:8080/fixtures/"
-    );
+    const fixturesApi = useFetch("fixtures");
 
     const [fixture, setFixture] = React.useState<App.Fixture>({
         _id: "",

@@ -4,7 +4,10 @@ interface Options {
     body: any 
 }
 
-const useFetch = (stub: string) => {
+const useFetch = (collection: string) => {
+    const url = process.env.PUBLIC_URL || "http://localhost:8080"
+    const stub = `${url}/${collection}`
+
     const defaultHeader = {
         Accept: "application/json",
         "Content-Type": "application/json"

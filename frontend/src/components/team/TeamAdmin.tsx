@@ -5,9 +5,7 @@ import useFetch from "../../hooks/useFetch"
 
 const TeamAdmin = () => {
 
-    const teamsApi = useFetch(
-        "http://localhost:8080/teams/"
-    );
+    const teamsApi = useFetch("teams");
 
     const [teamList, setTeamList] = React.useState<App.Team[]>([]);
     const [loading, setLoading] = React.useState<boolean>(false);

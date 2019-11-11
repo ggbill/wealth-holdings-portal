@@ -10,9 +10,7 @@ const Player = ({ match }) => {
         match.params.id
     );
 
-    const playersApi = useFetch(
-        "http://localhost:8080/players/"
-    );
+    const playersApi = useFetch("players");
 
     const [player, setPlayer] = React.useState<App.Player>({
         _id: "",

@@ -23,13 +23,9 @@ const Season = (props: InputProps) => {
     const { isAuthenticated } = props.auth;
     const { id } = useParams();
 
-    const seasonsApi = useFetch(
-        "http://localhost:8080/seasons"
-    );
+    const seasonsApi = useFetch("seasons");
 
-    const fixturesApi = useFetch(
-        "http://localhost:8080/fixtures"
-    );
+    const fixturesApi = useFetch("fixtures");
 
     const [seasonId] = React.useState<string>(
         // match.params.id
