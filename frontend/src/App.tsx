@@ -13,6 +13,7 @@ import Player from './components/player/Player'
 import Footer from './components/shared/Footer'
 import Auth from './auth/Auth';
 import Callback from './components/callback'
+import Loading from './components/shared/Loading'
 
 const auth = new Auth();
 
@@ -56,6 +57,7 @@ const App = () => {
                         return <Callback {...props} />;
                     }}
                     />
+                    <Route path="/loading" component={Loading} />
                     <Route component={Error} />
                 </Switch>
             </div>

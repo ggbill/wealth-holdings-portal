@@ -14,6 +14,7 @@ import SeasonHeader from "./SeasonHeader"
 import {
     useParams
 } from "react-router-dom";
+import Loading from "../shared/Loading"
 
 interface InputProps {
     auth: any
@@ -270,7 +271,7 @@ const Season = (props: InputProps) => {
 
     if (loading) {
         return (
-            <i>Loading season...</i>
+            <Loading />
         )
     }
 

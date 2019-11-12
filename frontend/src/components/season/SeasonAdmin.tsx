@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import { Button } from "@material-ui/core"
 import ConfigureSeasonDialog from "./ConfigureSeasonDialog"
+import Loading from "../shared/Loading"
 
 interface InputProps {
     auth: any
@@ -157,7 +158,7 @@ const SeasonAdmin = (props: InputProps) => {
 
     if (loading) {
         return (
-            <i>Loading seasons...</i>
+            <Loading />
         )
     }
 

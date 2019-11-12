@@ -2,6 +2,7 @@ import React from "react"
 import './fixture.scss'
 import FixturePlayerUnorderedList from "../player/FixturePlayerUnorderedList";
 import useFetch from "../../hooks/useFetch"
+import Loading from "../shared/Loading";
 
 const Fixture = ({ match }) => {
 
@@ -64,7 +65,7 @@ const Fixture = ({ match }) => {
 
     if (loading) {
         return (
-            <i>Loading fixture...</i>
+            <Loading />
         )
     }
 

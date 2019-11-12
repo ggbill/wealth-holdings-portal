@@ -5,6 +5,7 @@ import useFetch from "../../hooks/useFetch"
 import moment from 'moment'
 import LastNextFixturesSection from '../fixture/LastNextFixturesSection'
 import FixtureCard from '../fixture/FixtureCard'
+import Loading from '../shared/Loading';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -92,7 +93,7 @@ const Home = () => {
 
     if (loading) {
         return (
-            <i>Loading...</i>
+            <Loading />
         )
     }
 

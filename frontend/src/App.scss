@@ -21,6 +21,18 @@
   color: #09d3ac;
 }
 
+.loading-wrapper{
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    h2 {
+        margin: 0;
+    }
+}
+
 .menu-bar{
 
     .MuiAppBar-root{
@@ -30,9 +42,6 @@
             box-shadow: none;
         }
     }
-
-
-
 
     .MuiAppBar-colorPrimary{
         flex-grow: 1;
@@ -95,7 +104,6 @@
 }
 
 .full-height-content{
-    // min-height: calc(100vh - 166px); /* will cover the 100% of viewport minus (header + footer) */
     min-height: calc(100vh - 102px); /* will cover the 100% of viewport minus (header + footer) */
     overflow: hidden;
     display: block;
@@ -152,6 +160,10 @@
 @media only screen and (max-width: 600px) {
     .content{
         padding: 12px;
+    }
+
+    .full-height-content{
+        min-height: calc(100vh - 176px); /* will cover the 100% of viewport minus (header + footer) */
     }
 
     .menu-items{

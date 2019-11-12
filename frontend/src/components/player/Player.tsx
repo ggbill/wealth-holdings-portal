@@ -3,6 +3,7 @@ import './player.scss'
 import useFetch from "../../hooks/useFetch"
 import PlayerCareerStatsTable from "./PlayerCareerStatsTable";
 import PlayerHeader from "./PlayerHeader";
+import Loading from "../shared/Loading";
 
 const Player = ({ match }) => {
 
@@ -41,7 +42,7 @@ const Player = ({ match }) => {
 
     if (loading) {
         return (
-            <i>Loading player...</i>
+            <Loading />
         )
     }
 

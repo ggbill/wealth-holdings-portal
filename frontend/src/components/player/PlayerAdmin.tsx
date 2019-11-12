@@ -5,6 +5,7 @@ import PlayerCard from "./PlayerCard"
 import { Box, Select, FormControl, InputLabel, MenuItem, Button } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import ConfigurePlayerDialog from "./ConfigurePlayerDialog";
+import Loading from "../shared/Loading";
 
 interface SeasonStat {
     seasonName: string,
@@ -180,7 +181,7 @@ const PlayerAdmin = (props: InputProps) => {
 
     if (loading) {
         return (
-            <i>Loading players...</i>
+            <Loading />
         )
     }
 

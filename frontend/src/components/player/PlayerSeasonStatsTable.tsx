@@ -7,6 +7,7 @@ import useFetch from "../../hooks/useFetch"
 import _ from "lodash"
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Loading from "../shared/Loading";
 
 const seasonsApi = useFetch("seasons");
 
@@ -102,7 +103,7 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
 
     if (loading) {
         return (
-            <i>Loading season...</i>
+            <Loading />
         )
     }
 
