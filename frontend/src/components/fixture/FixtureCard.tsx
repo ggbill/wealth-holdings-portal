@@ -149,7 +149,7 @@ const FixtureCard = (props: InputProps) => {
                     </div>
                     <div className="lightning-wrapper">
                         {props.fixture.players.length ?
-                            <span className="team-name">Lenton Lightning FC: {getLightningGoals()}</span> :
+                            <span className="team-name">Lenton Lightning FC: <span className={getResultClass()}>{getLightningGoals()}</span></span> :
                             <span className="team-name">Lenton Lightning FC</span>
                         }
                         <div className="scorers">
