@@ -10,6 +10,16 @@ interface InputProps {
 
 const FixtureCard = (props: InputProps) => {
 
+    const getResultClass = () => {
+        if (props.fixture.result == "WIN") {
+            return "win"
+        } else if (props.fixture.result == "LOSS") {
+            return "loss"
+        } else {
+            return "draw"
+        }
+    }
+
     const getLightningGoals = (): number => {
         if (!props.fixture.oppositionOwnGoals) {
             props.fixture.oppositionOwnGoals = 0
@@ -31,7 +41,7 @@ const FixtureCard = (props: InputProps) => {
             return (
                 <div className="score-kickoff-wrapper">
                     <div className="score-wrapper desktop-view">
-                        <span className="score">{getLightningGoals()}</span>
+                        <span className={`score ${getResultClass()}`}>{getLightningGoals()}</span>
                         <span className="score">-</span>
                         <span className="score">{props.fixture.goalsAgainst}</span>
                     </div>

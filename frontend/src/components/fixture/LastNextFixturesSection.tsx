@@ -166,7 +166,7 @@ const LastNextFixturesSection = (props: InputProps) => {
                 }
                 topScorerList = []
                 topScorer.goalCount = fixturePlayer.goalCount
-                topScorer.name = `${fixturePlayer.player.firstName} ${fixturePlayer.player.surname}`
+                topScorer.name = `${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
                 topScorer.id = fixturePlayer.player._id
                 topScorerList.push(topScorer)
             } else if (fixturePlayer.goalCount == topScorer.goalCount) {
