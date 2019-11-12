@@ -191,7 +191,7 @@ const PlayerAdmin = (props: InputProps) => {
     }
 
     return (
-        <div className="content">
+        <div className="content menu-bar-margin">
             <h2>Player List</h2>
             <FormControl className={classes.formControl}>
                 <InputLabel id="order-by-select">Sort</InputLabel>

@@ -1,5 +1,4 @@
-import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import React, { useRef, useState, useEffect } from 'react'
 import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core'
 import LinkButton from './LinkButton'
 import { ReactComponent as LightningSVG } from '../../images/lightning-logo.svg'
@@ -12,23 +11,26 @@ interface InputProps {
     auth: any
 }
 
-// const useStyles = makeStyles((theme: Theme) =>
-//     createStyles({
-//         linkButton: {
-//             color: 'black',
-//             fontFamily: 'Quicksand, sans-serif',
-//             fontWeight: 'bold',
-//             "&:hover": {
-//                 backgroundColor: "#E4FF1A",
-//                 color: '#84A07C'
-//             }
-//         }
-//     }),
-// );
-
 const MenuBar = (props: InputProps) => {
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [isShadow, setIsShadow] = useState(false)
+
+    const handleScroll = () => {
+        if (window.pageYOffset > 20){
+            setIsShadow(true)
+        }else{
+            setIsShadow(false)
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+    
+        return () => {
+          window.removeEventListener('scroll', () => handleScroll);
+        };
+      }, []);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -47,7 +49,7 @@ const MenuBar = (props: InputProps) => {
     return (
         <>
             <div className="menu-bar">
-                <AppBar position="static">
+                <AppBar className={isShadow ? 'shadow' : 'no-shadow' }>
                     <Toolbar>
                         <Link className="clickable-icon" to={'/'}>
                             <LightningSVG className="logo" />
@@ -93,14 +95,6 @@ const MenuBar = (props: InputProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {/* <MenuItem><LinkButton className="link-button" to='/season-admin'>Seasons</LinkButton></MenuItem>
-                <MenuItem>
-                    {isAuthenticated() &&
-                        <LinkButton className="link-button" to='/teams'>Teams</LinkButton>
-                    }
-                </MenuItem>
-                <MenuItem><LinkButton className="link-button" to='/players'>Players</LinkButton></MenuItem>
-                <MenuItem onClick={logOut}>Log Out</MenuItem> */}
                 <Link to='/season-admin' style={{ textDecoration: 'none', color: 'black' }}>
                     <MenuItem onClick={handleClose}>Seasons</MenuItem>
                 </Link>
@@ -115,11 +109,6 @@ const MenuBar = (props: InputProps) => {
                 {isAuthenticated() &&
                     <MenuItem onClick={logOut}>Log Out</MenuItem>
                 }
-
-
-
-
-
             </Menu>
         </>
     )

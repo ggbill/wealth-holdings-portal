@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Box } from '@material-ui/core'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 interface InputProps {
     fixtureList: App.Fixture[];
@@ -135,22 +136,24 @@ const LastNextFixturesSection = (props: InputProps) => {
     }
 
     const getMotm = () => {
-        let motm = "N/A"
+        let motm: any = "N/A"
         previousFixture.players.forEach(fixturePlayer => {
             if (fixturePlayer.isMotm) {
-                motm = `${fixturePlayer.player.firstName} ${fixturePlayer.player.surname}`
+                motm = <Link to={'/player/' + fixturePlayer.player._id}>{fixturePlayer.player.firstName.charAt(0)}. {fixturePlayer.player.surname}</Link>
             }
         });
         return motm
     }
 
-    const getTopScorers = () => {
+    const getTopScorers = (): any => {
         interface TopScorer {
+            id: string,
             name: string,
             goalCount: number
         }
         let topScorerList: TopScorer[] = []
         let topScorer: TopScorer = {
+            id: "",
             name: "",
             goalCount: 0
         }
@@ -164,37 +167,45 @@ const LastNextFixturesSection = (props: InputProps) => {
                 topScorerList = []
                 topScorer.goalCount = fixturePlayer.goalCount
                 topScorer.name = `${fixturePlayer.player.firstName} ${fixturePlayer.player.surname}`
+                topScorer.id = fixturePlayer.player._id
                 topScorerList.push(topScorer)
             } else if (fixturePlayer.goalCount == topScorer.goalCount) {
-                topScorer = { name: "", goalCount: 0 }
+                topScorer = { id: "", name: "", goalCount: 0 }
                 topScorer.goalCount = fixturePlayer.goalCount
-                topScorer.name = `${fixturePlayer.player.firstName} ${fixturePlayer.player.surname}`
+                topScorer.name = `${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
+                topScorer.id = fixturePlayer.player._id
 
                 topScorerList.push(topScorer)
             }
         });
 
-        let topScorerListString = ""
+        let topScorerListString: any = ""
 
         if (topScorerList.length > 1) {
-            topScorerListString = "Top Scorers: "
+            topScorerListString = "Top Scorers:"
         } else if (topScorerList.length == 1) {
-            topScorerListString = "Top Scorer: "
+            topScorerListString = "Top Scorer:"
         } else {
             topScorerListString = "N/A"
         }
 
-        topScorerList.forEach((element, index) => {
-            if ((index + 1) < topScorerList.length) {
-                topScorerListString += `${element.name}, `
-            } else {
-                topScorerListString += `${element.name} [${element.goalCount}]`
-            }
-        });
-
         return (
             <div className="row">
-                <span style={{ display: isMoreThanOneGoalScored ? 'flex' : 'none' }}>{topScorerListString}</span>
+                <span style={{ display: isMoreThanOneGoalScored ? 'flex' : 'none' }}>
+                    {topScorerListString}&nbsp;
+
+                    {
+                        topScorerList.map((element, index) => {
+                            if ((index + 1) < topScorerList.length) {
+                                    return(<Link to={'/player/' + element.id}>{element.name}</Link>)
+                                } else {
+                                    return(<div><Link to={'/player/' + element.id}>{element.name}</Link> [{element.goalCount}]</div>)
+                            }
+                        })
+                    }
+    
+    
+                </span>
             </div>
 
         )

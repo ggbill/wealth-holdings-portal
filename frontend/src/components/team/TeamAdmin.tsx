@@ -77,7 +77,7 @@ const TeamAdmin = () => {
     }
 
     return (
-        <div className="content team">
+        <div className="content team menu-bar-margin">
             <h2>Team List</h2>
             <CreateTeamTable
                 teams={teamList}

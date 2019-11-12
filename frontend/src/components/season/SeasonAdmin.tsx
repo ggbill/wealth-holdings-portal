@@ -168,7 +168,7 @@ const SeasonAdmin = (props: InputProps) => {
     }
 
     return (
-        <div className="content season">
+        <div className="content menu-bar-margin season">
             <div className="current-season-wrapper">
                 <h2>Current Season</h2>
                 <div className="season-card-div" key={currentSeason._id}>

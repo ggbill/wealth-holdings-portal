@@ -22,6 +22,18 @@
 }
 
 .menu-bar{
+
+    .MuiAppBar-root{
+        position: fixed;
+
+        &.no-shadow {
+            box-shadow: none;
+        }
+    }
+
+
+
+
     .MuiAppBar-colorPrimary{
         flex-grow: 1;
         background-color: #E4FF1A;
@@ -69,6 +81,7 @@
     background-color: #E4FF1A;
     text-align: center;
     padding: 48px 0;
+    margin-top: 56px;
 }
 
 .content{
@@ -77,8 +90,13 @@
     margin: 0 auto;
 }
 
+.menu-bar-margin{
+    margin-top: 56px;
+}
+
 .full-height-content{
-    min-height: calc(100vh - 166px); /* will cover the 100% of viewport minus (header + footer) */
+    // min-height: calc(100vh - 166px); /* will cover the 100% of viewport minus (header + footer) */
+    min-height: calc(100vh - 102px); /* will cover the 100% of viewport minus (header + footer) */
     overflow: hidden;
     display: block;
 }
