@@ -114,7 +114,7 @@ const FixtureCard = (props: InputProps) => {
     }
 
     return (
-        <div className="fixture-card">
+        <div key={props.fixture._id} className="fixture-card">
             <Card className="desktop-view">
                 <CardContent>
                     <div className="left-content">
