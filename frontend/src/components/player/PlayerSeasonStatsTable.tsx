@@ -73,33 +73,33 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
         setSeasonPlayerStatList(_.orderBy(playerSeasonStatList, columnToSort, sortDirection))
     }, [columnToSort, sortDirection])
 
-    const useStyles = makeStyles((theme: Theme) =>
-        createStyles({
-            root: {
-                width: '100%',
-                marginTop: theme.spacing(3),
-                overflowX: 'auto',
-            },
-            table: {
-                minWidth: 650,
-                tableLayout: 'fixed'
-            },
-            firstTableHeaderCell: {
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer"
-            },
-            tableHeaderCell: {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                cursor: "pointer"
-            }
-            
-        }),
-    );
+    // const useStyles = makeStyles((theme: Theme) =>
+    //     createStyles({
+    //         root: {
+    //             width: '100%',
+    //             marginTop: theme.spacing(3),
+    //             overflowX: 'auto',
+    //         },
+    //         table: {
+    //             minWidth: 650,
+    //             tableLayout: 'fixed'
+    //         },
+    //         firstTableHeaderCell: {
+    //             display: "flex",
+    //             alignItems: "center",
+    //             cursor: "pointer"
+    //         },
+    //         tableHeaderCell: {
+    //             display: "flex",
+    //             alignItems: "center",
+    //             justifyContent: "flex-end",
+    //             cursor: "pointer"
+    //         }
 
-    const classes = useStyles();
+    //     }),
+    // );
+
+    // const classes = useStyles();
 
     if (loading) {
         return (
@@ -115,12 +115,12 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
 
     return (
         <>
-            <Paper className={classes.root}>
-                <Table className={classes.table} size="small">
+            <Paper className="stats-table-wrapper">
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <div onClick={() => handleSort("player.surname")} className={classes.firstTableHeaderCell}>
+                                <div onClick={() => handleSort("player.surname")} className="firstTableHeaderCell">
                                     <span>Player</span>
                                     {
                                         columnToSort === "player.surname" ? (
@@ -129,8 +129,8 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
                                     }
                                 </div>
                             </TableCell>
-                            <TableCell align="right">
-                                <div onClick={() => handleSort("seasonStat.capCount")} className={classes.tableHeaderCell}>
+                            <TableCell>
+                                <div onClick={() => handleSort("seasonStat.capCount")} className="tableHeaderCell">
                                     {
                                         columnToSort === "seasonStat.capCount" ? (
                                             sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -139,8 +139,8 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
                                     <span>Caps</span>
                                 </div>
                             </TableCell>
-                            <TableCell align="right">
-                                <div onClick={() => handleSort("seasonStat.goalCount")} className={classes.tableHeaderCell}>                                
+                            <TableCell>
+                                <div onClick={() => handleSort("seasonStat.goalCount")} className="tableHeaderCell">
                                     {
                                         columnToSort === "seasonStat.goalCount" ? (
                                             sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -149,8 +149,8 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
                                     <span>Goals</span>
                                 </div>
                             </TableCell>
-                            <TableCell align="right">
-                                <div onClick={() => handleSort("seasonStat.motmCount")} className={classes.tableHeaderCell}>                                
+                            <TableCell>
+                                <div onClick={() => handleSort("seasonStat.motmCount")} className="tableHeaderCell">
                                     {
                                         columnToSort === "seasonStat.motmCount" ? (
                                             sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -159,30 +159,33 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
                                     <span>MotMs</span>
                                 </div>
                             </TableCell>
-                            <TableCell align="right">
-                                    Strike Rate
+                            <TableCell className="hide-on-mobile">
+                                Strike Rate
                             </TableCell>
-                            <TableCell align="right">
-                                    Win %
+                            <TableCell className="hide-on-mobile">
+                                Win %
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {playerSeasonStatList.map((item: PlayerSeasonStat) => (
                             <TableRow key={item.player._id}>
-                                <TableCell>
+                                <TableCell className="align-left">
                                     <Link to={'/player/' + item.player._id}>{item.player.firstName} {item.player.surname}</Link>
                                 </TableCell>
-                                <TableCell align="right">{item.seasonStat.capCount}</TableCell>
-                                <TableCell align="right">{item.seasonStat.goalCount}</TableCell>
-                                <TableCell align="right">{item.seasonStat.motmCount}</TableCell>
-                                <TableCell align="right">{Math.round((item.seasonStat.goalCount / item.seasonStat.capCount) * 100) / 100}</TableCell>
-                                <TableCell align="right">{Math.round((item.seasonStat.winCount / item.seasonStat.capCount) * 100) / 100}</TableCell>
+                                <TableCell>{item.seasonStat.capCount}</TableCell>
+                                <TableCell>{item.seasonStat.goalCount}</TableCell>
+                                <TableCell>{item.seasonStat.motmCount}</TableCell>
+                                <TableCell className="hide-on-mobile">{Math.round((item.seasonStat.goalCount / item.seasonStat.capCount) * 100) / 100}</TableCell>
+                                <TableCell className="hide-on-mobile">{Math.round((item.seasonStat.winCount / item.seasonStat.capCount) * 100) / 100}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </Paper>
+            <p className="hide-on-desktop">
+                <i>* Columns hidden for small screen size. Please hold your phone in landscape mode, or view on a larger screen to see full detail.</i>
+            </p>
         </>
     )
 }

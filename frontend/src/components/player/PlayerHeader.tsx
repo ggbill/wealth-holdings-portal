@@ -5,12 +5,12 @@ interface InputProps {
     player: App.Player
 }
 
-const PlayerHeader = (props: InputProps) => {
 
+const PlayerHeader = (props: InputProps) => {
     return (
         <div className="header-section">
             <div className="player-header">
-                <img src={props.player.imageUrl} />
+                <img src={props.player.imageUrl ? props.player.imageUrl : require("../../images/placeholder_image_logo.png")} />
                 <div className="player-info">
                     <span className="title">{props.player.firstName} {props.player.surname}</span>
                 </div>

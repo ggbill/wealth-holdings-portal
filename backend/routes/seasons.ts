@@ -89,7 +89,6 @@ router.get('/:id/playerSeasonStats', async (request: Request, response: Response
 });
 
 router.get('/:id/playerCareerStats', async (request: Request, response: Response) => {
-    console.log("im here")
     try {
         const result = await SeasonController.GetPlayerCareerStats(request.params.id);
         response.json(result);
