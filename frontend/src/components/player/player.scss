@@ -91,12 +91,12 @@ table a{
         flex-direction: column;
         align-items: center;
 
-        img{
-            width: 150px;
-            height: 150px;
-            padding: 0;
-            margin-bottom: 24px;
-        }
+        // img{
+        //     width: 150px;
+        //     height: 150px;
+        //     padding: 0;
+        //     margin-bottom: 24px;
+        // }
 
         .player-info{
             align-items: center;
@@ -130,5 +130,20 @@ table a{
     .hide-on-desktop{
         display: block;
     }
+}
+
+@media only screen and (max-width: 800px) {
+    .player-header{
+        img{
+            width: 150px;
+            height: 150px;
+            padding: 0 24px;
+        }
+
+        .player-info{
+            align-items: center;
+        }
+    }
+
 }
 
