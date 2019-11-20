@@ -36,7 +36,7 @@ const PlayerCareerStatsTable = (props: InputProps) => {
     }
 
     const url = process.env.PUBLIC_URL || "http://localhost:8080"
-  
+
     const getPlayerCareerStats = (): void => {
         fetch(`${url}/seasons/${props.playerId}/playerCareerStats`, {
             method: 'GET',
@@ -97,7 +97,22 @@ const PlayerCareerStatsTable = (props: InputProps) => {
     }
 
     useEffect(() => {
-        setPlayerCareerStatList(_.orderBy(playerCareerStatList, columnToSort, sortDirection))
+        if (columnToSort === "strikeRate") {
+            setPlayerCareerStatList(_.orderBy(playerCareerStatList,
+                function (item: SeasonStat) {
+                    return (item.goalCount / item.capCount);
+                },
+                sortDirection))
+        } else if (columnToSort === "winPercentage") {
+            setPlayerCareerStatList(_.orderBy(playerCareerStatList,
+                function (item: SeasonStat) {
+                    return (item.winCount / item.capCount);
+                },
+                sortDirection))
+        } else {
+            setPlayerCareerStatList(_.orderBy(playerCareerStatList, columnToSort, sortDirection))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [columnToSort, sortDirection])
 
     useEffect(() => {
@@ -111,7 +126,7 @@ const PlayerCareerStatsTable = (props: InputProps) => {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                        <TableCell>
+                            <TableCell>
                                 <div onClick={() => handleSort("seasonStartDate")} className="firstTableHeaderCell">
                                     <span>Season</span>
                                     {
@@ -151,8 +166,26 @@ const PlayerCareerStatsTable = (props: InputProps) => {
                                     <span>MotMs</span>
                                 </div>
                             </TableCell>
-                            <TableCell className="hide-on-mobile">Goals/Game %</TableCell>
-                            <TableCell className="hide-on-mobile">Win %</TableCell>
+                            <TableCell className="hide-on-mobile">
+                                <div onClick={() => handleSort("strikeRate")} className="tableHeaderCell">
+                                    {
+                                        columnToSort === "strikeRate" ? (
+                                            sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                        ) : null
+                                    }
+                                    <span>Strike Rate</span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="hide-on-mobile">
+                                <div onClick={() => handleSort("winPercentage")} className="tableHeaderCell">
+                                    {
+                                        columnToSort === "winPercentage" ? (
+                                            sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                        ) : null
+                                    }
+                                    <span>Win %</span>
+                                </div>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

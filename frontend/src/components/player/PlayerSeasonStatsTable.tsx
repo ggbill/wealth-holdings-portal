@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import './player.scss';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import useFetch from "../../hooks/useFetch"
@@ -64,42 +63,28 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
 
     const handleSort = (columnName) => {
         setColumnToSort(columnName)
-
         let sortDirect: any = columnToSort === columnName ? invertDirection(sortDirection) : 'desc'
         setSortDirection(sortDirect)
     }
 
     useEffect(() => {
-        setSeasonPlayerStatList(_.orderBy(playerSeasonStatList, columnToSort, sortDirection))
+        if (columnToSort == "seasonStat.strikeRate") {
+            setSeasonPlayerStatList(_.orderBy(playerSeasonStatList,
+                function (item: PlayerSeasonStat) {
+                    return (item.seasonStat.goalCount / item.seasonStat.capCount);
+                },
+                sortDirection))
+        } else if (columnToSort == "seasonStat.winPercentage") {
+            setSeasonPlayerStatList(_.orderBy(playerSeasonStatList,
+                function (item: PlayerSeasonStat) {
+                    return (item.seasonStat.winCount / item.seasonStat.capCount);
+                },
+                sortDirection))
+        } else {
+            setSeasonPlayerStatList(_.orderBy(playerSeasonStatList, columnToSort, sortDirection))
+        }
     }, [columnToSort, sortDirection])
 
-    // const useStyles = makeStyles((theme: Theme) =>
-    //     createStyles({
-    //         root: {
-    //             width: '100%',
-    //             marginTop: theme.spacing(3),
-    //             overflowX: 'auto',
-    //         },
-    //         table: {
-    //             minWidth: 650,
-    //             tableLayout: 'fixed'
-    //         },
-    //         firstTableHeaderCell: {
-    //             display: "flex",
-    //             alignItems: "center",
-    //             cursor: "pointer"
-    //         },
-    //         tableHeaderCell: {
-    //             display: "flex",
-    //             alignItems: "center",
-    //             justifyContent: "flex-end",
-    //             cursor: "pointer"
-    //         }
-
-    //     }),
-    // );
-
-    // const classes = useStyles();
 
     if (loading) {
         return (
@@ -160,10 +145,24 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
                                 </div>
                             </TableCell>
                             <TableCell className="hide-on-mobile">
-                                Strike Rate
+                                <div onClick={() => handleSort("seasonStat.strikeRate")} className="tableHeaderCell">
+                                    {
+                                        columnToSort === "seasonStat.strikeRate" ? (
+                                            sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                        ) : null
+                                    }
+                                    <span>Strike Rate</span>
+                                </div>
                             </TableCell>
                             <TableCell className="hide-on-mobile">
-                                Win %
+                                <div onClick={() => handleSort("seasonStat.winPercentage")} className="tableHeaderCell">
+                                    {
+                                        columnToSort === "seasonStat.winPercentage" ? (
+                                            sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                        ) : null
+                                    }
+                                    <span>Win %</span>
+                                </div>
                             </TableCell>
                         </TableRow>
                     </TableHead>

@@ -90,7 +90,7 @@ const FixtureCard = (props: InputProps) => {
             <table>
                 <tbody>
                     {scorerList.map(scorer => (
-                        <tr className="scorer-row">
+                        <tr key={scorer.player._id} className="scorer-row">
                             <td><Link to={'/player/' + scorer.player._id}>{scorer.player.firstName.charAt(0)}. {scorer.player.surname}</Link></td>
                             <td style={{ display: scorer.goalCount > 1 ? 'block' : 'none' }}> [{scorer.goalCount}]</td>
                         </tr>
