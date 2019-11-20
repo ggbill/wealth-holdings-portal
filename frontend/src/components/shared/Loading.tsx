@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { ReactComponent as PacmanSVG } from '../../images/Pacman.svg'
+import { ReactComponent as PacManSVG } from '../../images/Pacman.svg'
 
 const Loading = () => {
 
     const [isDisplayLoading, setIsDisplayLoading] = useState(false)
 
-    const timer = setTimeout(() => enableLoading(), 500);
-
     useEffect(() => {
+        const timer = setTimeout(() => enableLoading(), 500);
 
         //same as componentWillUnmount
         return () => {
@@ -23,7 +22,7 @@ const Loading = () => {
 
         isDisplayLoading ?
             <div className="loading-wrapper content">
-                < PacmanSVG />
+                < PacManSVG />
                 <h2>Loading...</h2>
             </div > : null
         

@@ -13,11 +13,11 @@ const SeasonCard = (props: InputProps) => {
         let winCount = 0, drawCount = 0, lossCount = 0;
 
         props.season.fixtureList.forEach(fixture => {
-            if (fixture.result == "WIN") {
+            if (fixture.result === "WIN") {
                 winCount++
-            } else if (fixture.result == "DRAW") {
+            } else if (fixture.result === "DRAW") {
                 drawCount++
-            } else if (fixture.result == "LOSS") {
+            } else if (fixture.result === "LOSS") {
                 lossCount++
             }
         });

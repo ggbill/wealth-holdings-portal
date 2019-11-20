@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import './player.scss';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
 import { Link } from 'react-router-dom'
@@ -35,6 +35,8 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
     const [columnToSort, setColumnToSort] = useState("");
     const [sortDirection, setSortDirection] = useState("");
 
+    const isComponentMounted = useRef(true);
+
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {
             return "desc"
@@ -45,6 +47,11 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
 
     useEffect(() => {
         getSeasonPlayerStats()
+
+        return () => {
+            isComponentMounted.current = false;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [props.seasonId])
 
     const getSeasonPlayerStats = () => {
@@ -52,13 +59,14 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
         setLoading(true)
         seasonsApi.get(`${props.seasonId}/playerSeasonStats`)
             .then((data: PlayerSeasonStat[]) => {
-                setSeasonPlayerStatList(_.orderBy(data, `player.surname`, "asc"))
-                setLoading(false)
+                if (isComponentMounted.current) {
+                    setSeasonPlayerStatList(_.orderBy(data, `player.surname`, "asc"))
+                    setLoading(false)
+                }
             })
             .catch((err: Error) => {
                 setError(err.message)
             })
-
     }
 
     const handleSort = (columnName) => {
@@ -68,13 +76,13 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
     }
 
     useEffect(() => {
-        if (columnToSort == "seasonStat.strikeRate") {
+        if (columnToSort === "seasonStat.strikeRate") {
             setSeasonPlayerStatList(_.orderBy(playerSeasonStatList,
                 function (item: PlayerSeasonStat) {
                     return (item.seasonStat.goalCount / item.seasonStat.capCount);
                 },
                 sortDirection))
-        } else if (columnToSort == "seasonStat.winPercentage") {
+        } else if (columnToSort === "seasonStat.winPercentage") {
             setSeasonPlayerStatList(_.orderBy(playerSeasonStatList,
                 function (item: PlayerSeasonStat) {
                     return (item.seasonStat.winCount / item.seasonStat.capCount);
@@ -83,6 +91,7 @@ const PlayerSeasonStatsTable = (props: InputProps) => {
         } else {
             setSeasonPlayerStatList(_.orderBy(playerSeasonStatList, columnToSort, sortDirection))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [columnToSort, sortDirection])
 
 

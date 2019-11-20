@@ -32,7 +32,7 @@ const FixturePlayerDialog = (props: InputProps) => {
     const classes = useStyles();
 
     const [isSetPlayerCalled, setIsSetPlayerCalled] = React.useState<boolean>(false);
-    const [playerList, setPlayerList] = React.useState<App.Player[]>(
+    const [playerList] = React.useState<App.Player[]>(
         props.playerList
     )
 
@@ -117,6 +117,7 @@ const FixturePlayerDialog = (props: InputProps) => {
 
     React.useEffect(() => {
         generateUnselectedPlayerList() 
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [props.fixturePlayerList])
 
     return (

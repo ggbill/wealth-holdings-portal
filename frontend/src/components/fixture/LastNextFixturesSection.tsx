@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Paper, Grid, Box } from '@material-ui/core'
+import { Paper, Box } from '@material-ui/core'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 
@@ -126,9 +126,9 @@ const LastNextFixturesSection = (props: InputProps) => {
     }
 
     const getResultClass = () => {
-        if (previousFixture.result == "WIN") {
+        if (previousFixture.result === "WIN") {
             return "win"
-        } else if (previousFixture.result == "LOSS") {
+        } else if (previousFixture.result === "LOSS") {
             return "loss"
         } else {
             return "draw"
@@ -169,7 +169,7 @@ const LastNextFixturesSection = (props: InputProps) => {
                 topScorer.name = `${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
                 topScorer.id = fixturePlayer.player._id
                 topScorerList.push(topScorer)
-            } else if (fixturePlayer.goalCount == topScorer.goalCount) {
+            } else if (fixturePlayer.goalCount === topScorer.goalCount) {
                 topScorer = { id: "", name: "", goalCount: 0 }
                 topScorer.goalCount = fixturePlayer.goalCount
                 topScorer.name = `${fixturePlayer.player.firstName.charAt(0)}. ${fixturePlayer.player.surname}`
@@ -183,7 +183,7 @@ const LastNextFixturesSection = (props: InputProps) => {
 
         if (topScorerList.length > 1) {
             topScorerListString = "Top Scorers:"
-        } else if (topScorerList.length == 1) {
+        } else if (topScorerList.length === 1) {
             topScorerListString = "Top Scorer:"
         } else {
             topScorerListString = "N/A"
@@ -197,14 +197,14 @@ const LastNextFixturesSection = (props: InputProps) => {
                     {
                         topScorerList.map((element, index) => {
                             if ((index + 1) < topScorerList.length) {
-                                    return(<Link to={'/player/' + element.id}>{element.name}</Link>)
-                                } else {
-                                    return(<div><Link to={'/player/' + element.id}>{element.name}</Link> [{element.goalCount}]</div>)
+                                return (<Link to={'/player/' + element.id}>{element.name}</Link>)
+                            } else {
+                                return (<div><Link to={'/player/' + element.id}>{element.name}</Link> [{element.goalCount}]</div>)
                             }
                         })
                     }
-    
-    
+
+
                 </span>
             </div>
 
@@ -264,15 +264,25 @@ const LastNextFixturesSection = (props: InputProps) => {
                 </Paper>
                 <Paper>
                     <h2>Next Fixture</h2>
-                    <div className="row">
-                        <span className="label">Opposition:&nbsp;</span><span>{nextFixture.opposition.name}</span>
-                    </div>
-                    <div className="row">
-                        <span className="label">Kickoff:&nbsp;</span><span>{moment(nextFixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
-                    </div>
-                    <div className="row">
-                        <span className="label">Fixture Type:&nbsp;</span><span>{nextFixture.fixtureType}</span>
-                    </div>
+                    {nextFixture._id ?
+                        <>
+                            <div className="row">
+                                <span className="label">Opposition:&nbsp;</span><span>{nextFixture.opposition.name}</span>
+                            </div>
+                            <div className="row">
+                                <span className="label">Kickoff:&nbsp;</span><span>{moment(nextFixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
+                            </div>
+                            <div className="row">
+                                <span className="label">Fixture Type:&nbsp;</span><span>{nextFixture.fixtureType}</span>
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div className="row"><span className="label"><i>No upcoming fixtures</i></span></div>
+                            <div className="row"></div>
+                            <div className="row"></div>
+                        </>
+                    }
                 </Paper>
             </Box>
         </div>

@@ -58,10 +58,8 @@ const PlayerAdmin = (props: InputProps) => {
     const classes = useStyles();
 
     const playersApi = useFetch("players");
-
     const seasonsApi = useFetch("seasons");
 
-    const [playerList, setPlayerList] = useState<App.Player[]>([]);
     const [playerCareerStatList, setPlayerCareerStatList] = useState<PlayerCareerStat[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");

@@ -95,6 +95,7 @@ const ConfigureFixtureDialog = (props: InputProps) => {
             setOpposition( props.fixture.opposition )
             setFixturePlayerList(props.fixture.players)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [props.fixture]);
 
     //use the useEffect hook to only call the props.createFixture method once the createdFixture has been updated

@@ -1,33 +1,14 @@
 import './home.scss';
 import React, { useState } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import useFetch from "../../hooks/useFetch"
 import moment from 'moment'
 import LastNextFixturesSection from '../fixture/LastNextFixturesSection'
 import FixtureCard from '../fixture/FixtureCard'
 import Loading from '../shared/Loading';
 
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-            height: 150
-        },
-    }),
-);
-
 const Home = () => {
 
-    const classes = useStyles();
-
     const seasonsApi = useFetch("seasons");
-
     const [currentSeason, setCurrentSeason] = useState<App.Season>({
         _id: "",
         name: "",
@@ -89,6 +70,7 @@ const Home = () => {
 
     React.useEffect(() => {
         getCurrentSeason();
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
 
     if (loading) {
@@ -107,7 +89,7 @@ const Home = () => {
         <>
             <div className="header-section">
                 <div className="hero-image">
-                    <img src={require('../../images/hero-image.png')} />
+                    <img alt="" src={require('../../images/hero-image.png')} />
                 </div>
             </div>
 

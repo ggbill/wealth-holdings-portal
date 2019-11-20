@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core'
 import LinkButton from './LinkButton'
 import { ReactComponent as LightningSVG } from '../../images/lightning-logo.svg'

@@ -11,9 +11,9 @@ interface InputProps {
 const FixtureCard = (props: InputProps) => {
 
     const getResultClass = () => {
-        if (props.fixture.result == "WIN") {
+        if (props.fixture.result === "WIN") {
             return "win"
-        } else if (props.fixture.result == "LOSS") {
+        } else if (props.fixture.result === "LOSS") {
             return "loss"
         } else {
             return "draw"

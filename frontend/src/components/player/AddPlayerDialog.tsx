@@ -57,6 +57,7 @@ const AddPlayerDialog = (props: InputProps) => {
         if (props.isDialogOpen) {
             getPlayers();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [props.isDialogOpen]);
 
     const submitTeam = () => {

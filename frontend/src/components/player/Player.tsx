@@ -38,6 +38,7 @@ const Player = ({ match }) => {
 
     React.useEffect(() => {
         getPlayerById(playerId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
 
     if (loading) {

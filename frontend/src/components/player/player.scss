@@ -17,7 +17,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: start;
+        align-items: flex-start;
     }
 
     .title{
@@ -82,21 +82,12 @@ table a{
     display: none;
 }
 
-// .MuiTableCell-root.hide-on-mobile{
-//     display: block;
-// }
+
 
 @media only screen and (max-width: 600px) {
     .player-header{
         flex-direction: column;
         align-items: center;
-
-        // img{
-        //     width: 150px;
-        //     height: 150px;
-        //     padding: 0;
-        //     margin-bottom: 24px;
-        // }
 
         .player-info{
             align-items: center;

@@ -10,7 +10,7 @@ const SeasonHeader = (props: InputProps) => {
     return (
         <div className="header-section">
             <div className="season-header">
-                <img src={require('../../images/football.jpg')} />
+                <img alt="" src={require('../../images/football.jpg')} />
                 <div className="season-info">
                     <span className="title">Season: {props.season.name}</span>
                     <span className="sub-title">{props.season.location}</span>

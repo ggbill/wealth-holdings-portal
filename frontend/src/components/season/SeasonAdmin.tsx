@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import SeasonTable from "./SeasonTable"
 import './season.scss'
 import useFetch from "../../hooks/useFetch"
 import moment from 'moment'
@@ -154,6 +153,7 @@ const SeasonAdmin = (props: InputProps) => {
 
     React.useEffect(() => {
         getSeasonList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
 
     if (loading) {

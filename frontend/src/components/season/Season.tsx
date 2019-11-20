@@ -133,6 +133,7 @@ const Season = (props: InputProps) => {
 
     React.useEffect(() => {
         getSeasonById(seasonId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -150,6 +151,7 @@ const Season = (props: InputProps) => {
             setIsPlayerUpdated(false)
         }
         setIsSeasonUpdated(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTeamUpdated, isFixtureUpdated, isPlayerUpdated]);
 
     React.useEffect(() => {
