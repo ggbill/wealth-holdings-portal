@@ -278,7 +278,7 @@ const LastNextFixturesSection = (props: InputProps) => {
                         </>
                         :
                         <>
-                            <div className="row"><span className="label"><i>No upcoming fixtures</i></span></div>
+                            <div className="row"><span><i>No upcoming fixtures</i></span></div>
                             <div className="row"></div>
                             <div className="row"></div>
                         </>
