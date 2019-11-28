@@ -46,5 +46,4 @@ declare module App {
         players: FixturePlayer[],
         isActive: boolean
     } 
-
 }
