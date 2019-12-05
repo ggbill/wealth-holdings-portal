@@ -30,11 +30,15 @@ const Home = () => {
         setLoading(true)
         seasonsApi.get("getCurrentSeason")
             .then((data: App.Season[]) => {
-                data[0].fixtureList.sort((a, b) => {
-                    return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
-                })
-                setCurrentSeason(data[0])
-                sortFixtures(data[0])
+                console.log(`data: ${JSON.stringify(data)}`)
+
+                if (data.length) {
+                    data[0].fixtureList.sort((a, b) => {
+                        return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
+                    })
+                    setCurrentSeason(data[0])
+                    sortFixtures(data[0])
+                }
                 setLoading(false)
             })
             .catch((err: Error) => {
@@ -97,7 +101,7 @@ const Home = () => {
                 <div className="last-next-fixture-section">
                     <LastNextFixturesSection fixtureList={currentSeason.fixtureList} />
                 </div>
-                <div style={{display: futureFixtureList.length ? 'block' : 'none' }}>
+                <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>
                     <h2>Fixtures</h2>
                     {futureFixtureList.map(fixture => {
                         return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
@@ -105,10 +109,12 @@ const Home = () => {
                     <br />
                 </div>
 
-                <h2>Results</h2>
-                {pastFixtureList.map(fixture => {
-                    return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
-                })}
+                <div style={{ display: currentSeason._id ? 'block' : 'none' }}>
+                    <h2>Results</h2>
+                    {pastFixtureList.map(fixture => {
+                        return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
+                    })}
+                </div>
             </div>
         </>
     )

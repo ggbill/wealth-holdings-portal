@@ -218,49 +218,69 @@ const LastNextFixturesSection = (props: InputProps) => {
 
     return (
         <div className="last-next-fixture-section" >
-            {/* <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly" alignItems="center"> */}
             <Box display="flex" flexDirection="row" justifyContent="space-evenly" alignItems="center">
                 <Paper>
                     <h2>Latest Result</h2>
-                    <div className="row desktop-view">
-                        <span className="lightning-score">
-                            Lenton Lightning&nbsp;
+
+                    {previousFixture._id ?
+                        <>
+                            <div className="row desktop-view">
+                                <span className="lightning-score">
+                                    Lenton Lightning&nbsp;
                             <span className={getResultClass()}>
-                                {calculateGoalsScored()}
-                            </span>
-                        </span>
-                        <span>
-                            &nbsp;-&nbsp;
-                        </span>
-                        <span className="opposition-score">
-                            <span className="score">
-                                {previousFixture.goalsAgainst}&nbsp;
-                            </span>
-                            {previousFixture.opposition.name}
-                        </span>
-                    </div>
-                    <div className="mobile-view">
-                        <div className="row">
-                            <span className="lightning-score">
-                                Lenton Lightning:&nbsp;
-                            <span className={getResultClass()}>
-                                    {calculateGoalsScored()}
+                                        {calculateGoalsScored()}
+                                    </span>
                                 </span>
+                                <span>
+                                    &nbsp;-&nbsp;
+                        </span>
+                                <span className="opposition-score">
+                                    <span className="score">
+                                        {previousFixture.goalsAgainst}&nbsp;
                             </span>
-                        </div>
-                        <div className="row">
-                            <span className="opposition-score">
-                                {previousFixture.opposition.name}:&nbsp;
+                                    {previousFixture.opposition.name}
+                                </span>
+                            </div>
+                            <div className="mobile-view">
+                                <div className="row">
+                                    <span className="lightning-score">
+                                        Lenton Lightning:&nbsp;
+                            <span className={getResultClass()}>
+                                            {calculateGoalsScored()}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div className="row">
+                                    <span className="opposition-score">
+                                        {previousFixture.opposition.name}:&nbsp;
                                 <span className="score">
-                                    {previousFixture.goalsAgainst}
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <span>MOTM: {getMotm()}</span>
-                    </div>
-                    {getTopScorers()}
+                                            {previousFixture.goalsAgainst}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <span>MOTM: {getMotm()}</span>
+                            </div>
+                            {getTopScorers()}
+                        </>
+                        :
+                        <>
+                            <div className="row"><span><i>No previous fixtures</i></span></div>
+                            <div className="row"></div>
+                            <div className="row"></div>
+                        </>
+                    }
+
+
+
+
+
+
+
+
+
+
                 </Paper>
                 <Paper>
                     <h2>Next Fixture</h2>
