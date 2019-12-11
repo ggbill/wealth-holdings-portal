@@ -13,6 +13,8 @@ interface InputProps {
 
 const AddTeamDialog = (props: InputProps) => {
 
+    const url = process.env.PUBLIC_URL || "http://localhost:8080"
+
     const [team, setTeam] = React.useState<App.Team>({
         _id: "",
         name: "",
@@ -33,7 +35,7 @@ const AddTeamDialog = (props: InputProps) => {
     }
 
     const getTeams = (): void => {
-        fetch('http://localhost:8080/teams/', {
+        fetch(`${url}/teams/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

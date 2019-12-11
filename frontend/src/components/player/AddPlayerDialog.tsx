@@ -13,6 +13,8 @@ interface InputProps {
 
 const AddPlayerDialog = (props: InputProps) => {
 
+    const url = process.env.PUBLIC_URL || "http://localhost:8080"
+
     const [player, setPlayer] = React.useState<App.Player>({
         _id: "",
         firstName: "",
@@ -35,7 +37,7 @@ const AddPlayerDialog = (props: InputProps) => {
     }
 
     const getPlayers = (): void => {
-        fetch('http://localhost:8080/players/', {
+        fetch(`${url}/players/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
