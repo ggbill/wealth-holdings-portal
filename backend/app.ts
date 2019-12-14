@@ -4,6 +4,7 @@ import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
 
 const path = require('path');
+const compression = require("compression");
 
 
 // const seasonsRouter = require('./routes/seasons');
@@ -26,15 +27,20 @@ app.use('/fixtures', fixturesRouter);
 app.use('/players', playersRouter);
 app.use('/teams', teamsRouter);
 
-if (process.env.NODE_ENV === 'production') {
-    // app.use(express.static( '../frontend/build '));
+function shouldCompress(req, res) {
+    if (req.headers["x-no-compression"]) return false;
+    return compression.filter(req, res);
+  }
 
-    // app.get('*', (req, res) => {
-    //     res.sendFile(path.join(__dirname, 'frontend', 'build', 'server.js'));
-    // })
+if (process.env.NODE_ENV === 'production') {
+
     // Declare the path to frontend's static assets
-    
     app.use(express.static(path.resolve("..", "frontend", "build")));
+
+    app.use(compression({
+        level: 6,               // set compression level from 1 to 9 (6 by default)
+        filter: shouldCompress, // set predicate to determine whether to compress
+      }));
 
     // Intercept requests to return the frontend's static entry point
     app.get("*", (_, response) => {
