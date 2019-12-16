@@ -4,6 +4,7 @@ import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
 
 const path = require('path');
+const shrinkRay = require('shrink-ray-current');
 
 import seasonsRouter from './routes/seasons';
 import fixturesRouter from './routes/fixtures';
@@ -11,6 +12,10 @@ import playersRouter from './routes/players';
 import teamsRouter from './routes/teams';
 
 const app = express();
+
+// compress responses
+app.use(shrinkRay());
+
 app.use(cors());
 app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
