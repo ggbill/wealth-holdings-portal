@@ -3,8 +3,10 @@ import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
 
+
 const path = require('path');
 const compression = require("compression");
+var expressStaticGzip = require("express-static-gzip");
 
 
 // const seasonsRouter = require('./routes/seasons');
@@ -35,7 +37,13 @@ function shouldCompress(req, res) {
 if (process.env.NODE_ENV === 'production') {
 
     // Declare the path to frontend's static assets
-    app.use(express.static(path.resolve("..", "frontend", "build")));
+    app.use(express.static(path.resolve("..", "frontend", "build")), expressStaticGzip(path.resolve("..", "frontend", "build"), {
+        enableBrotli: true,
+        orderPreference: ['br', 'gz'],
+        setHeaders: function (res, path) {
+           res.setHeader("Cache-Control", "public, max-age=31536000");
+        }
+     }));
 
     app.use(compression({
         level: 6,               // set compression level from 1 to 9 (6 by default)
