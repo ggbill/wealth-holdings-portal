@@ -37,7 +37,7 @@ const FixtureCard = (props: InputProps) => {
     }
 
     const generateScores = () => {
-        if (props.fixture.players.length) {
+        if (props.fixture.result) {
             return (
                 <div className="score-kickoff-wrapper">
                     <div className="score-wrapper desktop-view">
@@ -137,7 +137,7 @@ const FixtureCard = (props: InputProps) => {
             <Card className="mobile-view">
                 <CardContent>
                     <div>
-                        {props.fixture.players.length ?
+                        {props.fixture.result ?
                             <span className="team-name">{props.fixture.opposition.name}: {props.fixture.goalsAgainst}</span> :
                             <span className="team-name">{props.fixture.opposition.name}</span>
                         }
@@ -148,7 +148,7 @@ const FixtureCard = (props: InputProps) => {
                         <span className="fixture-type">{props.fixture.fixtureType}</span>
                     </div>
                     <div className="lightning-wrapper">
-                        {props.fixture.players.length ?
+                        {props.fixture.result ?
                             <span className="team-name">Lenton Lightning FC: <span className={getResultClass()}>{getLightningGoals()}</span></span> :
                             <span className="team-name">Lenton Lightning FC</span>
                         }
