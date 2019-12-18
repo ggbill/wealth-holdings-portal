@@ -3,6 +3,7 @@ import { Schema, Document } from 'mongoose';
 import Team, {ITeam} from './team.model';
 import Fixture, { IFixture } from './fixture.model';
 import Player, { IPlayer } from './player.model'
+import Accolade, { IAccolade } from './accolade.model';
 
 export interface ISeason extends Document {
     name: string,
@@ -11,7 +12,8 @@ export interface ISeason extends Document {
     endDate: Date,
     teamList: ITeam[],
     playerList: ITeam[],
-    fixtureList: IFixture[]
+    fixtureList: IFixture[],
+    accoladeList: IAccolade[],
     isActive: boolean
 }
 
@@ -23,6 +25,7 @@ const SeasonSchema: Schema = new Schema({
   teamList: [{ type: Schema.Types.ObjectId, ref: Player }],
   playerList: [{ type: Schema.Types.ObjectId, ref: Team }],
   fixtureList: [{ type: Schema.Types.ObjectId, ref: Fixture }],
+  accoladeList: [{ type: Schema.Types.ObjectId, ref: Accolade }],
   isActive: {type: Boolean, required: true}
 });
 

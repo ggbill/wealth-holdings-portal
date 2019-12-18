@@ -30,7 +30,7 @@ const Home = () => {
         setLoading(true)
         seasonsApi.get("getCurrentSeason")
             .then((data: App.Season[]) => {
-                console.log(`data: ${JSON.stringify(data)}`)
+                // console.log(`data: ${JSON.stringify(data)}`) 
 
                 if (data.length) {
                     data[0].fixtureList.sort((a, b) => {
