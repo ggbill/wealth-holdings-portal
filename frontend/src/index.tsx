@@ -4,6 +4,9 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'typeface-roboto';
+import ReactGA from 'react-ga'
+
+ReactGA.initialize("UA-154787523-1")
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

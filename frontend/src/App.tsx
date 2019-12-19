@@ -16,9 +16,13 @@ import Callback from './components/callback'
 import Loading from './components/shared/Loading'
 import HttpsRedirect from 'react-https-redirect'
 import ReactGA from 'react-ga'
+import createHistory from 'history/createBrowserHistory'
 
-ReactGA.initialize("UA-154787523-1");
-ReactGA.pageview(window.location.pathname + window.location.search);
+const history = createHistory()
+history.listen(location => {
+    ReactGA.set({ page: location.pathname })
+    ReactGA.pageview(location.pathname)
+})
 
 const auth = new Auth();
 
@@ -31,7 +35,7 @@ const handleAuthentication = (prop: any) => {
 const App = () => {
     return (
         <HttpsRedirect>
-            <BrowserRouter>
+            <BrowserRouter history={history}>
                 <MenuBar auth={auth} />
                 <div className="full-height-content">
                     <Switch>
