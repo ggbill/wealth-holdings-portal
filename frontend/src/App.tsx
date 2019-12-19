@@ -15,14 +15,14 @@ import Auth from './auth/Auth';
 import Callback from './components/callback'
 import Loading from './components/shared/Loading'
 import HttpsRedirect from 'react-https-redirect'
-import ReactGA from 'react-ga'
-import createHistory from 'history/createBrowserHistory'
+import ReactGA from'react-ga'
 
-const history = createHistory()
-history.listen(location => {
-    ReactGA.set({ page: location.pathname })
-    ReactGA.pageview(location.pathname)
-})
+ReactGA.initialize('UA-154787523-1');
+
+const logPageView = () => {
+    ReactGA.set({ page: window.location.pathname + window.location.search });
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }
 
 const auth = new Auth();
 
@@ -35,41 +35,42 @@ const handleAuthentication = (prop: any) => {
 const App = () => {
     return (
         <HttpsRedirect>
-            <BrowserRouter history={history}>
-                <MenuBar auth={auth} />
-                <div className="full-height-content">
-                    <Switch>
-                        <Route
-                            path="/"
-                            component={Home}
-                            exact
-                        />
-                        <Route
-                            path="/season-list"
-                            render={() => <SeasonAdmin auth={auth} />}
-                        />
-                        <Route
-                            path="/season/:id"
-                            render={(props) => <Season auth={auth} {...props} />}
-                        />
-                        <Route path="/team-list" component={TeamAdmin} />
-                        <Route
-                            path="/player-list"
-                            render={() => <PlayerAdmin auth={auth} />}
-                        />
-                        <Route path="/player/:id" component={Player} />
-                        <Route path="/fixture-list" component={FixtureAdmin} />
-                        <Route path="/fixture/:id" component={Fixture} />
-                        <Route path="/callback" render={props => {
-                            handleAuthentication(props);
-                            return <Callback {...props} />;
-                        }}
-                        />
-                        <Route path="/loading" component={Loading} />
-                        <Route component={Error} />
-                    </Switch>
-                </div>
-                <Footer auth={auth} />
+            <BrowserRouter onUpdate={logPageView}>
+                    <MenuBar auth={auth} />
+                    <div className="full-height-content">
+
+                        <Switch>
+                            <Route
+                                path="/"
+                                component={Home}
+                                exact
+                            />
+                            <Route
+                                path="/season-list"
+                                render={() => <SeasonAdmin auth={auth} />}
+                            />
+                            <Route
+                                path="/season/:id"
+                                render={(props) => <Season auth={auth} {...props} />}
+                            />
+                            <Route path="/team-list" component={TeamAdmin} />
+                            <Route
+                                path="/player-list"
+                                render={() => <PlayerAdmin auth={auth} />}
+                            />
+                            <Route path="/player/:id" component={Player} />
+                            <Route path="/fixture-list" component={FixtureAdmin} />
+                            <Route path="/fixture/:id" component={Fixture} />
+                            <Route path="/callback" render={props => {
+                                handleAuthentication(props);
+                                return <Callback {...props} />;
+                            }}
+                            />
+                            <Route path="/loading" component={Loading} />
+                            <Route component={Error} />
+                        </Switch>
+                    </div>
+                    <Footer auth={auth} />
             </BrowserRouter>
         </HttpsRedirect>
     );
