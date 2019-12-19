@@ -14,6 +14,7 @@ import Footer from './components/shared/Footer'
 import Auth from './auth/Auth';
 import Callback from './components/callback'
 import Loading from './components/shared/Loading'
+import HttpsRedirect from 'react-https-redirect'
 
 const auth = new Auth();
 
@@ -27,42 +28,44 @@ const handleAuthentication = (prop: any) => {
 
 const App = () => {
     return (
-        <BrowserRouter>
-            <MenuBar auth={auth} />
-            <div className="full-height-content">
-                <Switch>
-                    <Route
-                        path="/"
-                        component={Home}
-                        exact
-                    />
-                    <Route
-                        path="/season-admin"
-                        render={() => <SeasonAdmin auth={auth} />}
-                    />
-                    <Route
-                        path="/season/:id"
-                        render={(props) => <Season auth={auth} {...props} />}
-                    />
-                    <Route path="/teams" component={TeamAdmin} />
-                    <Route
-                        path="/players"
-                        render={() => <PlayerAdmin auth={auth} />}
-                    />
-                    <Route path="/player/:id" component={Player} />
-                    <Route path="/fixture-admin" component={FixtureAdmin} />
-                    <Route path="/fixture/:id" component={Fixture} />
-                    <Route path="/callback" render={props => {
-                        handleAuthentication(props);
-                        return <Callback {...props} />;
-                    }}
-                    />
-                    <Route path="/loading" component={Loading} />
-                    <Route component={Error} />
-                </Switch>
-            </div>
-            <Footer auth={auth} />
-        </BrowserRouter>
+        <HttpsRedirect>
+            <BrowserRouter>
+                <MenuBar auth={auth} />
+                <div className="full-height-content">
+                    <Switch>
+                        <Route
+                            path="/"
+                            component={Home}
+                            exact
+                        />
+                        <Route
+                            path="/season-admin"
+                            render={() => <SeasonAdmin auth={auth} />}
+                        />
+                        <Route
+                            path="/season/:id"
+                            render={(props) => <Season auth={auth} {...props} />}
+                        />
+                        <Route path="/teams" component={TeamAdmin} />
+                        <Route
+                            path="/players"
+                            render={() => <PlayerAdmin auth={auth} />}
+                        />
+                        <Route path="/player/:id" component={Player} />
+                        <Route path="/fixture-admin" component={FixtureAdmin} />
+                        <Route path="/fixture/:id" component={Fixture} />
+                        <Route path="/callback" render={props => {
+                            handleAuthentication(props);
+                            return <Callback {...props} />;
+                        }}
+                        />
+                        <Route path="/loading" component={Loading} />
+                        <Route component={Error} />
+                    </Switch>
+                </div>
+                <Footer auth={auth} />
+            </BrowserRouter>
+        </HttpsRedirect>
     );
 }
 

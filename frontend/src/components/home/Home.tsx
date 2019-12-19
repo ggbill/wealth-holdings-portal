@@ -64,7 +64,7 @@ const Home = () => {
             return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
         })
         futureFixtureList.sort((a, b) => {
-            return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
+            return (a.kickoffDateTime < b.kickoffDateTime ? -1 : 1)
         })
 
         setPastFixtureList(pastFixtureList)

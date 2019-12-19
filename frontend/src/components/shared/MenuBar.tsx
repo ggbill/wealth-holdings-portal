@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { AppBar, Toolbar, Button, Menu, MenuItem, SwipeableDrawer } from '@material-ui/core'
+import { AppBar, Toolbar, Button, Menu, MenuItem, Drawer } from '@material-ui/core'
 import LinkButton from './LinkButton'
 import { ReactComponent as LightningSVG } from '../../images/lightning-logo.svg'
 import { Link } from 'react-router-dom'
@@ -82,17 +82,13 @@ const MenuBar = (props: InputProps) => {
                         <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
                             <MenuIcon />
                         </Button>
-                        {/* <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                            <MenuIcon />
-                        </Button> */}
                     </Toolbar>
                 </AppBar>
             </div>
-            <SwipeableDrawer
+            <Drawer
                 anchor="top"
                 open={isDrawerOpen}
                 onClose={toggleDrawer(false)}
-                onOpen={toggleDrawer(true)}
                 className="menu-drawer"
             >
                 <div className="close-icon-container">
@@ -114,7 +110,7 @@ const MenuBar = (props: InputProps) => {
                 {isAuthenticated() &&
                     <MenuItem onClick={logOut}>Log Out</MenuItem>
                 }
-            </SwipeableDrawer>
+            </Drawer>
             <Menu
                 id="logout-menu"
                 anchorEl={anchorEl}
