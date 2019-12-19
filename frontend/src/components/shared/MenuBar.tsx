@@ -67,11 +67,11 @@ const MenuBar = (props: InputProps) => {
                             <LightningSVG className="logo" />
                         </Link>
                         <div className="menu-items">
-                            <LinkButton className="link-button" to='/season-admin'>Seasons</LinkButton>
+                            <LinkButton className="link-button" to='/season-list'>Seasons</LinkButton>
                             {isAuthenticated() &&
-                                <LinkButton className="link-button" to='/teams'>Teams</LinkButton>
+                                <LinkButton className="link-button" to='/team-list'>Teams</LinkButton>
                             }
-                            <LinkButton className="link-button" to='/players'>Players</LinkButton>
+                            <LinkButton className="link-button" to='/player-list'>Players</LinkButton>
                             {isAuthenticated() &&
                                 <Button className="clickable-icon" aria-controls="logout-menu" aria-haspopup="true" onClick={handleClick}>
                                     <PersonIcon />
@@ -96,15 +96,15 @@ const MenuBar = (props: InputProps) => {
                         <CloseIcon />
                     </Button>
                 </div>
-                <Link to='/season-admin' style={{ textDecoration: 'none', color: 'black' }}>
+                <Link to='/season-list' style={{ textDecoration: 'none', color: 'black' }}>
                     <MenuItem onClick={handleClose}>Seasons</MenuItem>
                 </Link>
                 {isAuthenticated() &&
-                    <Link to='/teams' style={{ textDecoration: 'none', color: 'black' }}>
+                    <Link to='/team-list' style={{ textDecoration: 'none', color: 'black' }}>
                         <MenuItem onClick={handleClose}>Teams</MenuItem>
                     </Link>
                 }
-                <Link to='/players' style={{ textDecoration: 'none', color: 'black' }}>
+                <Link to='/player-list' style={{ textDecoration: 'none', color: 'black' }}>
                     <MenuItem onClick={handleClose}>Players</MenuItem>
                 </Link>
                 {isAuthenticated() &&

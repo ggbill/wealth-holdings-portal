@@ -48,20 +48,20 @@ const App = () => {
                             exact
                         />
                         <Route
-                            path="/season-admin"
+                            path="/season-list"
                             render={() => <SeasonAdmin auth={auth} />}
                         />
                         <Route
                             path="/season/:id"
                             render={(props) => <Season auth={auth} {...props} />}
                         />
-                        <Route path="/teams" component={TeamAdmin} />
+                        <Route path="/team-list" component={TeamAdmin} />
                         <Route
-                            path="/players"
+                            path="/player-list"
                             render={() => <PlayerAdmin auth={auth} />}
                         />
                         <Route path="/player/:id" component={Player} />
-                        <Route path="/fixture-admin" component={FixtureAdmin} />
+                        <Route path="/fixture-list" component={FixtureAdmin} />
                         <Route path="/fixture/:id" component={Fixture} />
                         <Route path="/callback" render={props => {
                             handleAuthentication(props);
