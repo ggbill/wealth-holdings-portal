@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { Router, Route, Switch } from "react-router-dom"
 import Home from './components/home/Home'
 import TeamAdmin from './components/team/TeamAdmin'
 import PlayerAdmin from './components/player/PlayerAdmin'
@@ -16,26 +16,29 @@ import Callback from './components/callback'
 import Loading from './components/shared/Loading'
 import HttpsRedirect from 'react-https-redirect'
 import ReactGA from'react-ga'
+import { createBrowserHistory } from 'history';
 
 ReactGA.initialize('UA-154787523-1');
+const history = createBrowserHistory();
 
-const logPageView = () => {
-    ReactGA.set({ page: window.location.pathname + window.location.search });
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  }
+history.listen((location) => {
+    console.log(`history - location: ${JSON.stringify(location)}`)
+    ReactGA.set({ page: location.pathname + location.search })
+    ReactGA.pageview(location.pathname + location.search)
+});
 
 const auth = new Auth();
 
 const handleAuthentication = (prop: any) => {
     if (/access_token|id_token|error/.test(prop.location.hash)) {
-        auth.handleAuthentication();
+        auth.handleAuthentication()
     }
 };
 
 const App = () => {
     return (
         <HttpsRedirect>
-            <BrowserRouter onUpdate={logPageView}>
+            <Router history={history}>
                     <MenuBar auth={auth} />
                     <div className="full-height-content">
 
@@ -71,7 +74,7 @@ const App = () => {
                         </Switch>
                     </div>
                     <Footer auth={auth} />
-            </BrowserRouter>
+            </Router>
         </HttpsRedirect>
     );
 }
