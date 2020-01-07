@@ -446,6 +446,11 @@ const Season = (props: InputProps) => {
                 }
                 <br />
 
+                <h2>Player Stats</h2>
+                <PlayerSeasonStatsTable
+                    seasonId={seasonId}
+                />
+
                 {isAuthenticated() &&
                     <>
                         <h3>Teams</h3>
