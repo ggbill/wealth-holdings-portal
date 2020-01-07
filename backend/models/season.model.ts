@@ -25,7 +25,7 @@ const SeasonSchema: Schema = new Schema({
   teamList: [{ type: Schema.Types.ObjectId, ref: Player }],
   playerList: [{ type: Schema.Types.ObjectId, ref: Team }],
   fixtureList: [{ type: Schema.Types.ObjectId, ref: Fixture }],
-  accoladeList: [{ type: Schema.Types.ObjectId, ref: Accolade }],
+  accoladeList: [{ type: Accolade.schema }],
   isActive: {type: Boolean, required: true}
 });
 

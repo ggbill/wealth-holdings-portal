@@ -51,5 +51,17 @@ router.post('/', async (request: Request, response: Response) => {
     }
 });
 
+router.get('/:id/careerAccoladeList', async (request: Request, response: Response) => {
+    try {
+        const result = await PlayerController.GetPlayerCareerAccoladeList(request.params.id);
+        response.json(result);
+        response.end();
+    }catch (err){
+        response.status(500);
+        response.end;
+        console.error("Error: ", err)
+    }
+});
+
 export default router;
 

@@ -18,6 +18,7 @@ const Home = () => {
         teamList: [],
         playerList: [],
         fixtureList: [],
+        accoladeList: [],
         isActive: false
     })
 
@@ -97,8 +98,8 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="content position-relative">
-                <div className="last-next-fixture-section">
+            <div className="content">
+                <div className="last-next-fixture-section position-relative">
                     <LastNextFixturesSection fixtureList={currentSeason.fixtureList} />
                 </div>
                 <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>

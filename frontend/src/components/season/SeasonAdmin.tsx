@@ -28,6 +28,7 @@ const SeasonAdmin = (props: InputProps) => {
         teamList: [],
         playerList: [],
         fixtureList: [],
+        accoladeList: [],
         isActive: false
     });
     const [previousSeasonList, setPreviousSeasonList] = useState<App.Season[]>([]);
@@ -41,6 +42,7 @@ const SeasonAdmin = (props: InputProps) => {
         teamList: [],
         playerList: [],
         fixtureList: [],
+        accoladeList: [],
         isActive: false
     });
     const [loading, setLoading] = useState<boolean>(false);
@@ -128,6 +130,7 @@ const SeasonAdmin = (props: InputProps) => {
             teamList: [],
             playerList: [],
             fixtureList: [],
+            accoladeList: [],
             isActive: false
         })
     }

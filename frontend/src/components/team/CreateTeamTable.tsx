@@ -37,9 +37,9 @@ const CreateTeamTable = (props: InputProps) => {
                 marginTop: theme.spacing(3),
                 overflowX: 'auto',
             },
-            table: {
-                minWidth: 650,
-            },
+            // table: {
+            //     // minWidth: 650,
+            // },
         }),
     );
 
@@ -84,7 +84,7 @@ const CreateTeamTable = (props: InputProps) => {
     return (
         <>
             <Paper className={classes.root}>
-                <Table className={classes.table}>
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
@@ -95,7 +95,7 @@ const CreateTeamTable = (props: InputProps) => {
                         {props.teams.map((item: App.Team) => (
                             <TableRow key={item._id}>
                                 <TableCell>{item.name}</TableCell>
-                                <TableCell align="right">
+                                <TableCell className="actions-cell" align="right">
                                     <Button variant="text" onClick={() => handleEditTeamDialogOpen(item)}>
                                         <EditIcon />
                                     </Button>

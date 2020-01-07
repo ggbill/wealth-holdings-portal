@@ -1,0 +1,58 @@
+.accolade-card{
+    width: 290px;
+    margin: 12px;
+
+    .player-image{
+        height: 200px;
+    }
+
+    .accolade-overlay-image{
+        height: 60px;
+        width: 60px;
+        position: relative;
+        top: -58px;
+        left: 200px;
+        margin-bottom: -54px;
+    }
+
+    .MuiCardContent-root{
+        .title{
+            display: block;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .subtitle{
+            display: block;
+            font-size: 1em;
+            font-weight: 500;
+
+
+        }
+    }
+}
+
+.accolade-sticker{
+    width: 150px;
+    margin: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .accolade-image{
+        height: 80px;
+    }
+
+    .title{
+        display: block;
+        font-size: 1em;
+        font-weight: 600;
+    }
+
+    .subtitle{
+        display: block;
+        font-size: 0.8em;
+        font-weight: 500;
+    }
+}

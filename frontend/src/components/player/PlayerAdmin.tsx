@@ -226,7 +226,7 @@ const PlayerAdmin = (props: InputProps) => {
             {isAuthenticated() &&
                 <Button onClick={handleAddPlayerDialogOpen} color="primary">
                     Add
-            </Button>
+                </Button>
             }
 
             {/* Create Player Dialog */}

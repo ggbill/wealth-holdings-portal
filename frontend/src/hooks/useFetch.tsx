@@ -32,12 +32,13 @@ const useFetch = (collection: string) => {
     };
 
     const get = id => {
+        // console.log(`useFetch get: ${id}`)
         const url = `${stub}${id ? `/${id}` : ""}`;
         return customFetch(url, "GET", null, defaultHeader);
     };
 
     const post = (body) => {
-        if (!body) throw new Error("to make a post you must provide a     body");
+        if (!body) throw new Error("to make a post you must provide a body");
         return customFetch(stub, "POST", body, defaultHeader);
     };
 

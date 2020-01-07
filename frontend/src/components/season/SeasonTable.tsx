@@ -27,6 +27,7 @@ const SeasonTable = (props: InputProps) => {
         teamList: [],
         playerList: [],
         fixtureList: [],
+        accoladeList: [],
         isActive: false
     });
 
@@ -55,6 +56,7 @@ const SeasonTable = (props: InputProps) => {
             teamList: [],
             playerList: [],
             fixtureList: [],
+            accoladeList: [],
             isActive: false
         })
     }

@@ -9,6 +9,7 @@ declare module App {
         teamList: Team[],
         playerList: Player[],
         fixtureList: Fixture[],
+        accoladeList: Accolade[],
         isActive: boolean
     } 
 
@@ -45,5 +46,21 @@ declare module App {
         opposition: Team,
         players: FixturePlayer[],
         isActive: boolean
+    } 
+
+    interface Accolade{
+        _id: string,
+        name: string,
+        imageUrl: string,
+        player: Player,
+        isActive: boolean
+    } 
+
+    interface PlayerAccolade{
+        seasonId: string,
+        seasonName: string,
+        seasonLocation: string,
+        seasonStartDate: Date,
+        accolade: IAccolade
     } 
 }

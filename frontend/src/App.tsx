@@ -22,7 +22,6 @@ ReactGA.initialize('UA-154787523-1');
 const history = createBrowserHistory();
 
 history.listen((location) => {
-    console.log(`history - location: ${JSON.stringify(location)}`)
     ReactGA.set({ page: location.pathname + location.search })
     ReactGA.pageview(location.pathname + location.search)
 });

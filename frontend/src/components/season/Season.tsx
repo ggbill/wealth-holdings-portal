@@ -8,13 +8,15 @@ import moment from 'moment'
 import FixtureCard from '../fixture/FixtureCard'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
-import { Button } from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 import ConfigureFixtureDialog from "../fixture/ConfigureFixtureDialog"
 import SeasonHeader from "./SeasonHeader"
 import {
     useParams
 } from "react-router-dom";
 import Loading from "../shared/Loading"
+import AccoladeCard from "../accolade/AccoladeCard"
+import ConfigureAccoladeDialog from "../accolade/ConfigureAccoladeDialog"
 
 interface InputProps {
     auth: any
@@ -42,13 +44,16 @@ const Season = (props: InputProps) => {
         teamList: [],
         playerList: [],
         fixtureList: [],
+        accoladeList: [],
         isActive: false
     });
 
     const [teamList, setTeamList] = useState<App.Team[]>([])
+    const [accoladeList, setAccoladeList] = useState<App.Accolade[]>([])
     const [isTeamUpdated, setIsTeamUpdated] = useState<boolean>(false)
     const [playerList, setPlayerList] = useState<App.Player[]>([])
     const [isPlayerUpdated, setIsPlayerUpdated] = useState<boolean>(false)
+    const [isAccoladeUpdated, setIsAccoladeUpdated] = useState<boolean>(false)
     const [fixtureList, setFixtureList] = useState<App.Fixture[]>([])
     const [isFixtureUpdated, setIsFixtureUpdated] = useState<boolean>(false)
     const [isSeasonUpdated, setIsSeasonUpdated] = useState<boolean>(false)
@@ -57,6 +62,7 @@ const Season = (props: InputProps) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [isAddFixtureDialogOpen, setIsAddFixtureDialogOpen] = React.useState<boolean>(false);
+    const [isAddAccoladeDialogOpen, setIsAddAccoladeDialogOpen] = React.useState<boolean>(false);
     const [isEditFixtureDialogOpen, setIsEditFixtureDialogOpen] = React.useState<boolean>(false);
     const [fixture, setfixture] = React.useState<App.Fixture>({
         _id: "",
@@ -74,6 +80,19 @@ const Season = (props: InputProps) => {
         players: [],
         isActive: true
     });
+    const [accolade, setAccolade] = React.useState<App.Accolade>({
+        _id: "",
+        name: "",
+        imageUrl: "",
+        player: {
+            _id: "",
+            firstName: "",
+            surname: "",
+            imageUrl: "",
+            isActive: true
+        },
+        isActive: true
+    })
 
     const getSeasonById = (seasonId: string): void => {
         setLoading(true)
@@ -84,6 +103,7 @@ const Season = (props: InputProps) => {
                 setPlayerList(data.playerList)
                 setFixtureList(data.fixtureList)
                 sortFixtures(data)
+                setAccoladeList(data.accoladeList)
                 setLoading(false)
             })
             .catch((err: Error) => {
@@ -150,9 +170,13 @@ const Season = (props: InputProps) => {
             setSeason({ ...season, playerList: playerList })
             setIsPlayerUpdated(false)
         }
+        if (isAccoladeUpdated) {
+            setSeason({ ...season, accoladeList: accoladeList })
+            setIsAccoladeUpdated(false)
+        }
         setIsSeasonUpdated(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isTeamUpdated, isFixtureUpdated, isPlayerUpdated]);
+    }, [isTeamUpdated, isFixtureUpdated, isPlayerUpdated, isAccoladeUpdated]);
 
     React.useEffect(() => {
         if (isSeasonUpdated) {
@@ -171,13 +195,21 @@ const Season = (props: InputProps) => {
         var updatedList = teamList.filter(team =>
             team._id !== id
         );
-        setTeamList(updatedList);
+        setTeamList(updatedList)
         setIsTeamUpdated(true)
     }
 
+    const deleteAccolade = (id): void => {
+        var updatedList = accoladeList.filter(accolade =>
+            accolade._id !== id
+        );
+        setAccoladeList(updatedList)
+        setIsAccoladeUpdated(true)
+    }
+
     const addPlayer = (player: App.Player): void => {
-        var updatedList = playerList.concat(player);
-        setPlayerList(updatedList);
+        var updatedList = playerList.concat(player)
+        setPlayerList(updatedList)
         setIsPlayerUpdated(true)
     }
 
@@ -185,17 +217,40 @@ const Season = (props: InputProps) => {
         var updatedList = playerList.filter(player =>
             player._id !== id
         );
-        setPlayerList(updatedList);
+        setPlayerList(updatedList)
         setIsPlayerUpdated(true)
     }
 
     const removeFixture = (id): void => {
-
         var updatedList = fixtureList.filter(team =>
             team._id !== id
         );
         setFixtureList(updatedList);
         setIsFixtureUpdated(true)
+    }
+
+    const updateAccoladeList = (accolade: App.Accolade): void => {
+
+        const updatedAccoladeList = season.accoladeList.map(obj => {
+            if (obj._id === accolade._id) {
+                return accolade;
+            } else {
+                return obj
+            }
+        })
+
+        setAccoladeList(updatedAccoladeList);
+        setIsAccoladeUpdated(true)
+    }
+
+    const addNewAccolade = (accolade: App.Accolade) => {
+        season.accoladeList.push(accolade)
+        setAccoladeList(season.accoladeList);
+        setIsAccoladeUpdated(true)
+
+    }
+
+    const updateAccolade = (accolade: App.Accolade) => {
     }
 
     const sortFixtures = (season: App.Season) => {
@@ -271,6 +326,27 @@ const Season = (props: InputProps) => {
         })
     };
 
+    const handleAddAccoladeDialogOpen = () => {
+        setIsAddAccoladeDialogOpen(true)
+    };
+
+    const handleAddAccoladeDialogClose = () => {
+        setIsAddAccoladeDialogOpen(false)
+        setAccolade({
+            _id: "",
+            name: "",
+            imageUrl: "",
+            player: {
+                _id: "",
+                firstName: "",
+                surname: "",
+                imageUrl: "",
+                isActive: true
+            },
+            isActive: true
+        })
+    };
+
     if (loading) {
         return (
             <Loading />
@@ -287,6 +363,39 @@ const Season = (props: InputProps) => {
         <>
             <SeasonHeader season={season} />
             <div className="content">
+                <div style={{ display: accoladeList.length ? 'block' : 'none' }}>
+                    <h2>Accolades</h2>
+                    <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
+                        {accoladeList.map(accolade => {
+                            return (
+                                <div className="accolade-card-div" key={accolade._id}>
+                                    <AccoladeCard
+                                        accolade={accolade}
+                                        auth={props.auth}
+                                        deleteAccolade={deleteAccolade}
+                                        updateAccoladeList={updateAccoladeList}
+                                        playerList={season.playerList}
+                                    />
+                                </div>
+                            )
+                        })}
+                    </Box>
+                    {isAuthenticated() &&
+                        <Button onClick={handleAddAccoladeDialogOpen} color="primary">
+                            Add
+                    </Button>
+                    }
+                    <br />
+                </div>
+                <div style={{ display: isAuthenticated() && !accoladeList.length ? 'block' : 'none' }}>
+                    <h2>Accolades</h2>
+                    {isAuthenticated() &&
+                        <Button onClick={handleAddAccoladeDialogOpen} color="primary">
+                            Add
+                    </Button>
+                    }
+                    <br />
+                </div>
                 <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>
                     <h2>Fixtures</h2>
                     {futureFixtureList.map(fixture => {
@@ -335,12 +444,8 @@ const Season = (props: InputProps) => {
                         Add
                     </Button>
                 }
+                <br />
 
-
-                <h2>Player Stats</h2>
-                <PlayerSeasonStatsTable
-                    seasonId={seasonId}
-                />
                 {isAuthenticated() &&
                     <>
                         <h3>Teams</h3>
@@ -382,6 +487,16 @@ const Season = (props: InputProps) => {
                 playerList={playerList}
                 isCreateFixtureDialog={true}
                 fixture={fixture}
+            />
+            {/* Add Accolade Dialog */}
+            <ConfigureAccoladeDialog
+                handleClose={handleAddAccoladeDialogClose}
+                updateAccolade={updateAccolade}
+                createAccolade={addNewAccolade}
+                isDialogOpen={isAddAccoladeDialogOpen}
+                accolade={accolade}
+                isCreateAccoladeDialog={true}
+                playerList={season.playerList}
             />
         </>
     )

@@ -1,4 +1,7 @@
 import Player, { IPlayer } from '../models/player.model';
+import { SeasonController } from './season.controller';
+import { ISeason } from '../models/season.model';
+import { IAccolade } from '../models/accolade.model';
 var mongoose = require('mongoose');
 
 export namespace PlayerController {
@@ -51,5 +54,31 @@ export namespace PlayerController {
                 resolve(result);
             });
         });
+    }
+
+    export async function GetPlayerCareerAccoladeList(playerId: string): Promise<any[]> {
+        let seasonList: ISeason[] = await SeasonController.GetSeasons();
+        let playerCareerAccoladeList: any[] = []
+
+        return new Promise((resolve: (result) => void, reject: (error: Error) => void) => {
+
+            seasonList.forEach(season => {
+
+                season.accoladeList.forEach((accolade: IAccolade) => {
+                    if (playerId == accolade.player._id){
+                        playerCareerAccoladeList.push({
+                            seasonId: season._id,
+                            seasonName: season.name,
+                            seasonLocation: season.location,
+                            seasonStartDate: season.startDate,
+                            accolade: accolade
+                        })
+                    }
+                })
+
+            });
+
+            resolve(playerCareerAccoladeList)
+        })
     }
 }

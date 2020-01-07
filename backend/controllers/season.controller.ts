@@ -102,6 +102,10 @@ export namespace SeasonController {
                     path: 'playerList',
                     model: 'Player'
                 })
+                .populate({
+                    path: 'accoladeList.player',
+                    model: 'Player'
+                })
 
         });
     }
@@ -116,6 +120,7 @@ export namespace SeasonController {
                 teamList: season.teamList,
                 playerList: season.playerList,
                 fixtureList: season.fixtureList,
+                accoladeList: season.accoladeList,
                 isActive: season.isActive
             }, function (err, result) {
                 if (err) {
@@ -136,6 +141,7 @@ export namespace SeasonController {
                 endDate: new Date(season.endDate),
                 teamList: season.teamList,
                 fixtureList: season.fixtureList,
+                accoladeList: season.accoladeList,
                 isActive: true
             }, function (err, result: ISeason) {
                 if (err) {
