@@ -1,8 +1,10 @@
 import React from "react"
 import './fixture.scss'
-import FixturePlayerUnorderedList from "../player/FixturePlayerUnorderedList";
+import { Box } from "@material-ui/core"
 import useFetch from "../../hooks/useFetch"
 import Loading from "../shared/Loading";
+import FixtureHeader from "./FixtureHeader";
+import PlayerSticker from "../player/PlayerSticker";
 
 const Fixture = ({ match }) => {
 
@@ -44,24 +46,15 @@ const Fixture = ({ match }) => {
             })
     }
 
-    const generateScore = (): string => {
-
-        if (fixture.players.length < 1){
-            return ''
-        }else{
-            var goalsFor: number = 0
-
-            fixture.players.forEach(fixturePlayer => {
-                goalsFor += fixturePlayer.goalCount;
-            });
-    
-            return `${goalsFor} - ${fixture.goalsAgainst}`;
-        }
-    }
-
     React.useEffect(() => {
         getFixtureById(fixtureId);
     }, []);
+
+    // let widget = window.cloudinary.createUploadWidget({
+    //     cloudName: "demo",
+    //     uploadPreset: "blog_upload"
+    // },
+    //     (error, result) => { })
 
     if (loading) {
         return (
@@ -77,15 +70,21 @@ const Fixture = ({ match }) => {
 
     return (
         <>
-            <h3>Kickoff: {new Intl.DateTimeFormat('en-GB').format(new Date(fixture.kickoffDateTime))}</h3>
-            <h3>Opposition: {fixture.opposition.name}</h3>
-            <h3>Fixture Type: {fixture.fixtureType}</h3>
-            <h3>Result: {fixture.result}</h3>
-            <h3>Score: {generateScore()}</h3>
-            <h3>Players:</h3>
-            <FixturePlayerUnorderedList
-                playerList={fixture.players}
-            />
+            <FixtureHeader fixture={fixture} />
+            <div className="content">
+                <div style={{ display: fixture.players.length ? 'block' : 'none' }}>
+                    <h2>Players</h2>
+                    <Box display="flex" flexDirection="row" flexWrap="wrap">
+                        {fixture.players.map((fixturePlayer: App.FixturePlayer) => (
+                            <PlayerSticker player={fixturePlayer.player} />
+                        ))}
+                    </Box>
+                    < br />
+                </div>
+
+            </div>
+
+
         </>
     )
 }

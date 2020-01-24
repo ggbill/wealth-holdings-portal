@@ -1,6 +1,5 @@
 import React from "react"
 import './accolade.scss'
-import { Card, CardContent, CardMedia } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 interface InputProps {
@@ -8,7 +7,6 @@ interface InputProps {
 }
 
 const AccoladeSticker = (props: InputProps) => {
-
     return (
         <>
             <Link to={`/season/${props.playerAccolade.seasonId}`} style={{ textDecoration: 'none', color: 'black' }}>

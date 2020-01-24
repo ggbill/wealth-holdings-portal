@@ -1,24 +1,12 @@
 import React from "react"
 import './fixture.scss'
-import { Card, CardContent, CardActionArea } from '@material-ui/core'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
 
 interface InputProps {
     fixture: App.Fixture
 }
 
-const FixtureCard = (props: InputProps) => {
-
-    const getResultClass = () => {
-        if (props.fixture.result === "WIN") {
-            return "win"
-        } else if (props.fixture.result === "LOSS") {
-            return "loss"
-        } else {
-            return "draw"
-        }
-    }
+const FixtureHeader = (props: InputProps) => {
 
     const getLightningGoals = (): number => {
         if (!props.fixture.oppositionOwnGoals) {
@@ -41,7 +29,7 @@ const FixtureCard = (props: InputProps) => {
             return (
                 <div className="score-kickoff-wrapper">
                     <div className="score-wrapper desktop-view">
-                        <span className={`score ${getResultClass()}`}>{getLightningGoals()}</span>
+                        <span className={"score"}>{getLightningGoals()}</span>
                         <span className="score">-</span>
                         <span className="score">{props.fixture.goalsAgainst}</span>
                     </div>
@@ -114,59 +102,52 @@ const FixtureCard = (props: InputProps) => {
     }
 
     return (
-        <div key={props.fixture._id} className="fixture-card">
-            <Card className="desktop-view">
-                <CardActionArea component={Link} to={`/fixture/${props.fixture._id}`}>
-                    <CardContent>
-                        <div className="left-content">
-                            <span className="team-name">Lenton Lightning FC</span>
-                            <div className="scorers">
-                                {generateScorerList()}
-                            </div>
-                            <div className="motm">
-                                {generateMotm()}
-                            </div>
+        <div className="header-section">
+            <div className="fixture-header">
+                <div className="desktop-view">
+                    <div className="left-content">
+                        <span className="team-name title">Lenton Lightning FC</span>
+                        <div className="scorers">
+                            {generateScorerList()}
                         </div>
-                        <div className="centre-content">
-                            {generateScores()}
+                        <div className="motm">
+                            {generateMotm()}
                         </div>
-                        <div className="right-content">
-                            <span className="team-name">{props.fixture.opposition.name}</span>
-                        </div>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-            <Card className="mobile-view">
-                <CardActionArea component={Link} to={`/fixture/${props.fixture._id}`}>
-                    <CardContent>
-                        <div>
-                            {props.fixture.result ?
-                                <span className="team-name">{props.fixture.opposition.name}: {props.fixture.goalsAgainst}</span> :
-                                <span className="team-name">{props.fixture.opposition.name}</span>
-                            }
+                    </div>
+                    <div className="centre-content">
+                        {generateScores()}
+                    </div>
+                    <div className="right-content">
+                        <span className="team-name">{props.fixture.opposition.name}</span>
+                    </div>
+                </div>
 
+                <div className="mobile-view">
+                        {props.fixture.result ?
+                            <span className="team-name">{props.fixture.opposition.name}: {props.fixture.goalsAgainst}</span> :
+                            <span className="team-name">{props.fixture.opposition.name}</span>
+                        }
+                    <div className="kickoff-wrapper">
+                        <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
+                        <span className="fixture-type">{props.fixture.fixtureType}</span>
+                    </div>
+                    <div className="lightning-wrapper">
+                        {props.fixture.result ?
+                            <span className="team-name">Lenton Lightning FC: <span>{getLightningGoals()}</span></span> :
+                            <span className="team-name">Lenton Lightning FC</span>
+                        }
+                        <div className="scorers">
+                            {generateScorerList()}
                         </div>
-                        <div className="kickoff-wrapper">
-                            <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
-                            <span className="fixture-type">{props.fixture.fixtureType}</span>
+                        <div className="motm">
+                            {generateMotm()}
                         </div>
-                        <div className="lightning-wrapper">
-                            {props.fixture.result ?
-                                <span className="team-name">Lenton Lightning FC: <span className={getResultClass()}>{getLightningGoals()}</span></span> :
-                                <span className="team-name">Lenton Lightning FC</span>
-                            }
-                            <div className="scorers">
-                                {generateScorerList()}
-                            </div>
-                            <div className="motm">
-                                {generateMotm()}
-                            </div>
-                        </div>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
+                    </div>
+                </div>
+
+            </div>
         </div>
     )
 }
 
-export default FixtureCard
+export default FixtureHeader

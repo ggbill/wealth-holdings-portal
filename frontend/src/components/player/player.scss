@@ -82,7 +82,60 @@ table a{
     display: none;
 }
 
+.player-sticker{
+    width: 150px;
+    margin: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
+    .player-image{
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+    }
+
+    .title{
+        display: block;
+        font-size: 1em;
+        font-weight: 600;
+    }
+}
+
+.player-card{
+    .MuiCard-root{
+        width: 290px;
+        margin: 12px;
+        text-align: center;
+
+        .MuiCardContent-root{
+            table{
+                width: 100%;
+                text-align: center;
+                
+                td{
+                    width: 25%;
+                }
+
+                td.value{
+                    font-weight: bold;
+                }
+
+                .horizontal-line{
+                    width: 100%;
+                    height: 2px;
+                    background-color: #E4FF1A;
+                }
+            }
+        }
+    }
+
+    .MuiCardMedia-root{
+        height: 200px;
+    }
+}
 
 @media only screen and (max-width: 600px) {
     .player-header{
