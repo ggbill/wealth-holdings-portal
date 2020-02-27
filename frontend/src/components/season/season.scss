@@ -71,12 +71,17 @@
 
 .fixture-card-div{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+
+    .admin-buttons{
+        padding-bottom: 12px;
+    }
 
     .fixture-card{
         display: flex;
         flex-grow: 1;
+        width: 100%;
     }
 }
 
@@ -116,13 +121,18 @@
 
 .season-card-div{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+
+    .admin-buttons{
+        padding-bottom: 12px;
+    }
 
     .season-card{
         display: flex;
         flex-grow: 1;
         margin-bottom: 12px;
+        width:100%;
 
         .MuiCard-root{
             width: 100%;

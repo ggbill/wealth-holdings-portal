@@ -197,7 +197,7 @@ const LastNextFixturesSection = (props: InputProps) => {
                     {
                         topScorerList.map((element, index) => {
                             if ((index + 1) < topScorerList.length) {
-                                return (<Link to={'/player/' + element.id}>{element.name}</Link>)
+                                return (<Link to={'/player/' + element.id}>{element.name},&nbsp;</Link>)
                             } else {
                                 return (<div><Link to={'/player/' + element.id}>{element.name}</Link> [{element.goalCount}]</div>)
                             }
