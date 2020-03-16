@@ -275,26 +275,28 @@ const Season = (props: InputProps) => {
                     <br />
                 </div>
 
-                <h2>Results</h2>
-                {pastFixtureList.map(fixture => {
-                    return (
-                        <div className="fixture-card-div" key={fixture._id}>
-                            <FixtureCard
-                                fixture={fixture}
-                            />
-                            {isAuthenticated() &&
-                                <div className="admin-buttons">
-                                    <Button variant="text" onClick={() => handleEditFixtureDialogOpen(fixture)}>
-                                        <EditIcon />
-                                    </Button>
-                                    <Button variant="text" onClick={() => removeFixture(fixture._id)}>
-                                        <DeleteIcon />
-                                    </Button>
-                                </div>
-                            }
-                        </div>
-                    )
-                })}
+                <div style={{ display: pastFixtureList.length ? 'block' : 'none' }}>
+                    <h2>Results</h2>
+                    {pastFixtureList.map(fixture => {
+                        return (
+                            <div className="fixture-card-div" key={fixture._id}>
+                                <FixtureCard
+                                    fixture={fixture}
+                                />
+                                {isAuthenticated() &&
+                                    <div className="admin-buttons">
+                                        <Button variant="text" onClick={() => handleEditFixtureDialogOpen(fixture)}>
+                                            <EditIcon />
+                                        </Button>
+                                        <Button variant="text" onClick={() => removeFixture(fixture._id)}>
+                                            <DeleteIcon />
+                                        </Button>
+                                    </div>
+                                }
+                            </div>
+                        )
+                    })}
+                </div>
                 {isAuthenticated() &&
                     <Button onClick={handleAddFixtureDialogOpen} color="primary">
                         Add

@@ -102,19 +102,21 @@ const Home = () => {
                 <div className="last-next-fixture-section position-relative">
                     <LastNextFixturesSection fixtureList={currentSeason.fixtureList} />
                 </div>
-                <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>
-                    <h2>Fixtures</h2>
-                    {futureFixtureList.map(fixture => {
-                        return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
-                    })}
-                    <br />
-                </div>
-
                 <div style={{ display: currentSeason._id ? 'block' : 'none' }}>
-                    <h2>Results</h2>
-                    {pastFixtureList.map(fixture => {
-                        return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
-                    })}
+                    <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>
+                        <h2>Fixtures</h2>
+                        {futureFixtureList.map(fixture => {
+                            return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
+                        })}
+                        <br />
+                    </div>
+
+                    <div style={{ display: pastFixtureList ? 'block' : 'none' }}>
+                        <h2>Results</h2>
+                        {pastFixtureList.map(fixture => {
+                            return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
+                        })}
+                    </div>
                 </div>
             </div>
         </>
