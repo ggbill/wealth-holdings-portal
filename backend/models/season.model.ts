@@ -8,10 +8,11 @@ import Accolade, { IAccolade } from './accolade.model';
 export interface ISeason extends Document {
     name: string,
     location: string,
+    imageUrl: string,
     startDate: Date,
     endDate: Date,
     teamList: ITeam[],
-    playerList: ITeam[],
+    playerList: IPlayer[],
     fixtureList: IFixture[],
     accoladeList: IAccolade[],
     isActive: boolean
@@ -20,6 +21,7 @@ export interface ISeason extends Document {
 const SeasonSchema: Schema = new Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
+  imageUrl: { type: String },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   teamList: [{ type: Schema.Types.ObjectId, ref: Player }],

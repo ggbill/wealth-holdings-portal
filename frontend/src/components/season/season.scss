@@ -93,11 +93,11 @@
     margin: 0 auto;
 
     img{
-        max-width: 170px;
-        max-height: 170px;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
         border-radius: 50%;
         padding: 0 24px;
-
     }
 
     .season-info{

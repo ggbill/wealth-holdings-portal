@@ -35,6 +35,7 @@ const ConfigureSeasonDialog = (props: InputProps) => {
                 _id: "",
                 name: "",
                 location: "",
+                imageUrl: "",
                 startDate: new Date(),
                 endDate: new Date(),
                 teamList: [],
@@ -96,6 +97,17 @@ const ConfigureSeasonDialog = (props: InputProps) => {
                         type="text"
                         fullWidth
                         value={season.location}
+                        onChange={handleChange}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="imageUrl"
+                        name="imageUrl"
+                        label="Image URL"
+                        type="text"
+                        fullWidth
+                        value={season.imageUrl}
                         onChange={handleChange}
                     />
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>

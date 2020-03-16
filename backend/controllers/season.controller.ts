@@ -115,6 +115,7 @@ export namespace SeasonController {
             Season.findByIdAndUpdate(id, {
                 name: season.name,
                 location: season.location,
+                imageUrl: season.imageUrl,
                 startDate: new Date(season.startDate),
                 endDate: new Date(season.endDate),
                 teamList: season.teamList,
@@ -137,6 +138,7 @@ export namespace SeasonController {
             Season.create({
                 name: season.name,
                 location: season.location,
+                imageUrl: season.imageUrl,
                 startDate: new Date(season.startDate),
                 endDate: new Date(season.endDate),
                 teamList: season.teamList,

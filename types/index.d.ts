@@ -4,6 +4,7 @@ declare module App {
         _id: string,
         name: string,
         location: string,
+        imageUrl: string,
         startDate: Date,
         endDate: Date,
         teamList: Team[],

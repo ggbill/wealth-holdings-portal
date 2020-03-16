@@ -38,6 +38,7 @@ const Season = (props: InputProps) => {
         _id: "",
         name: "",
         location: "",
+        imageUrl: "",
         startDate: new Date(),
         endDate: new Date(),
         teamList: [],
