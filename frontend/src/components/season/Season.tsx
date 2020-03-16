@@ -77,6 +77,8 @@ const Season = (props: InputProps) => {
         setLoading(true)
         seasonsApi.get(seasonId)
             .then((data: App.Season) => {
+                console.log(`data: ${JSON.stringify(data)}`)
+                console.log(`fixtureList: ${data.fixtureList}`)
                 setSeason(data)
                 setFixtureList(data.fixtureList)
                 sortFixtures(data)
@@ -135,14 +137,17 @@ const Season = (props: InputProps) => {
 
     React.useEffect(() => {
         if (isFixtureUpdated) {
+            console.log(`fixture updated`)
             setSeason({ ...season, fixtureList: fixtureList })
             setIsFixtureUpdated(false)
+            setIsSeasonUpdated(true)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFixtureUpdated]);
 
     React.useEffect(() => {
         if (isSeasonUpdated) {
+            console.log(`update season: ${JSON.stringify(season)}`)
             updateSeason(season)
         }
         setIsSeasonUpdated(false)
