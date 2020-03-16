@@ -47,7 +47,7 @@ const FixtureCard = (props: InputProps) => {
                     </div>
 
                     <div className="kickoff-wrapper">
-                        <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm D/MM/YYYY")}</span>
+                        <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
                         <span className="fixture-type">{props.fixture.fixtureType}</span>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ const FixtureCard = (props: InputProps) => {
         } else {
             return (
                 <div className="kickoff-wrapper">
-                    <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm D/MM/YYYY")}</span>
+                    <span className="kickoff">{moment(props.fixture.kickoffDateTime).format("HH:mm DD/MM/YYYY")}</span>
                     <span className="fixture-type">{props.fixture.fixtureType}</span>
                 </div>
             )
