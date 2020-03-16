@@ -171,10 +171,10 @@ const Season = (props: InputProps) => {
         });
 
         pastFixtureList.sort((a, b) => {
-            return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
+            return (a.kickoffDateTime < b.kickoffDateTime ? -1 : 1)
         })
         futureFixtureList.sort((a, b) => {
-            return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
+            return (a.kickoffDateTime < b.kickoffDateTime ? -1 : 1)
         })
 
         setPastFixtureList(pastFixtureList)
@@ -304,10 +304,13 @@ const Season = (props: InputProps) => {
                 }
                 <br />
 
-                <h2>Player Stats</h2>
-                <PlayerSeasonStatsTable
-                    seasonId={seasonId}
-                />
+                <div style={{ display: pastFixtureList.length ? 'block' : 'none' }}>
+                    <h2>Player Stats</h2>
+                    <PlayerSeasonStatsTable
+                        seasonId={seasonId}
+                    />
+                </div>
+
 
                 {isAuthenticated() &&
                     <>

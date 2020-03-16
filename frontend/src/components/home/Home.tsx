@@ -111,7 +111,7 @@ const Home = () => {
                         <br />
                     </div>
 
-                    <div style={{ display: pastFixtureList ? 'block' : 'none' }}>
+                    <div style={{ display: pastFixtureList.length ? 'block' : 'none' }}>
                         <h2>Results</h2>
                         {pastFixtureList.map(fixture => {
                             return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
