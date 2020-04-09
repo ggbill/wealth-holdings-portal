@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { AppBar, Toolbar, Button, Menu, MenuItem, Drawer } from '@material-ui/core'
-import LinkButton from './LinkButton'
-import { ReactComponent as LightningSVG } from '../../images/lightning-logo.svg'
+import React, { useState, useLayoutEffect } from 'react'
+import { AppBar, Toolbar, Button, Drawer, MenuItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import "../../App.scss"
-import PersonIcon from '@material-ui/icons/Person'
+import "./menuBar.scss"
+import LinkButton from './LinkButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 
-interface InputProps {
-    auth: any
-}
-
-const MenuBar = (props: InputProps) => {
+const MenuBar = () => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [isShadow, setIsShadow] = useState(false)
+    const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
     const toggleDrawer = (open: boolean) => event => {
@@ -26,65 +20,43 @@ const MenuBar = (props: InputProps) => {
         setIsDrawerOpen(open);
     };
 
-
-    const handleScroll = () => {
-        if (window.pageYOffset > 20) {
-            setIsShadow(true)
-        } else {
-            setIsShadow(false)
-        }
-    };
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', () => handleScroll);
-        };
-    }, []);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
     const handleClose = () => {
         setAnchorEl(null);
         setIsDrawerOpen(false);
     };
 
-    const logOut = () => {
-        setAnchorEl(null);
-        props.auth.logout();
-    }
+    const handleScroll = () => {
+        if (window.pageYOffset > 1) {
+            setScrollClass("menu-bar shadow")
+        } else {
+            setScrollClass("menu-bar no-shadow")
+        }
+    };
 
-    const { isAuthenticated } = props.auth;
+    useLayoutEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', () => handleScroll);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, []);
+
     return (
         <>
-            <div className="menu-bar">
-                <AppBar className={isShadow ? 'shadow' : 'no-shadow'}>
-                    <Toolbar>
-                        <Link className="clickable-icon" to={'/'}>
-                            <LightningSVG className="logo" />
-                        </Link>
-                        <div className="menu-items">
-                            <LinkButton className="link-button" to='/season-list'>Seasons</LinkButton>
-                            {isAuthenticated() &&
-                                <LinkButton className="link-button" to='/team-list'>Teams</LinkButton>
-                            }
-                            <LinkButton className="link-button" to='/player-list'>Players</LinkButton>
-                            {isAuthenticated() &&
-                                <Button className="clickable-icon" aria-controls="logout-menu" aria-haspopup="true" onClick={handleClick}>
-                                    <PersonIcon />
-                                </Button>
-                            }
-                        </div>
-
-                        <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
-                            <MenuIcon />
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            </div>
+            <AppBar className={scrollClass}>
+                <Toolbar>
+                    <Link className="clickable-icon" to={'/'}>
+                        <img className="logo" alt="logo" src={require("../../images/MrG-maths-logo-mobile.png")} />
+                    </Link>
+                    <div className="menu-items">
+                        <LinkButton className="link-button" to='/about'>About</LinkButton>
+                    </div>
+                    <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
+                        <MenuIcon />
+                    </Button>
+                </Toolbar>
+            </AppBar>
             <Drawer
                 anchor="top"
                 open={isDrawerOpen}
@@ -92,38 +64,17 @@ const MenuBar = (props: InputProps) => {
                 className="menu-drawer"
             >
                 <div className="close-icon-container">
-                    <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(false)}>
+                    <Button className="clickable-icon" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(false)}>
                         <CloseIcon />
                     </Button>
                 </div>
-                <Link to='/season-list' style={{ textDecoration: 'none', color: 'black' }}>
-                    <MenuItem onClick={handleClose}>Seasons</MenuItem>
+                <Link to='/about' style={{ textDecoration: 'none', color: 'black' }}>
+                    <MenuItem onClick={handleClose}>About</MenuItem>
                 </Link>
-                {isAuthenticated() &&
-                    <Link to='/team-list' style={{ textDecoration: 'none', color: 'black' }}>
-                        <MenuItem onClick={handleClose}>Teams</MenuItem>
-                    </Link>
-                }
-                <Link to='/player-list' style={{ textDecoration: 'none', color: 'black' }}>
-                    <MenuItem onClick={handleClose}>Players</MenuItem>
-                </Link>
-                {isAuthenticated() &&
-                    <MenuItem onClick={logOut}>Log Out</MenuItem>
-                }
+                <div className="drawer-footer">
+                    <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} />
+                </div>
             </Drawer>
-            <Menu
-                id="logout-menu"
-                anchorEl={anchorEl}
-                getContentAnchorEl={null}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={logOut}>Log Out</MenuItem>
-            </Menu>
-
         </>
     )
 }

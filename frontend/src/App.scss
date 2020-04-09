@@ -1,222 +1,41 @@
-.App {
-  text-align: center;
+.full-height-content {
+    min-height: calc(100vh - 122px); /* will cover the 100% of viewport minus footer */
+    overflow: hidden;
+    display: block;
+    background-image: url("./images/background.gif");
+    padding-bottom: 24px;
 }
 
-.App-logo {
-  height: 40vmin;
+.content {
+    padding: 140px 24px 24px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h1,
+h2,
+h3,
+a {
+    color: white;
 }
 
-.App-link {
-  color: #09d3ac;
-}
-
-.loading-wrapper{
+.loading-wrapper {
     position: absolute;
     left: 50%;
-    top: 40%;
+    top: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    padding: 100px 24px 24px 24px;
+    width: 200px;
 
     h2 {
         margin: 0;
     }
 }
 
-.menu-bar{
-
-    .MuiAppBar-root{
-        position: fixed;
-
-        &.no-shadow {
-            box-shadow: none;
-        }
-    }
-
-    .MuiAppBar-colorPrimary{
-        flex-grow: 1;
-        background-color: #E4FF1A;
-        color: #84A07C;
-    }
-
-    .MuiToolbar-root{
-        justify-content: space-between;
-    }
-
-    .clickable-icon{
-        padding: 0;
-        min-width: 36px;
-        &:hover {
-                background-color: #E4FF1A;
-                color: #84A07C;
-            }
-    }
-
-    .logo{
-        height: 100%;
-    }
-
-    .link-button{
-        color: black;
-        font-family: 'Quicksand', sans-serif;
-        font-weight: bold;
-        &:hover {
-            background-color: #E4FF1A;
-            color: #84A07C
-            }
-    }
-
-    .hamburger-menu{
-        display: none;
-        color: black;
-        &:hover {
-            background-color: #E4FF1A;
-            color: #84A07C
-            }   
-    }
-}
-
-.menu-drawer{
-    .MuiDrawer-paper{
-        padding-bottom: 24px;
-        background-color: #E4FF1A;
-
-        .MuiListItem-root{
-            font-weight: 600;
-            font-size: 1.3em;
-        }
-
-        .close-icon-container{
-            height: 56px;
-            display: flex;
-            justify-content: flex-end;
-        }
-    }
-}
-
-.header-section{
-    background-color: #E4FF1A;
-    text-align: center;
-    padding: 48px 0;
-    margin-top: 56px;
-}
-
-.content{
-    padding: 24px;
-    max-width: 1080px;
-    margin: 0 auto;
-}
-
-.menu-bar-margin{
-    margin-top: 56px;
-}
-
-.full-height-content{
-    min-height: calc(100vh - 150px); /* will cover the 100% of viewport minus (header + footer) */
-    overflow: hidden;
-    display: block;
-}
-   
-.footer-section{
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row;
-    background-color: #595F72;
-    padding: 24px;
-    margin-top: 48px;
-    color: white;
-    align-items: center;   
-    bottom: 0;
-    width: calc(100% - 48px);
-
-    .left-content{
-        flex-grow: 1;
-        flex-basis: 0;
-        font-size: 0.7em;
-    }
-
-    .middle-content{
-        display: flex;
-        flex-grow: 1;
-        flex-basis: 0;
-        justify-content: center;
-    }
-
-    .right-content{
-        font-size: 0.7em;
-        flex-grow: 1;
-        flex-basis: 0;
-        text-align: right;
-        flex-direction: column;
-    }
-
-    .logo{
-        width: 50px;
-        filter: invert(1) sepia(0) saturate(0) hue-rotate(0deg);
-    }
-
-    a{
-        color: inherit;
-    }
-
-    .admin-login{
-        text-decoration: underline;
-        cursor: pointer;
-    }
-}
-
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .content{
-        padding: 12px;
+    .content {
+        padding: 100px 12px 12px 12px;
     }
-
-    .full-height-content{
-        min-height: calc(100vh - 224px); /* will cover the 100% of viewport minus (header + footer) */
-    }
-
-    .menu-items{
-        display: none;
-    }
-
-    .menu-bar {
-        .hamburger-menu{
-            display: block;
-        }
-    }
-
-    .footer-section{
-        flex-direction: column;
-        
-
-        .left-content{
-            order: 3;
-            text-align: center;
-        }
-
-        .middle-content{
-            order: 1;
-            padding-bottom: 12px;
-            text-align: center;
-        }
-
-        .right-content{
-            order: 2;
-            padding-bottom: 12px;
-            text-align: center;
-        }
-
-    }
-
-    
 }

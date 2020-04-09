@@ -1,29 +1,46 @@
-.hero-image {
-    img {
-        height: 150px;
-        margin: 24px 0 84px;
-    }
-} 
+.home-page {
+    .intro-section {
+        text-align: center;
 
-.position-relative{
-    position: relative;
-    top: -70px;
-}
+        .minion-gif-desktop {
+            width: 100%;
+            max-width: 650px;
+        }
 
-.last-next-fixture-section{
-    margin-bottom: -40px;
-}
+        .minion-gif-mobile {
+            display: none;
+        }
 
-.fixture-card-div{
-    margin-bottom: 6px;
-}
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .hero-image{
-        img {
-            height: 100px;
+        .text-section {
+            text-align: left;
+            background-color: #141414b3;
+            color: white;
+            padding: 6px;
+            border-radius: 2px;
+            font-size: 1.2em;
         }
     }
 }
 
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .home-page {
+        .intro-section {
+            
+
+            .minion-gif-desktop {
+                display: none;
+            }
+            .minion-gif-mobile {
+                display: block;
+                width: 100%;
+            }
+
+            .text-section {
+                text-align: center;
+                padding: 2px;
+                font-size: 1.2em;
+            }
+        }
+    }
+}

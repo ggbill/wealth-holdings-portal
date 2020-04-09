@@ -1,41 +1,22 @@
 import React from "react"
-import { ReactComponent as LightningSVG } from '../../images/lightning-logo.svg'
 import { Link } from 'react-router-dom'
-import "../../App.scss"
+import "./footer.scss"
 
-interface InputProps {
-    auth: any
-}
-
-const Footer = (props: InputProps) => {
-
-    const { isAuthenticated } = props.auth;
-
-    const login = () => {
-        props.auth.login();
-    }
-    const logout = () => {
-        props.auth.logout();
-    }
+const Footer = () => {
 
     return (
         <section className="footer-section">
             <div className="left-content">
-                {!isAuthenticated() &&
-                    <span className="admin-login" onClick={login}>Admin Login</span>
-                }
-                {isAuthenticated() &&
-                    <span className="admin-login" onClick={logout}>Admin Log Out</span>
-                }
+                Email: <a href="mailto:thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a>
             </div>
             <div className="middle-content">
                 <Link to={'/'}>
-                    <LightningSVG className="logo" />
+                    <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} />
                 </Link>
 
             </div>
             <div className="right-content">
-                <p>Created by <a href="https://www.goinggone.io">Going Gone Technology Services</a>.</p>
+
             </div>
         </section>
     )

@@ -1,0 +1,84 @@
+.resource-card.MuiCard-root {
+    width: 296px;
+    margin: 12px 6px;
+    text-align: center;
+
+    .MuiCardContent-root {
+        display: flex;
+        flex-direction: column;
+
+        video {
+            width: 100%;
+        }
+    }
+
+    .MuiCardMedia-root {
+        height: 200px;
+    }
+
+    h1,
+    h2,
+    h3,
+    a {
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .card-title-wrapper {
+        min-height: 52px;
+        span {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+
+    .resource-type-badge {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        position: relative;
+        top: -42px;
+        left: 210px;
+        margin-bottom: -37px;
+        display: flex;
+        color: white;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    &.video{
+        .resource-type-badge {
+            background-color: #004FFF;
+            // color: black
+        }
+    }
+
+    &.image{
+        .resource-type-badge {
+            background-color: #FF1654;
+        }
+    }
+
+    &.audio{
+        .resource-type-badge {
+            background-color: #FC440F;
+        }
+    }
+    &.pdf{
+        .resource-type-badge {
+            background-color: #358600;
+            // background-color: #F18F01;
+            // background-color: #136F63;
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .resource-card.MuiCard-root {
+        width: 296px;
+        margin: 6px 0;
+        text-align: center;
+    }
+    
+}

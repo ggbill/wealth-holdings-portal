@@ -1,0 +1,39 @@
+.folder-card.MuiCard-root {
+    width: 40%;
+    margin: 12px;
+    text-align: center;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    span.folder-label {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .MuiCardContent-root {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    
+        span {
+            padding: 0 12px;
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .folder-card.MuiCard-root {
+        width: 100%;
+        margin: 6px 0;
+
+        span.folder-label {
+            font-size: 1em;
+        }
+    }
+    
+}
+

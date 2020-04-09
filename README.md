@@ -1,4 +1,4 @@
-# Lenton Lightning App
+# Mr G Maths
 
 ## Notes
 

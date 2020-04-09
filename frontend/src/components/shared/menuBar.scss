@@ -1,0 +1,99 @@
+.MuiAppBar-root.menu-bar {
+    position: fixed;
+    padding: 6px 0;
+
+    &.MuiAppBar-colorPrimary {
+        flex-grow: 1;
+        color: #84a07c;
+
+        &.no-shadow {
+            box-shadow: none;
+            background-color: #ffffff00;
+            transition: background-color 1s;
+        }
+        &.shadow {
+            background-color: #141414f0;
+            transition: background-color 1s;
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .logo {
+        max-width: 250px;
+        width: 100%;
+    }
+
+    .MuiToolbar-root {
+        justify-content: space-between;
+
+        .link-button {
+            color: white;
+            font-weight: bold;
+            &:hover {
+                color: #4abae6;
+            }
+        }
+    }
+
+    .hamburger-menu {
+        display: none;
+        color: white;
+        padding: 0;
+        min-width: 36px;
+    }
+}
+
+.menu-drawer {
+    .MuiDrawer-paper {
+        padding-bottom: 24px;
+        background-color: #141414;
+        color: white;
+
+        .MuiListItem-root {
+            font-weight: 600;
+            font-size: 1.3em;
+            color: white;
+        }
+
+        .close-icon-container {
+            height: 56px;
+            display: flex;
+            justify-content: flex-end;
+            button{
+                color: white;
+            }
+            
+        }
+
+        .drawer-footer{
+            text-align: center;
+
+            img{
+                width: 80px;
+            }
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .MuiAppBar-root.menu-bar {
+        padding: 4px 0 0 0;
+        .logo {
+            width: 240px;
+        }
+
+        .hamburger-menu {
+            display: block;
+        }
+    }
+
+    .menu-items {
+        display: none;
+    }
+
+    
+}

@@ -1,9 +1,9 @@
 {
-  "name": "lenton-lightning-backend",
+  "name": "mrgmaths-backend",
   "version": "1.0.0",
-  "description": "The nodeJS backend of the Lenton Lightning App",
+  "description": "The nodeJS backend of the Mr.G Maths",
   "repository": {
-    "url": "https://github.com/ggbill/lenton-lightning"
+    "url": "https://github.com/ggbill/mrgmaths"
   },
   "main": "dist/server.js",
   "engines": {
@@ -20,6 +20,7 @@
     "@types/auth0-js": "^8.11.1",
     "@types/cors": "^2.8.6",
     "body-parser": "^1.19.0",
+    "cloudinary": "^1.21.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongodb": "^3.3.2",

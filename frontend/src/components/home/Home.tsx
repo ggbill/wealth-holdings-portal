@@ -1,89 +1,46 @@
 import './home.scss';
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import useFetch from "../../hooks/useFetch"
-import moment from 'moment'
-import LastNextFixturesSection from '../fixture/LastNextFixturesSection'
-import FixtureCard from '../fixture/FixtureCard'
+import { Link } from "react-router-dom"
+import { Box, Card, CardContent, CardActionArea } from '@material-ui/core'
+import FolderOpenIcon from '@material-ui/icons/FolderOpen'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import Loading from '../shared/Loading';
+import FolderCard from '../shared/FolderCard'
 
-const Home = () => {
-
-    const seasonsApi = useFetch("seasons");
-    const [currentSeason, setCurrentSeason] = useState<App.Season>({
-        _id: "",
-        name: "",
-        location: "",
-        imageUrl: "",
-        startDate: new Date(),
-        endDate: new Date(),
-        teamList: [],
-        playerList: [],
-        fixtureList: [],
-        accoladeList: [],
-        isActive: false
-    })
-
-    const [futureFixtureList, setFutureFixtureList] = useState<App.Fixture[]>([]);
-    const [pastFixtureList, setPastFixtureList] = useState<App.Fixture[]>([]);
+const Home = ({ match }) => {
+    const isCancelled = useRef(false);
+    const cloudinaryApi = useFetch("cloudinary");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [rootFolders, setRootFolders] = useState<any>(null)
 
-    const getCurrentSeason = (): void => {
+    const getFolders = (): void => {
         setLoading(true)
-        seasonsApi.get("getCurrentSeason")
-            .then((data: App.Season[]) => {
-                // console.log(`data: ${JSON.stringify(data)}`) 
-
-                if (data.length) {
-                    data[0].fixtureList.sort((a, b) => {
-                        return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
-                    })
-                    setCurrentSeason(data[0])
-                    sortFixtures(data[0])
+        cloudinaryApi.get("root-folders")
+            .then((data: any) => {
+                if (data) {
+                    if (!isCancelled.current) {
+                        setRootFolders(data)
+                    }
                 }
                 setLoading(false)
             })
             .catch((err: Error) => {
+                console.log(err)
                 setError(err.message)
                 setLoading(false)
             })
     }
 
-    const sortFixtures = (season: App.Season) => {
-        let now = moment()
-        let pastFixtureList: App.Fixture[] = []
-        let futureFixtureList: App.Fixture[] = []
-
-        season.fixtureList.forEach(fixture => {
-            if (moment(fixture.kickoffDateTime).isBefore(now)) {
-                pastFixtureList.push(fixture)
-            } else if (moment(fixture.kickoffDateTime).isAfter(now)) {
-                futureFixtureList.push(fixture)
-            }
-        });
-
-        pastFixtureList.sort((a, b) => {
-            return (a.kickoffDateTime > b.kickoffDateTime ? -1 : 1)
-        })
-        futureFixtureList.sort((a, b) => {
-            return (a.kickoffDateTime < b.kickoffDateTime ? -1 : 1)
-        })
-
-        setPastFixtureList(pastFixtureList)
-        setFutureFixtureList(futureFixtureList)
-
-    }
-
     React.useEffect(() => {
-        getCurrentSeason();
+        getFolders();
+
+        return () => {
+            isCancelled.current = true;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
-
-    if (loading) {
-        return (
-            <Loading />
-        )
-    }
 
     if (error) {
         return (
@@ -92,35 +49,42 @@ const Home = () => {
     }
 
     return (
-        <>
-            <div className="header-section">
-                <div className="hero-image">
-                    <img alt="" src={require('../../images/hero-image.png')} />
+        <div className="content home-page">
+            <div className="intro-section">
+                <img className="minion-gif-desktop" alt="minion" src={require("../../images/FoodMinion.gif")} />
+                <img className="minion-gif-mobile" alt="minion" src={require("../../images/Maths-food-Minion-mobile.gif")} />
+                <div className="text-section">
+                    <p>
+                        Click on the folders below if you’re hungry to learn mathematics the Mr G way.
+                    </p>
                 </div>
             </div>
 
-            <div className="content">
-                <div className="last-next-fixture-section position-relative">
-                    <LastNextFixturesSection fixtureList={currentSeason.fixtureList} />
-                </div>
-                <div style={{ display: currentSeason._id ? 'block' : 'none' }}>
-                    <div style={{ display: futureFixtureList.length ? 'block' : 'none' }}>
-                        <h2>Fixtures</h2>
-                        {futureFixtureList.map(fixture => {
-                            return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
-                        })}
-                        <br />
-                    </div>
+            {loading &&
+                <Loading />
+            }
 
-                    <div style={{ display: pastFixtureList.length ? 'block' : 'none' }}>
-                        <h2>Results</h2>
-                        {pastFixtureList.map(fixture => {
-                            return (<div className="fixture-card-div" key={fixture._id}><FixtureCard fixture={fixture} /></div>)
-                        })}
-                    </div>
-                </div>
-            </div>
-        </>
+            {!loading &&
+                <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
+                    {rootFolders && rootFolders.folders.map((rootFolder: any) => {
+                        return (
+                            // <Card key={rootFolder.name} className="folder-card">
+                            //     <CardActionArea component={Link} to={`${match.url}${rootFolder.name}`}>
+                            //         <CardContent>
+                            //             <FolderOpenIcon />
+                            //             <span className="folder-label">{rootFolder.name}</span>
+                            //             <ArrowForwardIosIcon />
+                            //         </CardContent>
+                            //     </CardActionArea>
+                            // </Card>
+                            <FolderCard key={rootFolder.name} folder={rootFolder} url={match.url} />
+                        )
+                    })}
+                </Box>
+            }
+
+
+        </div>
     )
 }
 

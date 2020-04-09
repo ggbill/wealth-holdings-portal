@@ -2,14 +2,21 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
+import cloudinaryRouter from './routes/cloudinary';
 
 const path = require('path');
 const shrinkRay = require('shrink-ray-current');
+const cloudinary = require('cloudinary').v2;
 
-import seasonsRouter from './routes/seasons';
-import fixturesRouter from './routes/fixtures';
-import playersRouter from './routes/players';
-import teamsRouter from './routes/teams';
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
 
 const app = express();
 
@@ -20,10 +27,8 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
 
-app.use('/seasons', seasonsRouter);
-app.use('/fixtures', fixturesRouter);
-app.use('/players', playersRouter);
-app.use('/teams', teamsRouter);
+app.use('/cloudinary', cloudinaryRouter);
+
 
 if (process.env.NODE_ENV === 'production') {
 
