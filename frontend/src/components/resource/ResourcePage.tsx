@@ -24,7 +24,6 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        console.log(JSON.stringify(data))
                         setResource(data.resources[0])
                     }
                     setLoading(false)
@@ -37,17 +36,10 @@ const ResourcePage = ({ match }) => {
             })
     }
 
-    const generateBackLink = (filename: string): any => {
-        let backLink = match.url.replace(`/resource/${filename}`, "")
-        return backLink
-    }
-
     const generateBreadcrumbs = (): any => {
 
         let trimmedUrl = match.url.substr(1).replace(`/resource`, "")
         let breadcrumbs: string[] = trimmedUrl.split("/")
-
-        console.log(breadcrumbs)
 
         return (
             <div className="breadcrumb-wrapper">
@@ -63,7 +55,6 @@ const ResourcePage = ({ match }) => {
                         let breadcrumbLink = "/"
                         breadcrumbs.forEach((sub_breadcrumb, sub_index) => {
                             if (sub_index < index) {
-                                console.log(`add to breadcrumb link : ${sub_breadcrumb}`)
                                 breadcrumbLink += `${sub_breadcrumb}/`
                             } else if (sub_index === index) {
                                 breadcrumbLink += `${sub_breadcrumb}`

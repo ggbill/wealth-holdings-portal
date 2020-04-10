@@ -34,7 +34,6 @@ const Home = ({ match }) => {
     }
 
     React.useEffect(() => {
-        console.log(`process.env: ${process.env}`)
         getFolders();
 
         return () => {

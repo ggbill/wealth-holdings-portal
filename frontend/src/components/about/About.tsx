@@ -15,7 +15,7 @@ const About = () => {
                     At The Totteridge Academy, we love helping everyone do well and enjoy maths so even if you are not part of our school, you are still more than welcome to use this site and pass it on to others too!
                 </p>
                 <p>
-                    If you need any information, have any requests or want to provide any feedback (feedback is a gift), my email is <a href="mailto: thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a>.
+                    If you need any information, have any requests or want to provide any feedback (feedback is a gift), my email is <a href="mailto:thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a>.
                 </p>
                 <p>
                     Maths is life,
