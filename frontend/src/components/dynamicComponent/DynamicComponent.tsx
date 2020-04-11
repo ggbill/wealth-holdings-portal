@@ -1,15 +1,11 @@
 import React, { useState } from 'react'
 import useFetch from "../../hooks/useFetch"
-import { Switch, Route, Link } from "react-router-dom"
-import { Box, Card, CardContent, CardActionArea } from '@material-ui/core'
-import FolderOpenIcon from '@material-ui/icons/FolderOpen'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { Switch, Route } from "react-router-dom"
+import { Box } from '@material-ui/core'
 import './dynamicContent.scss';
 import Loading from '../shared/Loading'
-// import { Image, Video, Transformation, CloudinaryContext } from 'cloudinary-react'
 import ResourceCard from '../shared/ResourceCard'
 import ResourcePage from '../resource/ResourcePage'
-import HomeIcon from '@material-ui/icons/Home'
 import FolderCard from '../shared/FolderCard'
 import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
 
@@ -23,7 +19,6 @@ const DynamicComponent = ({ match }) => {
     const [folderContent, setFolderContent] = useState<any>(null)
 
     // API call to Cloudinary based on foldername taken from the match param (match.params.dynamicPath)
-
     const getSubFolders = (): void => {
         let encodedMatchUrl = match.url.replace(/\//g, "%2F")
         setLoading(true)
@@ -100,20 +95,11 @@ const DynamicComponent = ({ match }) => {
                 }
                 {!loading && subFolders && <div className="sub-folders">
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                        {subFolders.folders.map((subFolder: any, index: number) => {
-                            return (
-                                // <Card key={index} className="folder-card">
-                                //     <CardActionArea component={Link} to={`${match.url}/${subFolder.name}`}>
-                                //         <CardContent>
-                                //             {/* <FolderOpenIcon /> */}
-                                //             <span className="folder-label">{subFolder.name}</span>
-                                //             {/* <ArrowForwardIosIcon /> */}
-                                //         </CardContent>
-                                //     </CardActionArea>
-                                // </Card>
-                                <FolderCard key={subFolder.name} folder={subFolder} url={match.url} />
-                            )
-                        })}
+                            {subFolders.folders.map((subFolder: any, index: number) => {
+                                return (
+                                     <FolderCard key={subFolder.name} folder={subFolder} url={match.url} index={index} /> 
+                                )
+                            })}
                     </Box>
                 </div>}
 
@@ -121,7 +107,7 @@ const DynamicComponent = ({ match }) => {
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
                         {folderContent.resources.map((resource: any, index: number) => {
                             return (
-                                <ResourceCard key={index} resource={resource} matchUrl={match.url} />
+                                <ResourceCard key={index} resource={resource} matchUrl={match.url} index={index} />
                             )
                         })}
                     </Box>

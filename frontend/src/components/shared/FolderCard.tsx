@@ -8,21 +8,24 @@ import './folderCard.scss';
 
 interface InputProps {
     folder: any,
-    url: string
+    url: string,
+    index: number
 }
 
+
 const FolderCard = (props: InputProps) => {
+
     return (
         <>
             {props.url === "/" ?
-                <Card className="folder-card">
+                <Card style={{ animationDelay: `${props.index * 0.1}s` }} className="folder-card">
                     <CardActionArea component={Link} to={`${props.url}${props.folder.name}`}>
                         <CardContent>
                             <span className="folder-label">{props.folder.name.replace(/_/g, " ")}</span>
                         </CardContent>
                     </CardActionArea>
                 </Card> :
-                <Card className="folder-card">
+                <Card style={{ animationDelay: `${props.index * 0.1}s` }} className="folder-card">
                     <CardActionArea component={Link} to={`${props.url}/${props.folder.name}`}>
                         <CardContent>
                             <span className="folder-label">{props.folder.name.replace(/_/g, " ")}</span>

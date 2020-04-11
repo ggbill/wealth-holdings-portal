@@ -31,7 +31,7 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        console.log(data.resources)
+                        // console.log(data.resources)
                         setResource(data.resources[0])
                         // getSiblingResources(data.resources[0].filename)
                     }

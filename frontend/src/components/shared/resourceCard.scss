@@ -1,7 +1,27 @@
+@keyframes FadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.1);
+    }
+
+    85% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .resource-card.MuiCard-root {
     width: 296px;
     margin: 12px 6px;
     text-align: center;
+    opacity: 0;
+
+    animation: FadeIn 0.2s linear;
+    animation-fill-mode:forwards;
 
     .MuiCardContent-root {
         display: flex;

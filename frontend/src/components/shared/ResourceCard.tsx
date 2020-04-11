@@ -11,6 +11,7 @@ import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
 interface InputProps {
     resource: any
     matchUrl: string
+    index: number
 }
 
 const ResourceCard = (props: InputProps) => {
@@ -22,7 +23,7 @@ const ResourceCard = (props: InputProps) => {
             {props.resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(props.resource.format) &&
                 <>
                     
-                    < Card key={props.resource.name} className="resource-card">
+                    < Card style={{ animationDelay: `${props.index * 0.1}s` }} key={props.resource.name} className="resource-card">
                         <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                             <CardMedia
                                 image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
@@ -44,7 +45,7 @@ const ResourceCard = (props: InputProps) => {
             }
 
             {props.resource.resource_type === "video" && cloudinaryFunctions.isAudioFormat(props.resource.format) &&
-                < Card key={props.resource.name} className="resource-card">
+                < Card style={{ animationDelay: `${props.index * 0.1}s` }} key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={require("../../images/audio_placeholder.png")}
@@ -65,7 +66,7 @@ const ResourceCard = (props: InputProps) => {
             }
 
             {props.resource.resource_type === "image" && !cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-card">
+                <Card style={{ animationDelay: `${props.index * 0.1}s` }} key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={props.resource.secure_url}
@@ -85,7 +86,7 @@ const ResourceCard = (props: InputProps) => {
             }
 
             {props.resource.resource_type === "image" && cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-card">
+                <Card style={{ animationDelay: `${props.index * 0.1}s` }} key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}

@@ -66,9 +66,9 @@ const Home = ({ match }) => {
 
             {!loading &&
                 <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                    {rootFolders && rootFolders.folders.map((rootFolder: any) => {
+                    {rootFolders && rootFolders.folders.map((rootFolder: any, index: number) => {
                         return (
-                            <FolderCard key={rootFolder.name} folder={rootFolder} url={match.url} />
+                            <FolderCard key={rootFolder.name} folder={rootFolder} url={match.url} index={index} />
                         )
                     })}
                 </Box>
