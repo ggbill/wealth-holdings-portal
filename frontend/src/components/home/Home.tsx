@@ -1,35 +1,40 @@
 import './home.scss';
 import React, { useState, useRef } from 'react'
 import useFetch from "../../hooks/useFetch"
-import { Link } from "react-router-dom"
-import { Box, Card, CardContent, CardActionArea } from '@material-ui/core'
-import FolderOpenIcon from '@material-ui/icons/FolderOpen'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import { Box } from '@material-ui/core'
 import Loading from '../shared/Loading';
 import FolderCard from '../shared/FolderCard'
+import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
 
 const Home = ({ match }) => {
-    const isCancelled = useRef(false);
-    const cloudinaryApi = useFetch("cloudinary");
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+    const isCancelled = useRef(false)
+    const cloudinaryApi = useFetch("cloudinary")
+    const cloudinaryFunctions = useCloudinaryFunctions()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>("")
     const [rootFolders, setRootFolders] = useState<any>(null)
 
     const getFolders = (): void => {
         setLoading(true)
         cloudinaryApi.get("root-folders")
             .then((data: any) => {
-                if (data) {
-                    if (!isCancelled.current) {
+                if (!isCancelled.current) {
+                    if (data) {
+                        if (data.resources){
+                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        }
                         setRootFolders(data)
                     }
+
+                    setLoading(false)
                 }
-                setLoading(false)
             })
             .catch((err: Error) => {
-                console.log(err)
-                setError(err.message)
-                setLoading(false)
+                if (!isCancelled.current) {
+                    console.log(err)
+                    setError(err.message)
+                    setLoading(false)
+                }
             })
     }
 

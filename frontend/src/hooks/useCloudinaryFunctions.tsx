@@ -32,6 +32,22 @@ const useCloudinaryFuctions = () => {
         }
     }
 
+    const cleanFolderName = (folderName: string): string => {
+        let folderNameSplit = folderName.split("_");
+        folderNameSplit.splice(0, 1) //remove the first part
+
+        let cleanFolderName: string = ""
+        folderNameSplit.map((folderNameSplitInstance, index) => {
+            if (index === folderNameSplit.length - 1){
+                cleanFolderName += `${folderNameSplitInstance}`
+            }else{
+                cleanFolderName += `${folderNameSplitInstance} `
+            }
+        })
+
+        return cleanFolderName
+    }
+
     const generateBreadcrumbs = (breadcrumbs: string[]): any => {
 
         // let trimmedUrl = match.url.substr(1)
@@ -44,7 +60,7 @@ const useCloudinaryFuctions = () => {
                 {breadcrumbs.map((breadcrumb, index) => {
                     if (index === breadcrumbs.length - 1) {
                         return (
-                            <span key={index}>{breadcrumb.replace(/_/g, " ")}</span>
+                            <span key={index}>{cleanFolderName(breadcrumb)}</span>
                         )
                     } else {
                         let breadcrumbLink = "/"
@@ -58,7 +74,7 @@ const useCloudinaryFuctions = () => {
                         });
 
                         return (
-                            <span key={index}><Link to={breadcrumbLink}>{breadcrumb.replace(/_/g, " ")}</Link> / </span>
+                            <span key={index}><Link to={breadcrumbLink}>{<span key={index}>{cleanFolderName(breadcrumb)}</span>}</Link> / </span>
                         )
                     }
                 })}
@@ -66,11 +82,21 @@ const useCloudinaryFuctions = () => {
         )
     }
 
+    const sortByPrefix = (resourceList: any[]): any[] => {
+
+        resourceList.sort((a, b) => {
+            return (a.filename.split("_")[0] < b.filename.split("_")[0] ? -1 : 1)
+        })
+
+        return resourceList
+    }
+
     return {
         generateThumbnailUrl,
         isAudioFormat,
         isPDFFormat,
-        generateBreadcrumbs
+        generateBreadcrumbs,
+        sortByPrefix
     };
 };
 export default useCloudinaryFuctions;

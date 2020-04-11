@@ -20,7 +20,7 @@
     text-align: center;
     box-shadow: 0 0 10px 4px #3cb8e7;
     font-family: hoboStd;
-    opacity: 0;
+    opacity: 0; //must start invisible
 
     animation: FadeIn 0.2s linear;
     animation-fill-mode:forwards;

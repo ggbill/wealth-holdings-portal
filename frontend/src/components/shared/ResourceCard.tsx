@@ -18,11 +18,19 @@ const ResourceCard = (props: InputProps) => {
 
     const cloudinaryFunctions = useCloudinaryFunctions();
 
+    const cleanFilename = (filename: string): string => {
+        let fileNameSplit = filename.split("_");
+        fileNameSplit.splice(0, 1) //remove the first part
+        fileNameSplit.splice(fileNameSplit.length - 1, 1)
+
+        return `${fileNameSplit[0]} ${fileNameSplit[1]}`
+    }
+
     return (
         <>
             {props.resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(props.resource.format) &&
                 <>
-                    
+
                     < Card style={{ animationDelay: `${props.index * 0.1}s` }} key={props.resource.name} className="resource-card">
                         <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                             <CardMedia
@@ -36,7 +44,7 @@ const ResourceCard = (props: InputProps) => {
                                     </div>
                                 </div>
                                 <div className="card-title-wrapper">
-                                    <span>{props.resource.filename}</span>
+                                    <span>{cleanFilename(props.resource.filename)}</span>
                                 </div>
                             </CardContent>
                         </CardActionArea>
@@ -58,7 +66,7 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{props.resource.filename}</span>
+                                <span>{cleanFilename(props.resource.filename)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>
@@ -78,7 +86,7 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{props.resource.filename}</span>
+                                <span>{cleanFilename(props.resource.filename)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>
@@ -98,7 +106,7 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{props.resource.filename}</span>
+                                <span>{cleanFilename(props.resource.filename)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>

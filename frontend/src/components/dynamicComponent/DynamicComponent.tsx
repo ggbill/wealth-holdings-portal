@@ -26,6 +26,9 @@ const DynamicComponent = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
+                        if (data.resources){
+                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        }
                         setSubFolders(data)
                     }
                     setLoading(false)
@@ -45,7 +48,9 @@ const DynamicComponent = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        // console.log(JSON.stringify(data))
+                        if (data.resources){
+                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        }
                         setFolderContent(data)
                     }
                     setLoading(false)
