@@ -20,34 +20,41 @@ const ResourceCard = (props: InputProps) => {
     return (
         <>
             {props.resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(props.resource.format) &&
-                < Card key={props.resource.name} className="resource-card video">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
-                        <CardMedia
-                            image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
-                            title="Click to view video!"
-                        />
-                        <CardContent>
-                            <div className="resource-type-badge">
-                                <VideocamIcon />
-                            </div>
-                            <div className="card-title-wrapper">
-                                <span>{props.resource.filename}</span>
-                            </div>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
+                <>
+                    
+                    < Card key={props.resource.name} className="resource-card">
+                        <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
+                            <CardMedia
+                                image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
+                                title="Click to view video!"
+                            />
+                            <CardContent>
+                                <div className="resource-type-badge-wrapper video">
+                                    <div className="resource-type-badge">
+                                        <VideocamIcon />
+                                    </div>
+                                </div>
+                                <div className="card-title-wrapper">
+                                    <span>{props.resource.filename}</span>
+                                </div>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                </>
             }
 
             {props.resource.resource_type === "video" && cloudinaryFunctions.isAudioFormat(props.resource.format) &&
-                < Card key={props.resource.name} className="resource-card audio">
+                < Card key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={require("../../images/audio_placeholder.png")}
                             title="Click to listen to the audio!"
                         />
                         <CardContent>
-                            <div className="resource-type-badge">
-                                <AudiotrackIcon />
+                            <div className="resource-type-badge-wrapper audio">
+                                <div className="resource-type-badge">
+                                    <AudiotrackIcon />
+                                </div>
                             </div>
                             <div className="card-title-wrapper">
                                 <span>{props.resource.filename}</span>
@@ -58,14 +65,16 @@ const ResourceCard = (props: InputProps) => {
             }
 
             {props.resource.resource_type === "image" && !cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-card image">
+                <Card key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={props.resource.secure_url}
                         />
                         <CardContent>
-                            <div className="resource-type-badge">
-                                <ImageIcon />
+                            <div className="resource-type-badge-wrapper image">
+                                <div className="resource-type-badge">
+                                    <ImageIcon />
+                                </div>
                             </div>
                             <div className="card-title-wrapper">
                                 <span>{props.resource.filename}</span>
@@ -76,14 +85,16 @@ const ResourceCard = (props: InputProps) => {
             }
 
             {props.resource.resource_type === "image" && cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-card pdf">
+                <Card key={props.resource.name} className="resource-card">
                     <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
                         <CardMedia
                             image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
                         />
                         <CardContent>
-                            <div className="resource-type-badge">
-                                <DescriptionIcon />
+                            <div className="resource-type-badge-wrapper pdf">
+                                <div className="resource-type-badge">
+                                    <DescriptionIcon />
+                                </div>
                             </div>
                             <div className="card-title-wrapper">
                                 <span>{props.resource.filename}</span>

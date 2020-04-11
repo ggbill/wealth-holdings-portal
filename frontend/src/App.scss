@@ -38,4 +38,8 @@ a {
     .content {
         padding: 100px 12px 12px 12px;
     }
+
+    .full-height-content {
+        min-height: calc(100vh - 183px); /* will cover the 100% of viewport minus footer */
+    }
 }

@@ -27,11 +27,13 @@ export namespace CloudinaryController {
     }
 
     export async function GetResourcesInFolder(prefix: string): Promise<any> {
+        console.log(`prefix: ${prefix}`)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
                 .expression(`folder=${prefix.substring(1)}`)
                 .execute()
                 .then(result => {
+                    // console.log(JSON.stringify(result))
                     resolve(result)
                 })
                 .catch(error => {
@@ -42,9 +44,10 @@ export namespace CloudinaryController {
     }
 
     export async function GetResourceByPublicId(publicId: string): Promise<any> {
+        console.log(`publicId: ${publicId}`)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
-                .expression(`${publicId}`)
+                .expression(`public_id:${publicId.substr(1)}`)
                 .execute()
                 .then(result => {
                     resolve(result)

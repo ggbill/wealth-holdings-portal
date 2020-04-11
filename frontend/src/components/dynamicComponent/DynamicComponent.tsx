@@ -10,11 +10,14 @@ import Loading from '../shared/Loading'
 import ResourceCard from '../shared/ResourceCard'
 import ResourcePage from '../resource/ResourcePage'
 import HomeIcon from '@material-ui/icons/Home'
+import FolderCard from '../shared/FolderCard'
+import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
 
 const DynamicComponent = ({ match }) => {
-    const isCancelled = React.useRef(false);
-    const cloudinaryApi = useFetch("cloudinary");
-    const [loading, setLoading] = useState<boolean>(false);
+    const isCancelled = React.useRef(false)
+    const cloudinaryApi = useFetch("cloudinary")
+    const cloudinaryFunctions = useCloudinaryFunctions()
+    const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("");
     const [subFolders, setSubFolders] = useState<any>(null)
     const [folderContent, setFolderContent] = useState<any>(null)
@@ -54,9 +57,11 @@ const DynamicComponent = ({ match }) => {
                 }
             })
             .catch((err: Error) => {
-                console.log(err)
-                setError(err.message)
-                setLoading(false)
+                if (!isCancelled.current) {
+                    console.log(err)
+                    setError(err.message)
+                    setLoading(false)
+                }
             })
     }
 
@@ -66,31 +71,7 @@ const DynamicComponent = ({ match }) => {
         let breadcrumbs: string[] = trimmedUrl.split("/")
 
         return (
-            <div className="breadcrumb-wrapper">
-            <span className="home-icon-wrapper"><Link to="/"><HomeIcon /></Link> / </span>
-                
-                {breadcrumbs.map((breadcrumb, index) => {
-                    if (index === breadcrumbs.length - 1) {
-                        return (
-                            <span key={index}>{breadcrumb}</span>
-                        )
-                    } else {
-                        let breadcrumbLink = "/"
-                        breadcrumbs.forEach((sub_breadcrumb, sub_index) => {
-                            if (sub_index === index) {
-                                breadcrumbLink += `${sub_breadcrumb}`
-                            } else if (sub_index === index - 1) {
-                                breadcrumbLink += `${sub_breadcrumb}/`
-                            }
-
-                        });
-
-                        return (
-                            <span key={index}><Link to={breadcrumbLink}>{breadcrumb}</Link> / </span>
-                        )
-                    }
-                })}
-            </div>
+            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs)
         )
     }
 
@@ -121,15 +102,16 @@ const DynamicComponent = ({ match }) => {
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
                         {subFolders.folders.map((subFolder: any, index: number) => {
                             return (
-                                <Card key={index} className="folder-card">
-                                    <CardActionArea component={Link} to={`${match.url}/${subFolder.name}`}>
-                                        <CardContent>
-                                            <FolderOpenIcon />
-                                            <span className="folder-label">{subFolder.name}</span>
-                                            <ArrowForwardIosIcon />
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
+                                // <Card key={index} className="folder-card">
+                                //     <CardActionArea component={Link} to={`${match.url}/${subFolder.name}`}>
+                                //         <CardContent>
+                                //             {/* <FolderOpenIcon /> */}
+                                //             <span className="folder-label">{subFolder.name}</span>
+                                //             {/* <ArrowForwardIosIcon /> */}
+                                //         </CardContent>
+                                //     </CardActionArea>
+                                // </Card>
+                                <FolderCard key={subFolder.name} folder={subFolder} url={match.url} />
                             )
                         })}
                     </Box>

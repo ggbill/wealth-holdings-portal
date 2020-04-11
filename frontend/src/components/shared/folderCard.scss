@@ -2,6 +2,8 @@
     width: 40%;
     margin: 12px;
     text-align: center;
+    box-shadow: 0 0 10px 4px #3cb8e7;
+    font-family: hoboStd;
 
     a {
         text-decoration: none;
@@ -16,10 +18,16 @@
     .MuiCardContent-root {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+        background-color: #3cb8e7;
+        // box-shadow: 0px 0px 10px 4px #3cb8e7;
+        
+        border: 1px solid white;
     
         span {
             padding: 0 12px;
+            color: #226896;
+            font-weight: 400;
         }
     }
 }

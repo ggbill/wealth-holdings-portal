@@ -6,15 +6,22 @@ import Loading from '../shared/Loading'
 import './resource.scss'
 import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
 import HomeIcon from '@material-ui/icons/Home'
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import ResourceCard from '../shared/ResourceCard'
+
 
 
 const ResourcePage = ({ match }) => {
-    const isCancelled = React.useRef(false);
-    const cloudinaryApi = useFetch("cloudinary");
-    const cloudinaryFunctions = useCloudinaryFunctions();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+    const isCancelled = React.useRef(false)
+    const cloudinaryApi = useFetch("cloudinary")
+    const cloudinaryFunctions = useCloudinaryFunctions()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>("")
     const [resource, setResource] = useState<any>(null)
+    const [siblingResources, setSiblingResources] = useState<any>([])
+
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || "hhgetwduj"
 
     const getResource = (): void => {
         let publicKey = match.url.replace("resource/", "")
@@ -24,7 +31,29 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
+                        console.log(data.resources)
                         setResource(data.resources[0])
+                        // getSiblingResources(data.resources[0].filename)
+                    }
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                console.log(err)
+                setError(err.message)
+                setLoading(false)
+            })
+    }
+
+    const getSiblingResources = (filename: string): void => {
+        let encodedMatchUrl = match.url.replace(`/resource/${filename}`, "").replace(/\//g, "%2F")
+        setLoading(true)
+        cloudinaryApi.get(`resources/${encodedMatchUrl}`)
+            .then((data: any) => {
+                if (!isCancelled.current) {
+                    if (data) {
+                        console.log(JSON.stringify(data))
+                        setSiblingResources(data.resources)
                     }
                     setLoading(false)
                 }
@@ -42,31 +71,7 @@ const ResourcePage = ({ match }) => {
         let breadcrumbs: string[] = trimmedUrl.split("/")
 
         return (
-            <div className="breadcrumb-wrapper">
-            <span className="home-icon-wrapper"><Link to="/"><HomeIcon /></Link> / </span>
-                
-                {
-                breadcrumbs.map((breadcrumb, index) => {
-                    if (index === breadcrumbs.length - 1) {
-                        return (
-                            <span key={index}></span>
-                        )
-                    } else {
-                        let breadcrumbLink = "/"
-                        breadcrumbs.forEach((sub_breadcrumb, sub_index) => {
-                            if (sub_index < index) {
-                                breadcrumbLink += `${sub_breadcrumb}/`
-                            } else if (sub_index === index) {
-                                breadcrumbLink += `${sub_breadcrumb}`
-                            }
-                        });
-
-                        return (
-                            <span key={index}><Link to={breadcrumbLink}>{breadcrumb}</Link> / </span>
-                        )
-                    }
-                })}
-            </div>
+            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs)
         )
     }
 
@@ -105,7 +110,7 @@ const ResourcePage = ({ match }) => {
                                     <h1>{resource.filename}</h1>
                                     <div className="resource-wrapper">
                                         <Video
-                                            cloudName="hr5mbzyww"
+                                            cloudName={cloudName}
                                             publicId={resource.public_id}
                                             fallbackContent="Your browser does not support HTML5 video tags."
                                             controls={true}
@@ -121,9 +126,9 @@ const ResourcePage = ({ match }) => {
                                 <>
                                     <h1>{resource.filename}</h1>
                                     <div className="resource-wrapper audio">
-                                    <img alt="placeholder audio"src={require("../../images/audio_placeholder.png")} />
+                                        <img alt="placeholder audio" src={require("../../images/audio_placeholder.png")} />
                                         <Video
-                                            cloudName="hr5mbzyww"
+                                            cloudName={cloudName}
                                             publicId={resource.public_id}
                                             fallbackContent="Your browser does not support HTML5 video tags."
                                             controls={true}
@@ -140,7 +145,7 @@ const ResourcePage = ({ match }) => {
                                     <h1>{resource.filename}</h1>
                                     <div className="resource-wrapper">
                                         <Image
-                                            cloudName="hr5mbzyww"
+                                            cloudName={cloudName}
                                             publicId={resource.public_id}
                                         >
                                         </Image>
@@ -152,15 +157,29 @@ const ResourcePage = ({ match }) => {
                                 <>
                                     <h1>{resource.filename}</h1>
                                     <div className="resource-wrapper">
-                                        {/* <Image
-                                            cloudName="hr5mbzyww"
-                                            publicId={resource.public_id}
-                                        >
-                                        </Image> */}
                                         <object data={resource.secure_url}></object>
                                     </div>
                                 </>
-                            } 
+                            }
+
+                            {/* {siblingResources &&
+                                <CarouselProvider
+                                    naturalSlideWidth={20}
+                                    naturalSlideHeight={20}
+                                    totalSlides={8}
+
+                                >
+                                    <Slider>
+                                        {siblingResources.map((siblingResource, index) => {
+                                            return (
+                                                <Slide className="slide" key={index} index={index}><ResourceCard resource={siblingResource} matchUrl={match.url}/></Slide>
+                                            )
+                                        })}
+                                    </Slider>
+                                    <ButtonBack>Back</ButtonBack>
+                                    <ButtonNext>Next</ButtonNext>
+                                </CarouselProvider>
+                            } */}
                         </>
                     }
                 </div>

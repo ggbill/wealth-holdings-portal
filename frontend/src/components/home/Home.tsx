@@ -55,7 +55,7 @@ const Home = ({ match }) => {
                 <img className="minion-gif-mobile" alt="minion" src={require("../../images/Maths-food-Minion-mobile.gif")} />
                 <div className="text-section">
                     <p>
-                        Click on the folders below if you’re hungry to learn mathematics the Mr G way.
+                        Click on the folders below if you’re hungry to learn mathematics the Mr G way
                     </p>
                 </div>
             </div>
@@ -68,15 +68,6 @@ const Home = ({ match }) => {
                 <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
                     {rootFolders && rootFolders.folders.map((rootFolder: any) => {
                         return (
-                            // <Card key={rootFolder.name} className="folder-card">
-                            //     <CardActionArea component={Link} to={`${match.url}${rootFolder.name}`}>
-                            //         <CardContent>
-                            //             <FolderOpenIcon />
-                            //             <span className="folder-label">{rootFolder.name}</span>
-                            //             <ArrowForwardIosIcon />
-                            //         </CardContent>
-                            //     </CardActionArea>
-                            // </Card>
                             <FolderCard key={rootFolder.name} folder={rootFolder} url={match.url} />
                         )
                     })}

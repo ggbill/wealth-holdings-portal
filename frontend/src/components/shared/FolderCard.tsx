@@ -13,15 +13,24 @@ interface InputProps {
 
 const FolderCard = (props: InputProps) => {
     return (
-        <Card className="folder-card">
-            <CardActionArea component={Link} to={`${props.url}${props.folder.name}`}>
-                <CardContent>
-                    <FolderOpenIcon />
-                    <span className="folder-label">{props.folder.name}</span>
-                    <ArrowForwardIosIcon />
-                </CardContent>
-            </CardActionArea>
-        </Card>
+        <>
+            {props.url === "/" ?
+                <Card className="folder-card">
+                    <CardActionArea component={Link} to={`${props.url}${props.folder.name}`}>
+                        <CardContent>
+                            <span className="folder-label">{props.folder.name.replace(/_/g, " ")}</span>
+                        </CardContent>
+                    </CardActionArea>
+                </Card> :
+                <Card className="folder-card">
+                    <CardActionArea component={Link} to={`${props.url}/${props.folder.name}`}>
+                        <CardContent>
+                            <span className="folder-label">{props.folder.name.replace(/_/g, " ")}</span>
+                        </CardContent>
+                    </CardActionArea>
+                </Card>
+            }
+        </>
     )
 }
 
