@@ -71,7 +71,7 @@ const DynamicComponent = ({ match }) => {
         let breadcrumbs: string[] = trimmedUrl.split("/")
 
         return (
-            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs)
+            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs, false)
         )
     }
 

@@ -31,7 +31,7 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        // console.log(data.resources)
+                        console.log(data.resources)
                         setResource(data.resources[0])
                         // getSiblingResources(data.resources[0].filename)
                     }
@@ -71,7 +71,7 @@ const ResourcePage = ({ match }) => {
         let breadcrumbs: string[] = trimmedUrl.split("/")
 
         return (
-            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs)
+            cloudinaryFunctions.generateBreadcrumbs(breadcrumbs, true)
         )
     }
 
@@ -107,7 +107,19 @@ const ResourcePage = ({ match }) => {
 
                             {resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(resource.format) &&
                                 <>
-                                    <h1>{resource.filename}</h1>
+                                    {resource.context &&
+                                        <>
+                                            {resource.context.caption &&
+                                                <h1>{resource.context.caption}</h1>
+                                            }
+
+                                            {resource.context.alt &&
+                                                <span className="intro-text">{resource.context.alt}</span>
+                                            }
+                                        </>
+                                    }
+
+
                                     <div className="resource-wrapper">
                                         <Video
                                             cloudName={cloudName}
@@ -124,7 +136,17 @@ const ResourcePage = ({ match }) => {
 
                             {resource.resource_type === "video" && cloudinaryFunctions.isAudioFormat(resource.format) &&
                                 <>
-                                    <h1>{resource.filename}</h1>
+                                    {resource.context &&
+                                        <>
+                                            {resource.context.caption &&
+                                                <h1>{resource.context.caption}</h1>
+                                            }
+
+                                            {resource.context.alt &&
+                                                <span className="intro-text">{resource.context.alt}</span>
+                                            }
+                                        </>
+                                    }
                                     <div className="resource-wrapper audio">
                                         <img alt="placeholder audio" src={require("../../images/audio_placeholder.png")} />
                                         <Video
@@ -142,7 +164,17 @@ const ResourcePage = ({ match }) => {
 
                             {resource.resource_type === "image" && !cloudinaryFunctions.isPDFFormat(resource.format) &&
                                 <>
-                                    <h1>{resource.filename}</h1>
+                                    {resource.context &&
+                                        <>
+                                            {resource.context.caption &&
+                                                <h1>{resource.context.caption}</h1>
+                                            }
+
+                                            {resource.context.alt &&
+                                                <span className="intro-text">{resource.context.alt}</span>
+                                            }
+                                        </>
+                                    }
                                     <div className="resource-wrapper">
                                         <Image
                                             cloudName={cloudName}
@@ -155,7 +187,17 @@ const ResourcePage = ({ match }) => {
 
                             {resource.resource_type === "image" && cloudinaryFunctions.isPDFFormat(resource.format) &&
                                 <>
-                                    <h1>{resource.filename}</h1>
+                                    {resource.context &&
+                                        <>
+                                            {resource.context.caption &&
+                                                <h1>{resource.context.caption}</h1>
+                                            }
+
+                                            {resource.context.alt &&
+                                                <span className="intro-text">{resource.context.alt}</span>
+                                            }
+                                        </>
+                                    }
                                     <div className="resource-wrapper">
                                         <object data={resource.secure_url}></object>
                                     </div>

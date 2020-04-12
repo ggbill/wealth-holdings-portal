@@ -48,10 +48,19 @@ const useCloudinaryFuctions = () => {
         return cleanFolderName
     }
 
-    const generateBreadcrumbs = (breadcrumbs: string[]): any => {
+    const cleanFilename = (filename: string): string => {
+        let fileNameSplit = filename.split("_");
+        fileNameSplit.splice(0, 1) //remove the first part
+        fileNameSplit.splice(fileNameSplit.length - 1, 1)
 
-        // let trimmedUrl = match.url.substr(1)
-        // let breadcrumbs: string[] = trimmedUrl.split("/")
+        return `${fileNameSplit[0]} ${fileNameSplit[1]}`
+    }
+
+    const generateBreadcrumbs = (breadcrumbs: string[], isFinalEntryFileName: boolean): any => {
+
+        if (isFinalEntryFileName){
+            breadcrumbs[breadcrumbs.length -1] = cleanFilename(breadcrumbs[breadcrumbs.length -1])
+        }
 
         return (
             <div className="breadcrumb-wrapper">
@@ -59,9 +68,15 @@ const useCloudinaryFuctions = () => {
 
                 {breadcrumbs.map((breadcrumb, index) => {
                     if (index === breadcrumbs.length - 1) {
-                        return (
-                            <span key={index}>{cleanFolderName(breadcrumb)}</span>
-                        )
+                        if (isFinalEntryFileName){
+                            return (
+                                <span key={index}>{breadcrumb}</span>
+                            )
+                        }else{
+                            return (
+                                <span key={index}>{cleanFolderName(breadcrumb)}</span>
+                            )
+                        }
                     } else {
                         let breadcrumbLink = "/"
                         breadcrumbs.forEach((sub_breadcrumb, sub_index) => {
@@ -96,7 +111,9 @@ const useCloudinaryFuctions = () => {
         isAudioFormat,
         isPDFFormat,
         generateBreadcrumbs,
-        sortByPrefix
+        sortByPrefix,
+        cleanFolderName,
+        cleanFilename
     };
 };
 export default useCloudinaryFuctions;

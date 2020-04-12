@@ -48,6 +48,8 @@ export namespace CloudinaryController {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
                 .expression(`public_id:${publicId.substr(1)}`)
+                .with_field('tags')
+                .with_field('context')
                 .execute()
                 .then(result => {
                     resolve(result)
