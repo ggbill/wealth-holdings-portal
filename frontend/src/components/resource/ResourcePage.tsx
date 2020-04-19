@@ -53,6 +53,7 @@ const ResourcePage = ({ match }) => {
                         getSiblingResources(data.resources[0].filename)
                     }
                     setLoading(false)
+                    setIsResourceBadgeClicked(false)
                 }
             })
             .catch((err: Error) => {
@@ -114,7 +115,6 @@ const ResourcePage = ({ match }) => {
     //only do this when resource badge is clicked (to reload page)
     React.useEffect(() => {
         getResource()
-        setIsResourceBadgeClicked(false)
     }, [isResourceBadgeClicked]);
 
 
@@ -256,9 +256,9 @@ const ResourcePage = ({ match }) => {
                                     infiniteLoop={true}
                                     showStatus={false}
                                     showIndicators={false}
-                                    showArrows={isMobile ? false : true}
+                                    showArrows={isMobile || isTablet ? false : true}
                                     // emulateTouch = {true}
-                                    swipeScrollTolerance={3}
+                                    swipeScrollTolerance={4}
 
                                 >
                                     {siblingResources.map((siblingResource, index) => {
