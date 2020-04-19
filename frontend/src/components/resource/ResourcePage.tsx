@@ -65,7 +65,7 @@ const ResourcePage = ({ match }) => {
 
     const getSiblingResources = (filename: string): void => {
         let encodedMatchUrl = match.url.replace(`/resource/${filename}`, "").replace(/\//g, "%2F")
-        console.log(`encodedMatchUrl: ${encodedMatchUrl}`)
+        // console.log(`encodedMatchUrl: ${encodedMatchUrl}`)
         setLoading(true)
         cloudinaryApi.get(`resources/${encodedMatchUrl}`)
             .then((data: any) => {
@@ -73,8 +73,6 @@ const ResourcePage = ({ match }) => {
                     if (data) {
                         if (data.resources) {
                             data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
-
-                            console.log(data.resources)
 
                             //filter the current video from the siblings list
                             let filteredArray = data.resources.filter(resource => resource.filename !== filename)
@@ -114,7 +112,9 @@ const ResourcePage = ({ match }) => {
 
     //only do this when resource badge is clicked (to reload page)
     React.useEffect(() => {
-        getResource()
+        if (isResourceBadgeClicked){
+            getResource()
+        }
     }, [isResourceBadgeClicked]);
 
 
@@ -257,8 +257,7 @@ const ResourcePage = ({ match }) => {
                                     showStatus={false}
                                     showIndicators={false}
                                     showArrows={isMobile || isTablet ? false : true}
-                                    // emulateTouch = {true}
-                                    swipeScrollTolerance={4}
+                                    swipeScrollTolerance={8}
 
                                 >
                                     {siblingResources.map((siblingResource, index) => {

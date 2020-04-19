@@ -52,11 +52,8 @@ const DynamicComponent = ({ match }) => {
                     if (data) {
                         if (data.resources) {
                             data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
-                            console.log(data)
                             setFolderContent(data)
                         }
-                        // console.log(data)
-                        // setFolderContent(data)
                     }
                     setLoading(false)
                 }
@@ -80,7 +77,6 @@ const DynamicComponent = ({ match }) => {
     }
 
     React.useEffect(() => {
-        console.log(`useEffect: ${match.url}`)
         getSubFolders()
         getResources()
 
