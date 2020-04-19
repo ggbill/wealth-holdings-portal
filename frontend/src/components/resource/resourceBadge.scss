@@ -1,31 +1,11 @@
-@keyframes FadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.1);
-    }
-
-    85% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.resource-card.MuiCard-root {
-    width: 296px;
-    margin: 12px 6px;
+.resource-badge.MuiCard-root {
+    width: 150px;
     text-align: center;
-    opacity: 0;
-
-    animation: FadeIn 0.2s linear;
-    animation-fill-mode:forwards;
-
+    
     .MuiCardContent-root {
         display: flex;
         flex-direction: column;
+        padding: 6px;
 
         video {
             width: 100%;
@@ -33,7 +13,7 @@
     }
 
     .MuiCardMedia-root {
-        height: 200px;
+        height: 100px;
     }
 
     h1,
@@ -46,7 +26,7 @@
     .card-title-wrapper {
         min-height: 52px;
         span {
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
         }
     }
@@ -57,8 +37,8 @@
         margin: 0 0 0 auto;
 
         .resource-type-badge {
-            height: 50px;
-            width: 50px;
+            height: 25px;
+            width: 25px;
             border-radius: 50%;
             margin-bottom: -37px;
             display: flex;
@@ -66,6 +46,12 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+            .MuiSvgIcon-root{
+                width: 15px;
+            }
+
+
         }
 
         &.video {
@@ -89,11 +75,14 @@
         &.pdf {
             .resource-type-badge {
                 background-color: #358600;
-                // background-color: #F18F01;
-                // background-color: #136F63;
             }
         }
     }
+}
+
+.resource-badge.MuiCard-root:hover{
+    position: relative;
+    top: -1px;
 }
 
 /* Extra small devices (phones, 600px and down) */

@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom"
 import { Box } from '@material-ui/core'
 import './dynamicContent.scss';
 import Loading from '../shared/Loading'
-import ResourceCard from '../shared/ResourceCard'
+import ResourceCard from '../resource/ResourceCard'
 import ResourcePage from '../resource/ResourcePage'
 import FolderCard from '../shared/FolderCard'
 import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
@@ -14,9 +14,11 @@ const DynamicComponent = ({ match }) => {
     const cloudinaryApi = useFetch("cloudinary")
     const cloudinaryFunctions = useCloudinaryFunctions()
     const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<string>("")
     const [subFolders, setSubFolders] = useState<any>(null)
     const [folderContent, setFolderContent] = useState<any>(null)
+
+    
 
     // API call to Cloudinary based on foldername taken from the match param (match.params.dynamicPath)
     const getSubFolders = (): void => {

@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import useFetch from "../../hooks/useFetch"
-import { Link } from "react-router-dom"
 import { Video, Image } from 'cloudinary-react'
 import Loading from '../shared/Loading'
-import './resource.scss'
+import './resourcePage.scss'
 import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
-import HomeIcon from '@material-ui/icons/Home'
-import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
-import ResourceCard from '../shared/ResourceCard'
+import ResourceBadge from './ResourceBadge'
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 
 
@@ -20,8 +19,26 @@ const ResourcePage = ({ match }) => {
     const [error, setError] = useState<string>("")
     const [resource, setResource] = useState<any>(null)
     const [siblingResources, setSiblingResources] = useState<any>([])
+    const [resourceIndex, setResourceIndex] = useState<number>(0)
+    const [isResourceBadgeClicked, setIsResourceBadgeClicked] = useState<boolean>(false)
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || "hhgetwduj"
+    const isMobile = useMediaQuery('(max-width:400px)');
+    const isTablet = useMediaQuery('(max-width:600px) and (min-width: 401px)');
+
+    const calculateCenterSlidePercentage = (): number => {
+
+        if (isMobile){
+            //mobile
+            return 60
+        }else if (isTablet){
+            //tablet
+            return 42
+        } else { 
+            //pc
+            return 32
+        }  
+    }
 
     const getResource = (): void => {
         let publicKey = match.url.replace("resource/", "")
@@ -31,9 +48,9 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        console.log(data.resources)
+                        // console.log(data.resources)
                         setResource(data.resources[0])
-                        // getSiblingResources(data.resources[0].filename)
+                        getSiblingResources(data.resources[0].filename)
                     }
                     setLoading(false)
                 }
@@ -52,8 +69,20 @@ const ResourcePage = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        console.log(JSON.stringify(data))
-                        setSiblingResources(data.resources)
+                        if (data.resources) {
+                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        }
+
+                        //filter the current video from the siblings list
+                        let filteredArray = data.resources.filter(resource => resource.filename !== filename)
+                        setSiblingResources(filteredArray)
+
+                        //find the index number of the current video
+                        data.resources.map((resource, index) => {
+                            if (resource.filename === filename){
+                                setResourceIndex(index)
+                            }
+                        })
                     }
                     setLoading(false)
                 }
@@ -75,9 +104,20 @@ const ResourcePage = ({ match }) => {
         )
     }
 
+    const handleIsResourceBadgeClicked = () => {
+        setIsResourceBadgeClicked(true)
+    };
+
+    //only do this when resource badge is clicked (to reload page)
     React.useEffect(() => {
         getResource()
+        setIsResourceBadgeClicked(false)
+    }, [isResourceBadgeClicked]);
 
+
+    React.useEffect(() => {
+        getResource()
+        
         return () => {
             isCancelled.current = true;
         };
@@ -104,6 +144,8 @@ const ResourcePage = ({ match }) => {
                     {!loading && resource &&
                         <>
                             <h2>{generateBreadcrumbs()}</h2>
+                            <p style={isMobile ? {display: 'block'} : {display: 'none'}}>MOBILE</p>
+                            <p style={isTablet ? {display: 'block'} : {display: 'none'}}>TABLET</p>
 
                             {resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(resource.format) &&
                                 <>
@@ -204,24 +246,25 @@ const ResourcePage = ({ match }) => {
                                 </>
                             }
 
-                            {/* {siblingResources &&
-                                <CarouselProvider
-                                    naturalSlideWidth={20}
-                                    naturalSlideHeight={20}
-                                    totalSlides={8}
-
+                            {siblingResources &&
+                                <Carousel
+                                showThumbs = {false}
+                                selectedItem = {resourceIndex}
+                                centerMode = {true}
+                                centerSlidePercentage = {calculateCenterSlidePercentage()}
+                                infiniteLoop = {true}
+                                showStatus = {false}
+                                showIndicators = {false}
+                                showArrows = {isMobile ? true : false}
+                                
                                 >
-                                    <Slider>
-                                        {siblingResources.map((siblingResource, index) => {
+                                    {siblingResources.map((siblingResource, index) => {
                                             return (
-                                                <Slide className="slide" key={index} index={index}><ResourceCard resource={siblingResource} matchUrl={match.url}/></Slide>
+                                                <ResourceBadge resource={siblingResource} matchUrl={match.url} index={index} key={index} setIsResourceBadgeClicked={handleIsResourceBadgeClicked} />
                                             )
                                         })}
-                                    </Slider>
-                                    <ButtonBack>Back</ButtonBack>
-                                    <ButtonNext>Next</ButtonNext>
-                                </CarouselProvider>
-                            } */}
+                                </Carousel>
+                            }
                         </>
                     }
                 </div>

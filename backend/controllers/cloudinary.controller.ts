@@ -27,7 +27,6 @@ export namespace CloudinaryController {
     }
 
     export async function GetResourcesInFolder(prefix: string): Promise<any> {
-        console.log(`prefix: ${prefix}`)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
                 .expression(`folder=${prefix.substring(1)}`)
@@ -44,7 +43,6 @@ export namespace CloudinaryController {
     }
 
     export async function GetResourceByPublicId(publicId: string): Promise<any> {
-        console.log(`publicId: ${publicId}`)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
                 .expression(`public_id:${publicId.substr(1)}`)
