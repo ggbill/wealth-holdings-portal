@@ -27,6 +27,7 @@ export namespace CloudinaryController {
     }
 
     export async function GetResourcesInFolder(prefix: string): Promise<any> {
+        console.log(`GetResourcesInFolder prefix: ${prefix.replace(/%2F/g, "/")}`)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.search
                 .expression(`folder=${prefix.substring(1)}`)

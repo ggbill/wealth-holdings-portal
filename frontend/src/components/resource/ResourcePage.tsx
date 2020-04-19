@@ -28,16 +28,16 @@ const ResourcePage = ({ match }) => {
 
     const calculateCenterSlidePercentage = (): number => {
 
-        if (isMobile){
+        if (isMobile) {
             //mobile
             return 60
-        }else if (isTablet){
+        } else if (isTablet) {
             //tablet
             return 42
-        } else { 
+        } else {
             //pc
             return 32
-        }  
+        }
     }
 
     const getResource = (): void => {
@@ -64,6 +64,7 @@ const ResourcePage = ({ match }) => {
 
     const getSiblingResources = (filename: string): void => {
         let encodedMatchUrl = match.url.replace(`/resource/${filename}`, "").replace(/\//g, "%2F")
+        console.log(`encodedMatchUrl: ${encodedMatchUrl}`)
         setLoading(true)
         cloudinaryApi.get(`resources/${encodedMatchUrl}`)
             .then((data: any) => {
@@ -71,18 +72,20 @@ const ResourcePage = ({ match }) => {
                     if (data) {
                         if (data.resources) {
                             data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+
+                            console.log(data.resources)
+
+                            //filter the current video from the siblings list
+                            let filteredArray = data.resources.filter(resource => resource.filename !== filename)
+                            setSiblingResources(filteredArray)
+
+                            //find the index number of the current video
+                            data.resources.map((resource, index) => {
+                                if (resource.filename === filename) {
+                                    setResourceIndex(index)
+                                }
+                            })
                         }
-
-                        //filter the current video from the siblings list
-                        let filteredArray = data.resources.filter(resource => resource.filename !== filename)
-                        setSiblingResources(filteredArray)
-
-                        //find the index number of the current video
-                        data.resources.map((resource, index) => {
-                            if (resource.filename === filename){
-                                setResourceIndex(index)
-                            }
-                        })
                     }
                     setLoading(false)
                 }
@@ -117,7 +120,7 @@ const ResourcePage = ({ match }) => {
 
     React.useEffect(() => {
         getResource()
-        
+
         return () => {
             isCancelled.current = true;
         };
@@ -246,23 +249,23 @@ const ResourcePage = ({ match }) => {
 
                             {siblingResources &&
                                 <Carousel
-                                showThumbs = {false}
-                                selectedItem = {resourceIndex}
-                                centerMode = {true}
-                                centerSlidePercentage = {calculateCenterSlidePercentage()}
-                                infiniteLoop = {true}
-                                showStatus = {false}
-                                showIndicators = {false}
-                                showArrows = {isMobile ? false : true}
-                                // emulateTouch = {true}
-                                swipeScrollTolerance = {3}
-                                
+                                    showThumbs={false}
+                                    selectedItem={resourceIndex}
+                                    centerMode={true}
+                                    centerSlidePercentage={calculateCenterSlidePercentage()}
+                                    infiniteLoop={true}
+                                    showStatus={false}
+                                    showIndicators={false}
+                                    showArrows={isMobile ? false : true}
+                                    // emulateTouch = {true}
+                                    swipeScrollTolerance={3}
+
                                 >
                                     {siblingResources.map((siblingResource, index) => {
-                                            return (
-                                                <ResourceBadge resource={siblingResource} matchUrl={match.url} index={index} key={index} setIsResourceBadgeClicked={handleIsResourceBadgeClicked} />
-                                            )
-                                        })}
+                                        return (
+                                            <ResourceBadge resource={siblingResource} matchUrl={match.url} index={index} key={index} setIsResourceBadgeClicked={handleIsResourceBadgeClicked} />
+                                        )
+                                    })}
                                 </Carousel>
                             }
                         </>

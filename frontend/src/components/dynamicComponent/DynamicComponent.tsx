@@ -18,7 +18,7 @@ const DynamicComponent = ({ match }) => {
     const [subFolders, setSubFolders] = useState<any>(null)
     const [folderContent, setFolderContent] = useState<any>(null)
 
-    
+
 
     // API call to Cloudinary based on foldername taken from the match param (match.params.dynamicPath)
     const getSubFolders = (): void => {
@@ -28,7 +28,7 @@ const DynamicComponent = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        if (data.resources){
+                        if (data.resources) {
                             data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
                         }
                         setSubFolders(data)
@@ -50,10 +50,13 @@ const DynamicComponent = ({ match }) => {
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        if (data.resources){
+                        if (data.resources) {
                             data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                            console.log(data)
+                            setFolderContent(data)
                         }
-                        setFolderContent(data)
+                        // console.log(data)
+                        // setFolderContent(data)
                     }
                     setLoading(false)
                 }
@@ -68,7 +71,6 @@ const DynamicComponent = ({ match }) => {
     }
 
     const generateBreadcrumbs = (): any => {
-
         let trimmedUrl = match.url.substr(1)
         let breadcrumbs: string[] = trimmedUrl.split("/")
 
@@ -78,6 +80,7 @@ const DynamicComponent = ({ match }) => {
     }
 
     React.useEffect(() => {
+        console.log(`useEffect: ${match.url}`)
         getSubFolders()
         getResources()
 
@@ -102,11 +105,11 @@ const DynamicComponent = ({ match }) => {
                 }
                 {!loading && subFolders && <div className="sub-folders">
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                            {subFolders.folders.map((subFolder: any, index: number) => {
-                                return (
-                                     <FolderCard key={subFolder.name} folder={subFolder} url={match.url} index={index} /> 
-                                )
-                            })}
+                        {subFolders.folders.map((subFolder: any, index: number) => {
+                            return (
+                                <FolderCard key={subFolder.name} folder={subFolder} url={match.url} index={index} />
+                            )
+                        })}
                     </Box>
                 </div>}
 
