@@ -144,8 +144,6 @@ const ResourcePage = ({ match }) => {
                     {!loading && resource &&
                         <>
                             <h2>{generateBreadcrumbs()}</h2>
-                            <p style={isMobile ? {display: 'block'} : {display: 'none'}}>MOBILE</p>
-                            <p style={isTablet ? {display: 'block'} : {display: 'none'}}>TABLET</p>
 
                             {resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(resource.format) &&
                                 <>
@@ -255,7 +253,9 @@ const ResourcePage = ({ match }) => {
                                 infiniteLoop = {true}
                                 showStatus = {false}
                                 showIndicators = {false}
-                                showArrows = {isMobile ? true : false}
+                                showArrows = {isMobile ? false : true}
+                                // emulateTouch = {true}
+                                swipeScrollTolerance = {3}
                                 
                                 >
                                     {siblingResources.map((siblingResource, index) => {
