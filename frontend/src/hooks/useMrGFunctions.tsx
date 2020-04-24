@@ -2,10 +2,24 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import HomeIcon from '@material-ui/icons/Home'
 
-const useCloudinaryFuctions = () => {
+const useMrGFuctions = () => {
 
     const generateThumbnailUrl = (videoUrl: string): string => {
         return `${videoUrl.substring(0, videoUrl.lastIndexOf(".") + 1)}jpg`
+    }
+
+    const isVideoFormat = (format: string): boolean => {
+        if (format === "avi" ||
+            format === "mov" ||
+            format === "swf" ||
+            format === "mp4" ||
+            format === "mpeg" ||
+            format === "webm" ||
+            format === "wmv" ) {
+            return true
+        } else {
+            return false
+        }
     }
 
     const isAudioFormat = (format: string): boolean => {
@@ -18,6 +32,19 @@ const useCloudinaryFuctions = () => {
             format === "ogg" ||
             format === "opus" ||
             format === "wav") {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const isImageFormat = (format: string): boolean => {
+        if (format === "gif" ||
+            format === "bmp" ||
+            format === "jpg" ||
+            format === "jpeg" ||
+            format === "png" ||
+            format === "svg") {
             return true
         } else {
             return false
@@ -39,9 +66,9 @@ const useCloudinaryFuctions = () => {
         let cleanFolderName: string = ""
         folderNameSplit.map((folderNameSplitInstance, index) => {
             if (index === folderNameSplit.length - 1){
-                cleanFolderName += `${folderNameSplitInstance}`
+                return(cleanFolderName += `${folderNameSplitInstance}`)
             }else{
-                cleanFolderName += `${folderNameSplitInstance} `
+                return(cleanFolderName += `${folderNameSplitInstance} `)
             }
         })
 
@@ -49,11 +76,23 @@ const useCloudinaryFuctions = () => {
     }
 
     const cleanFilename = (filename: string): string => {
+        // console.log(`filename: ${filename}`)
         let fileNameSplit = filename.split("_");
-        fileNameSplit.splice(0, 1) //remove the first part
-        fileNameSplit.splice(fileNameSplit.length - 1, 1)
 
-        return `${fileNameSplit[0]} ${fileNameSplit[1]}`
+        if (fileNameSplit.length > 1){
+            fileNameSplit.splice(0, 1) //remove the first part
+        }
+
+        let extensionSplit = fileNameSplit[fileNameSplit.length-1].split(".")
+        fileNameSplit[fileNameSplit.length-1] = extensionSplit[0]
+
+        let cleanedFileName = ""
+
+        fileNameSplit.forEach(element => {
+            cleanedFileName += ` ${element}`
+        });
+
+        return cleanedFileName
     }
 
     const generateBreadcrumbs = (breadcrumbs: string[], isFinalEntryFileName: boolean): any => {
@@ -98,9 +137,8 @@ const useCloudinaryFuctions = () => {
     }
 
     const sortByPrefix = (resourceList: any[]): any[] => {
-
         resourceList.sort((a, b) => {
-            return (a.filename.split("_")[0] < b.filename.split("_")[0] ? -1 : 1)
+            return (a.split("_")[0] < b.split("_")[0] ? -1 : 1)
         })
 
         return resourceList
@@ -109,6 +147,8 @@ const useCloudinaryFuctions = () => {
     return {
         generateThumbnailUrl,
         isAudioFormat,
+        isVideoFormat,
+        isImageFormat,
         isPDFFormat,
         generateBreadcrumbs,
         sortByPrefix,
@@ -116,4 +156,4 @@ const useCloudinaryFuctions = () => {
         cleanFilename
     };
 };
-export default useCloudinaryFuctions;
+export default useMrGFuctions;

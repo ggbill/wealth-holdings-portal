@@ -10,7 +10,7 @@ const Loading = () => {
     const [isDisplayLoading, setIsDisplayLoading] = useState(false)
 
     useEffect(() => {
-        const timer = setTimeout(() => enableLoading(), 500);
+        const timer = setTimeout(() => enableLoading(), 1000);
 
         //same as componentWillUnmount
         return () => {

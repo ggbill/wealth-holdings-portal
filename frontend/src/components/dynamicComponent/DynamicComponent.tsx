@@ -7,64 +7,53 @@ import Loading from '../shared/Loading'
 import ResourceCard from '../resource/ResourceCard'
 import ResourcePage from '../resource/ResourcePage'
 import FolderCard from '../shared/FolderCard'
-import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
+import useCloudinaryFunctions from "../../hooks/useMrGFunctions"
 
 const DynamicComponent = ({ match }) => {
     const isCancelled = React.useRef(false)
-    const cloudinaryApi = useFetch("cloudinary")
+    const ftpApi = useFetch("ftp")
     const cloudinaryFunctions = useCloudinaryFunctions()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [subFolders, setSubFolders] = useState<any>(null)
-    const [folderContent, setFolderContent] = useState<any>(null)
+    const [files, setFiles] = useState<any>(null)
+    const [isFilesFound, setIsFilesFound] = useState<boolean>(true)
+    const [isSubFoldersFound, setIsSubFoldersFound] = useState<boolean>(true)
 
-
-
-    // API call to Cloudinary based on foldername taken from the match param (match.params.dynamicPath)
-    const getSubFolders = (): void => {
-        let encodedMatchUrl = match.url.replace(/\//g, "%2F")
+    const getFolderContent = (): void => {
         setLoading(true)
-        cloudinaryApi.get(`sub-folders/${encodedMatchUrl}`)
-            .then((data: any) => {
-                if (!isCancelled.current) {
-                    if (data) {
-                        if (data.resources) {
-                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
-                        }
-                        setSubFolders(data)
+        let encodedMatchUrl = match.url.replace(/\//g, "%2F")
+        ftpApi.get(`folder-content/${encodedMatchUrl}`)
+        .then((data: any) => {
+            // console.log(`data: ${JSON.stringify(data)}`)
+            if (!isCancelled.current) {
+                if (data) {
+                    if (data.contentBody.subFolders.length) {
+                        data.contentBody.subFolders = cloudinaryFunctions.sortByPrefix(data.contentBody.subFolders)
+                        setSubFolders(data.contentBody.subFolders)
+                    } else {
+                        setIsSubFoldersFound(false)
                     }
-                    setLoading(false)
+
+                    if (data.contentBody.files.length) {
+                        data.contentBody.files = cloudinaryFunctions.sortByPrefix(data.contentBody.files)
+                        setFiles(data.contentBody.files)
+                    } else {
+                        setIsFilesFound(false)
+                    }
+                } else {
+                    setError("No data found.")
                 }
-            })
-            .catch((err: Error) => {
+                setLoading(false)
+            }
+        })
+        .catch((err: Error) => {
+            if (!isCancelled.current) {
                 console.log(err)
                 setError(err.message)
                 setLoading(false)
-            })
-    }
-
-    const getResources = (): void => {
-        let encodedMatchUrl = match.url.replace(/\//g, "%2F")
-        setLoading(true)
-        cloudinaryApi.get(`resources/${encodedMatchUrl}`)
-            .then((data: any) => {
-                if (!isCancelled.current) {
-                    if (data) {
-                        if (data.resources) {
-                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
-                            setFolderContent(data)
-                        }
-                    }
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    console.log(err)
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
+            }
+        })
     }
 
     const generateBreadcrumbs = (): any => {
@@ -77,8 +66,7 @@ const DynamicComponent = ({ match }) => {
     }
 
     React.useEffect(() => {
-        getSubFolders()
-        getResources()
+        getFolderContent()
 
         return () => {
             isCancelled.current = true;
@@ -99,25 +87,30 @@ const DynamicComponent = ({ match }) => {
                 {loading &&
                     <Loading />
                 }
-                {!loading && subFolders && <div className="sub-folders">
+
+                {!loading && subFolders &&
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                        {subFolders.folders.map((subFolder: any, index: number) => {
+                        {subFolders.map((subFolder: string, index: number) => {
                             return (
-                                <FolderCard key={subFolder.name} folder={subFolder} url={match.url} index={index} />
+                                <FolderCard key={subFolder} folder={subFolder} url={match.url} index={index} />
                             )
                         })}
                     </Box>
-                </div>}
-
-                {folderContent && <div className="folder-content">
+                }
+                {!loading && files &&
                     <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                        {folderContent.resources.map((resource: any, index: number) => {
+                        {files.map((resource: string, index: number) => {
                             return (
                                 <ResourceCard key={index} resource={resource} matchUrl={match.url} index={index} />
                             )
                         })}
                     </Box>
+                }
+
+                {!loading && !isSubFoldersFound && !isFilesFound && <div className="no-content-found">
+                    <p>This folder is empty!</p>
                 </div>}
+
             </div>}
 
             <Switch>

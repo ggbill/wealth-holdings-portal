@@ -7,8 +7,6 @@ import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 
 const MenuBar = () => {
-
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
@@ -21,7 +19,6 @@ const MenuBar = () => {
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
         setIsDrawerOpen(false);
     };
 

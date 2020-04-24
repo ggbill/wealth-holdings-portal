@@ -6,34 +6,36 @@ import ImageIcon from '@material-ui/icons/Image';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import DescriptionIcon from '@material-ui/icons/Description';
 import './resourceBadge.scss';
-import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
+import useCloudinaryFunctions from "../../hooks/useMrGFunctions"
+import useMrGFunctions from "../../hooks/useMrGFunctions"
 
 interface InputProps {
-    resource: any
+    resource: string
     matchUrl: string
     index: number
     setIsResourceBadgeClicked: () => void
 }
 
-const ResourceCard = (props: InputProps) => {
+const ResourceBadge = (props: InputProps) => {
+
+    const mrGFunctions = useMrGFunctions()
 
     const cloudinaryFunctions = useCloudinaryFunctions()
 
     const generateLink = (): string => {
         let matchUrlSplit = props.matchUrl.split('/resource/')
-        return `${matchUrlSplit[0]}/resource/${props.resource.filename}`
+        return `${matchUrlSplit[0]}/resource/${props.resource}`
     }
 
     return (
         <>
-            {props.resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(props.resource.format) &&
+            {mrGFunctions.isVideoFormat(props.resource.split(".")[1]) &&
                 <>
 
-                    < Card key={props.resource.name} className="resource-badge">
+                    < Card key={props.resource} className="resource-badge">
                         <CardActionArea component={Link} to={generateLink()} onClick={props.setIsResourceBadgeClicked}>
-                        {/* <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}> */}
                             <CardMedia
-                                image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
+                                image={require("../../images/Minion-video-icon.png")}
                                 title="Click to view video!"
                             />
                             <CardContent>
@@ -43,7 +45,7 @@ const ResourceCard = (props: InputProps) => {
                                     </div>
                                 </div>
                                 <div className="card-title-wrapper">
-                                    <span>{cloudinaryFunctions.cleanFilename(props.resource.filename)}</span>
+                                    <span>{cloudinaryFunctions.cleanFilename(props.resource)}</span>
                                 </div>
                             </CardContent>
                         </CardActionArea>
@@ -51,11 +53,11 @@ const ResourceCard = (props: InputProps) => {
                 </>
             }
 
-            {props.resource.resource_type === "video" && cloudinaryFunctions.isAudioFormat(props.resource.format) &&
-                < Card key={props.resource.name} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
+            {mrGFunctions.isAudioFormat(props.resource.split(".")[1]) &&
+                < Card key={props.resource} className="resource-badge">
+                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
                         <CardMedia
-                            image={require("../../images/audio_placeholder.png")}
+                            image={require("../../images/Minion-video-icon.png")}
                             title="Click to listen to the audio!"
                         />
                         <CardContent>
@@ -65,18 +67,19 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{cloudinaryFunctions.cleanFilename(props.resource.filename)}</span>
+                                <span>{cloudinaryFunctions.cleanFilename(props.resource)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>
                 </Card>
             }
 
-            {props.resource.resource_type === "image" && !cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
+            {mrGFunctions.isImageFormat(props.resource.split(".")[1]) &&
+                <Card key={props.resource} className="resource-badge">
+                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
                         <CardMedia
-                            image={props.resource.secure_url}
+                            image={require("../../images/Minion-video-icon.png")}
+                            title="Click to view the image!"
                         />
                         <CardContent>
                             <div className="resource-type-badge-wrapper image">
@@ -85,18 +88,19 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{cloudinaryFunctions.cleanFilename(props.resource.filename)}</span>
+                                <span>{cloudinaryFunctions.cleanFilename(props.resource)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>
                 </Card>
             }
 
-            {props.resource.resource_type === "image" && cloudinaryFunctions.isPDFFormat(props.resource.format) &&
-                <Card key={props.resource.name} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource.filename}`}>
+            {mrGFunctions.isPDFFormat(props.resource.split(".")[1]) &&
+                <Card key={props.resource} className="resource-badge">
+                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
                         <CardMedia
-                            image={cloudinaryFunctions.generateThumbnailUrl(props.resource.secure_url)}
+                            image={require("../../images/Minion-video-icon.png")}
+                            title="Click to view the pdf!"
                         />
                         <CardContent>
                             <div className="resource-type-badge-wrapper pdf">
@@ -105,7 +109,7 @@ const ResourceCard = (props: InputProps) => {
                                 </div>
                             </div>
                             <div className="card-title-wrapper">
-                                <span>{cloudinaryFunctions.cleanFilename(props.resource.filename)}</span>
+                                <span>{cloudinaryFunctions.cleanFilename(props.resource)}</span>
                             </div>
                         </CardContent>
                     </CardActionArea>
@@ -115,4 +119,4 @@ const ResourceCard = (props: InputProps) => {
     )
 }
 
-export default ResourceCard
+export default ResourceBadge

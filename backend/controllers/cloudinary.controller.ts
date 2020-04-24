@@ -5,6 +5,7 @@ export namespace CloudinaryController {
     export async function GetFolders(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             cloudinary.api.root_folders(function (error, result) {
+                // console.log(`result: ${JSON.stringify(result)}`)
                 if (error) {
                     console.log(error)
                     reject(error)

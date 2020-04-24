@@ -3,6 +3,7 @@ import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
 import cloudinaryRouter from './routes/cloudinary';
+import ftpRouter from './routes/ftp';
 
 const path = require('path');
 const shrinkRay = require('shrink-ray-current');
@@ -28,6 +29,7 @@ app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
 
 app.use('/cloudinary', cloudinaryRouter);
+app.use('/ftp', ftpRouter);
 
 
 if (process.env.NODE_ENV === 'production') {

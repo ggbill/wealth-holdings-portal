@@ -1,30 +1,32 @@
 import React, { useState } from 'react'
 import useFetch from "../../hooks/useFetch"
-import { Video, Image } from 'cloudinary-react'
+// import { Video, Image } from 'cloudinary-react'
 import Loading from '../shared/Loading'
 import './resourcePage.scss'
-import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
+import useCloudinaryFunctions from "../../hooks/useMrGFunctions"
 import ResourceBadge from './ResourceBadge'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMrGFunctions from "../../hooks/useMrGFunctions"
 
 
 
 const ResourcePage = ({ match }) => {
     const isCancelled = React.useRef(false)
-    const cloudinaryApi = useFetch("cloudinary")
+    const ftpApi = useFetch("ftp")
     const cloudinaryFunctions = useCloudinaryFunctions()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [resource, setResource] = useState<any>(null)
     const [siblingResources, setSiblingResources] = useState<any>([])
     const [resourceIndex, setResourceIndex] = useState<number>(0)
     const [isResourceBadgeClicked, setIsResourceBadgeClicked] = useState<boolean>(false)
+    const [contentType, setContentType] = useState<string>("")
+    const [mediaBlobUrl, setMediaBlobUrl] = useState<any>()
 
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || "hhgetwduj"
     const isMobile = useMediaQuery('(max-width:400px)');
     const isTablet = useMediaQuery('(max-width:600px) and (min-width: 401px)');
+    const mrGFunctions = useMrGFunctions()
 
     const calculateCenterSlidePercentage = (): number => {
 
@@ -40,23 +42,29 @@ const ResourcePage = ({ match }) => {
         }
     }
 
-    const getResource = (): void => {
-        let publicKey = match.url.replace("resource/", "")
-        let encodedPublicKey = publicKey.replace(/\//g, "%2F")
+    const getFile = (): void => {
+        let filePath = match.url.replace("resource/", "")
+        let encodedFilePath = filePath.replace(/\//g, "%2F")
         setLoading(true)
-        cloudinaryApi.get(`resource/${encodedPublicKey}`)
+        ftpApi.get(`file/${encodedFilePath}`)
             .then((data: any) => {
                 if (!isCancelled.current) {
                     if (data) {
-                        // console.log(data.resources)
-                        setResource(data.resources[0])
-                        getSiblingResources(data.resources[0].filename)
+                        // console.log(`data: ${JSON.stringify(data.contentType)}`)
+                        setContentType(data.contentType)
+                        setMediaBlobUrl(URL.createObjectURL(data.contentBody))
+
+                        let filepathSplit = filePath.split("/")
+                        let filename = filepathSplit[filepathSplit.length - 1]
+                        // console.log(`filepath: ${filepathSplit[filepathSplit.length-1]}`)
+                        getSiblingResources(filename)
                     }
                     setLoading(false)
                     setIsResourceBadgeClicked(false)
                 }
             })
             .catch((err: Error) => {
+                console.log("we got an error.")
                 console.log(err)
                 setError(err.message)
                 setLoading(false)
@@ -64,35 +72,41 @@ const ResourcePage = ({ match }) => {
     }
 
     const getSiblingResources = (filename: string): void => {
-        let encodedMatchUrl = match.url.replace(`/resource/${filename}`, "").replace(/\//g, "%2F")
-        // console.log(`encodedMatchUrl: ${encodedMatchUrl}`)
         setLoading(true)
-        cloudinaryApi.get(`resources/${encodedMatchUrl}`)
+        let encodedMatchUrl = match.url.replace(/\//g, "%2F")
+        ftpApi.get(`folder-content/${encodedMatchUrl.replace(`%2Fresource%2F${filename}`, "")}`)
             .then((data: any) => {
+                // console.log(`data: ${JSON.stringify(data)}`)
                 if (!isCancelled.current) {
                     if (data) {
-                        if (data.resources) {
-                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        if (data.contentBody.files.length) {
+                            data.contentBody.files = cloudinaryFunctions.sortByPrefix(data.contentBody.files)
 
                             //filter the current video from the siblings list
-                            let filteredArray = data.resources.filter(resource => resource.filename !== filename)
+                            let filteredArray = data.contentBody.files.filter(file => file !== filename)
+                            // console.log(JSON.stringify(filteredArray))
                             setSiblingResources(filteredArray)
 
                             //find the index number of the current video
-                            data.resources.map((resource, index) => {
-                                if (resource.filename === filename) {
+                            data.contentBody.files.forEach((file, index) => {
+                                if (file === filename) {
                                     setResourceIndex(index)
                                 }
                             })
+
                         }
+                    } else {
+                        setError("No data found.")
                     }
                     setLoading(false)
                 }
             })
             .catch((err: Error) => {
-                console.log(err)
-                setError(err.message)
-                setLoading(false)
+                if (!isCancelled.current) {
+                    console.log(err)
+                    setError(err.message)
+                    setLoading(false)
+                }
             })
     }
 
@@ -112,14 +126,15 @@ const ResourcePage = ({ match }) => {
 
     //only do this when resource badge is clicked (to reload page)
     React.useEffect(() => {
-        if (isResourceBadgeClicked){
-            getResource()
+        if (isResourceBadgeClicked) {
+            getFile()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isResourceBadgeClicked]);
 
 
     React.useEffect(() => {
-        getResource()
+        getFile()
 
         return () => {
             isCancelled.current = true;
@@ -144,130 +159,77 @@ const ResourcePage = ({ match }) => {
                             <Loading />
                         </>
                     }
-                    {!loading && resource &&
+
+                    {!loading && mrGFunctions.isVideoFormat(contentType.split("/")[1]) &&
                         <>
                             <h2>{generateBreadcrumbs()}</h2>
-
-                            {resource.resource_type === "video" && !cloudinaryFunctions.isAudioFormat(resource.format) &&
-                                <>
-                                    {resource.context &&
-                                        <>
-                                            {resource.context.caption &&
-                                                <h1>{resource.context.caption}</h1>
-                                            }
-
-                                            {resource.context.alt &&
-                                                <span className="intro-text">{resource.context.alt}</span>
-                                            }
-                                        </>
-                                    }
-
-
-                                    <div className="resource-wrapper">
-                                        <Video
-                                            cloudName={cloudName}
-                                            publicId={resource.public_id}
-                                            fallbackContent="Your browser does not support HTML5 video tags."
-                                            controls={true}
-                                            autoPlay={true}
-                                        >
-                                        </Video>
-                                    </div>
-
-                                </>
-                            }
-
-                            {resource.resource_type === "video" && cloudinaryFunctions.isAudioFormat(resource.format) &&
-                                <>
-                                    {resource.context &&
-                                        <>
-                                            {resource.context.caption &&
-                                                <h1>{resource.context.caption}</h1>
-                                            }
-
-                                            {resource.context.alt &&
-                                                <span className="intro-text">{resource.context.alt}</span>
-                                            }
-                                        </>
-                                    }
-                                    <div className="resource-wrapper audio">
-                                        <img alt="placeholder audio" src={require("../../images/audio_placeholder.png")} />
-                                        <Video
-                                            cloudName={cloudName}
-                                            publicId={resource.public_id}
-                                            fallbackContent="Your browser does not support HTML5 video tags."
-                                            controls={true}
-                                            autoPlay={true}
-                                        >
-                                        </Video>
-                                    </div>
-
-                                </>
-                            }
-
-                            {resource.resource_type === "image" && !cloudinaryFunctions.isPDFFormat(resource.format) &&
-                                <>
-                                    {resource.context &&
-                                        <>
-                                            {resource.context.caption &&
-                                                <h1>{resource.context.caption}</h1>
-                                            }
-
-                                            {resource.context.alt &&
-                                                <span className="intro-text">{resource.context.alt}</span>
-                                            }
-                                        </>
-                                    }
-                                    <div className="resource-wrapper">
-                                        <Image
-                                            cloudName={cloudName}
-                                            publicId={resource.public_id}
-                                        >
-                                        </Image>
-                                    </div>
-                                </>
-                            }
-
-                            {resource.resource_type === "image" && cloudinaryFunctions.isPDFFormat(resource.format) &&
-                                <>
-                                    {resource.context &&
-                                        <>
-                                            {resource.context.caption &&
-                                                <h1>{resource.context.caption}</h1>
-                                            }
-
-                                            {resource.context.alt &&
-                                                <span className="intro-text">{resource.context.alt}</span>
-                                            }
-                                        </>
-                                    }
-                                    <div className="resource-wrapper">
-                                        <object data={resource.secure_url}></object>
-                                    </div>
-                                </>
-                            }
-
-                            {siblingResources &&
-                                <Carousel
-                                    showThumbs={false}
-                                    selectedItem={resourceIndex}
-                                    centerMode={true}
-                                    centerSlidePercentage={calculateCenterSlidePercentage()}
-                                    infiniteLoop={true}
-                                    showStatus={false}
-                                    showIndicators={false}
-                                    showArrows={isMobile || isTablet ? false : true}
-                                    swipeScrollTolerance={8}
-
+                            <div className="resource-wrapper">
+                                <video
+                                    src={mediaBlobUrl}
+                                    controls={true}
+                                    autoPlay={true}
                                 >
-                                    {siblingResources.map((siblingResource, index) => {
-                                        return (
-                                            <ResourceBadge resource={siblingResource} matchUrl={match.url} index={index} key={index} setIsResourceBadgeClicked={handleIsResourceBadgeClicked} />
-                                        )
-                                    })}
-                                </Carousel>
-                            }
+                                    Your browser does not support HTML5 video tags.
+                                </video>
+                            </div>
                         </>
+                    }
+
+                    {!loading && mrGFunctions.isAudioFormat(contentType.split("/")[1]) &&
+                        <>
+                            <h2>{generateBreadcrumbs()}</h2>
+                            <div className="resource-wrapper audio">
+                                <img alt="placeholder audio" src={require("../../images/Minion-video-icon.png")} />
+                                <audio
+                                    src={mediaBlobUrl}
+                                    controls={true}
+                                    autoPlay={true}
+                                >
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                        </>
+                    }
+
+                    {!loading && mrGFunctions.isImageFormat(contentType.split("/")[1]) &&
+                        <>
+                            <h2>{generateBreadcrumbs()}</h2>
+                            <div className="resource-wrapper">
+                                <img src={mediaBlobUrl} alt="mr.g" />
+                            </div>
+                        </>
+                    }
+
+                    {!loading && mrGFunctions.isPDFFormat(contentType.split("/")[1]) &&
+                        <>
+                            <h2>{generateBreadcrumbs()}</h2>
+                            <div className="resource-wrapper">
+                                <object data={mediaBlobUrl} >
+                                    Your browser does not support the pdf viewer element.
+                                </object>
+                            </div>
+                        </>
+                    }
+
+                    {!loading && siblingResources &&
+                        <Carousel
+                            showThumbs={false}
+                            selectedItem={resourceIndex}
+                            centerMode={true}
+                            centerSlidePercentage={calculateCenterSlidePercentage()}
+                            infiniteLoop={true}
+                            showStatus={false}
+                            showIndicators={false}
+                            showArrows={isMobile || isTablet ? false : true}
+                            swipeScrollTolerance={8}
+
+                        >
+                            {siblingResources.map((siblingResource, index) => {
+                                return (
+                                    <ResourceBadge resource={siblingResource} matchUrl={match.url} index={index} key={index} setIsResourceBadgeClicked={handleIsResourceBadgeClicked} />
+                                )
+                            })}
+                        </Carousel>
                     }
                 </div>
             }

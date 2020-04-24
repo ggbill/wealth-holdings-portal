@@ -33,7 +33,7 @@
 
     .resource-type-badge-wrapper {
         position: relative;
-        top: -42px;
+        top: -19px;
         margin: 0 0 0 auto;
 
         .resource-type-badge {
@@ -83,6 +83,8 @@
 .resource-badge.MuiCard-root:hover{
     position: relative;
     top: -1px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 
 /* Extra small devices (phones, 600px and down) */

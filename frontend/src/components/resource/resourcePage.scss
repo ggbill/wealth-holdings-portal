@@ -16,13 +16,13 @@
         }
     }
 
-    video,
-    img {
+    video, img, audio, embed {
         max-width: 600px;
         width: 100%;
     }
 
     object {
+        max-width: 600px;
         width: 100%;
         height: 500px;
     }

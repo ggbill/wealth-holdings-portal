@@ -4,28 +4,44 @@ import useFetch from "../../hooks/useFetch"
 import { Box } from '@material-ui/core'
 import Loading from '../shared/Loading';
 import FolderCard from '../shared/FolderCard'
-import useCloudinaryFunctions from "../../hooks/useCloudinaryFunctions"
+import useCloudinaryFunctions from "../../hooks/useMrGFunctions"
+import ResourceCard from '../resource/ResourceCard';
 
 const Home = ({ match }) => {
     const isCancelled = useRef(false)
-    const cloudinaryApi = useFetch("cloudinary")
+    const ftpApi = useFetch("ftp")
     const cloudinaryFunctions = useCloudinaryFunctions()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [rootFolders, setRootFolders] = useState<any>(null)
+    const [subFolders, setSubFolders] = useState<any>(null)
+    const [files, setFiles] = useState<any>(null)
+    const [isFolderContentFound, setIsFilesFound] = useState<boolean>(true)
+    const [isSubFoldersFound, setIsSubFoldersFound] = useState<boolean>(true)
 
-    const getFolders = (): void => {
+    const getFolderContent = (): void => {
         setLoading(true)
-        cloudinaryApi.get("root-folders")
+         ftpApi.get("folder-content/%2F")
             .then((data: any) => {
+                // console.log(`data: ${JSON.stringify(data)}`)
                 if (!isCancelled.current) {
                     if (data) {
-                        if (data.resources){
-                            data.resources = cloudinaryFunctions.sortByPrefix(data.resources)
+                        if (data.contentBody.subFolders.length) {
+                            data.contentBody.subFolders = cloudinaryFunctions.sortByPrefix(data.contentBody.subFolders)
+                            setSubFolders(data.contentBody.subFolders)
+                        } else {
+                            setIsSubFoldersFound(false)
                         }
-                        setRootFolders(data)
-                    }
 
+                        if (data.contentBody.files.length) {
+                            data.contentBody.files = cloudinaryFunctions.sortByPrefix(data.contentBody.files)
+                            setFiles(data.contentBody.files)
+                        } else {
+                            setIsFilesFound(false)
+                        }
+                    } else {
+                        setIsFilesFound(false)
+                        setIsSubFoldersFound(false)  
+                    }
                     setLoading(false)
                 }
             })
@@ -39,7 +55,7 @@ const Home = ({ match }) => {
     }
 
     React.useEffect(() => {
-        getFolders();
+        getFolderContent();
 
         return () => {
             isCancelled.current = true;
@@ -69,18 +85,50 @@ const Home = ({ match }) => {
                 <Loading />
             }
 
-            {!loading &&
+            {!loading && subFolders &&
                 <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
-                    {rootFolders && rootFolders.folders.map((rootFolder: any, index: number) => {
+                    {subFolders.map((subFolder: string, index: number) => {
                         return (
-                            <FolderCard key={rootFolder.name} folder={rootFolder} url={match.url} index={index} />
+                            <FolderCard key={subFolder} folder={subFolder} url={match.url} index={index} />
+                        )
+                    })}
+                </Box>
+            }
+            {!loading && files &&
+                <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
+                    {files.map((resource: string, index: number) => {
+                        return (
+                            <ResourceCard key={index} resource={resource} matchUrl={match.url} index={index} />
                         )
                     })}
                 </Box>
             }
 
+            {!loading && !isSubFoldersFound && !isFolderContentFound && <div className="no-content-found">
+                <p>This folder is empty!</p>
+            </div>}
 
-        </div>
+
+            {/* {!loading &&
+                <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
+                    {subFolders && subFolders.map((subFolder: string, index: number) => {
+                        return (
+                            <FolderCard key={subFolder} folder={subFolder} url={match.url} index={index} />
+                        )
+                    })}
+                    {files && <div className="folder-content">
+                        <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-evenly">
+                            {files.map((resource: string, index: number) => {
+                                return (
+                                    <ResourceCard key={index} resource={resource} matchUrl={match.url} index={index} />
+                                )
+                            })}
+                        </Box>
+                    </div>}
+                </Box>
+            } */}
+
+        </div >
     )
 }
 
