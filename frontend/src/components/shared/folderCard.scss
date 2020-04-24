@@ -15,15 +15,18 @@
 }
 
 .folder-card.MuiCard-root {
+    display: flex;
+    align-items: center;
     width: 40%;
     margin: 12px;
     text-align: center;
     box-shadow: 0 0 10px 4px #3cb8e7;
     font-family: hoboStd;
     opacity: 0; //must start invisible
-
+    background-color: #3cb8e7;
+    border: 1px solid white;
     animation: FadeIn 0.2s linear;
-    animation-fill-mode:forwards;
+    animation-fill-mode: forwards;
 
     a {
         text-decoration: none;
@@ -39,9 +42,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #3cb8e7;
-
-        border: 1px solid white;
+        // background-color: #3cb8e7;
+        // border: 1px solid white;
 
         span {
             padding: 0 12px;
@@ -51,7 +53,7 @@
     }
 }
 
-.folder-card.MuiCard-root:hover{
+.folder-card.MuiCard-root:hover {
     position: relative;
     top: -1px;
     box-shadow: 0 0 8px 4px #3cb8e7;
@@ -72,11 +74,11 @@
         }
     }
 
-    .folder-card.MuiCard-root:hover{
+    .folder-card.MuiCard-root:hover {
         position: relative;
         top: 0px;
         box-shadow: 0 0 10px 4px #3cb8e7;
-    
+
         span.folder-label {
             color: #226896;
         }

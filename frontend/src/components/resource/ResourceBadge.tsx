@@ -55,7 +55,7 @@ const ResourceBadge = (props: InputProps) => {
 
             {mrGFunctions.isAudioFormat(props.resource.split(".")[1]) &&
                 < Card key={props.resource} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
+                    <CardActionArea component={Link} to={generateLink()} onClick={props.setIsResourceBadgeClicked}>
                         <CardMedia
                             image={require("../../images/Minion-video-icon.png")}
                             title="Click to listen to the audio!"
@@ -76,7 +76,7 @@ const ResourceBadge = (props: InputProps) => {
 
             {mrGFunctions.isImageFormat(props.resource.split(".")[1]) &&
                 <Card key={props.resource} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
+                    <CardActionArea component={Link} to={generateLink()} onClick={props.setIsResourceBadgeClicked}>
                         <CardMedia
                             image={require("../../images/Minion-video-icon.png")}
                             title="Click to view the image!"
@@ -97,7 +97,7 @@ const ResourceBadge = (props: InputProps) => {
 
             {mrGFunctions.isPDFFormat(props.resource.split(".")[1]) &&
                 <Card key={props.resource} className="resource-badge">
-                    <CardActionArea component={Link} to={`${props.matchUrl}/resource/${props.resource}`}>
+                    <CardActionArea component={Link} to={generateLink()} onClick={props.setIsResourceBadgeClicked}>
                         <CardMedia
                             image={require("../../images/Minion-video-icon.png")}
                             title="Click to view the pdf!"
