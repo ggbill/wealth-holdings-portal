@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
-import cloudinaryRouter from './routes/cloudinary';
+// import cloudinaryRouter from './routes/cloudinary';
 import ftpRouter from './routes/ftp';
 
 const path = require('path');
@@ -28,7 +28,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
 
-app.use('/cloudinary', cloudinaryRouter);
+// app.use('/cloudinary', cloudinaryRouter);
 app.use('/ftp', ftpRouter);
 
 
