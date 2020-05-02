@@ -1,9 +1,9 @@
 {
-  "name": "mrgmaths-backend",
+  "name": "wealth-holdings-backend",
   "version": "1.0.0",
-  "description": "The nodeJS backend of the Mr.G Maths",
+  "description": "The nodeJS backend of the Wealth Holdings Portal",
   "repository": {
-    "url": "https://github.com/ggbill/mrgmaths"
+    "url": "https://github.com/ggbill/wealth-holdings"
   },
   "main": "dist/server.js",
   "engines": {

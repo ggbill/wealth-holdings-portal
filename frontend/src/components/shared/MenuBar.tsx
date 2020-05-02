@@ -5,6 +5,7 @@ import "./menuBar.scss"
 import LinkButton from './LinkButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const MenuBar = () => {
     const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
@@ -41,13 +42,15 @@ const MenuBar = () => {
 
     return (
         <>
-            <AppBar className={scrollClass}>
+            <AppBar position="fixed" className={scrollClass}>
                 <Toolbar>
                     <Link className="clickable-icon" to={'/'}>
-                        <img className="logo" alt="logo" src={require("../../images/MrG-maths-logo-mobile.png")} />
+                        <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                     </Link>
                     <div className="menu-items">
-                        <LinkButton className="link-button" to='/about'>About</LinkButton>
+                        <LinkButton className="link-button" to='/about'><AccountCircleIcon /></LinkButton>
+                        
+
                     </div>
                     <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
                         <MenuIcon />
@@ -69,7 +72,7 @@ const MenuBar = () => {
                     <MenuItem onClick={handleClose}>About</MenuItem>
                 </Link>
                 <div className="drawer-footer">
-                    <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} />
+                    {/* <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} /> */}
                 </div>
             </Drawer>
         </>

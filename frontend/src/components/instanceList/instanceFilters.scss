@@ -1,0 +1,17 @@
+.filters{
+
+    h2{
+        margin-bottom: 12px
+    }
+
+    margin-bottom: 48px;
+
+    .MuiFormControl-root{
+        min-width: 200px;
+        margin-right: 48px;
+
+        &.assigned-bdm{
+            margin-right: 0px;
+        }
+    }
+}

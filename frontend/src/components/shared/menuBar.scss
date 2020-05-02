@@ -1,19 +1,18 @@
 .MuiAppBar-root.menu-bar {
     position: fixed;
     padding: 6px 0;
+    z-index: 10000;
 
     &.MuiAppBar-colorPrimary {
         flex-grow: 1;
-        color: #84a07c;
+        background-color: #57AB6E;
 
         &.no-shadow {
             box-shadow: none;
-            background-color: #ffffff00;
-            transition: background-color 1s;
+            transition: box-shadow 1s;   
         }
         &.shadow {
-            background-color: #141414f0;
-            transition: background-color 1s;
+            transition: box-shadow 1s;
         }
     }
 
@@ -65,7 +64,6 @@
             button{
                 color: white;
             }
-            
         }
 
         .drawer-footer{
@@ -93,7 +91,5 @@
 
     .menu-items {
         display: none;
-    }
-
-    
+    }    
 }

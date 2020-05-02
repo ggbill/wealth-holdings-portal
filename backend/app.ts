@@ -2,22 +2,10 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
-// import cloudinaryRouter from './routes/cloudinary';
-import ftpRouter from './routes/ftp';
+import kissflowRouter from './routes/kissflow';
 
 const path = require('path');
 const shrinkRay = require('shrink-ray-current');
-const cloudinary = require('cloudinary').v2;
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
-cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-    api_key: process.env.CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
 
 const app = express();
 
@@ -28,8 +16,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
 
-// app.use('/cloudinary', cloudinaryRouter);
-app.use('/ftp', ftpRouter);
+app.use('/kissflow', kissflowRouter);
 
 
 if (process.env.NODE_ENV === 'production') {

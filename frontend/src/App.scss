@@ -1,35 +1,39 @@
 .full-height-content {
-    min-height: calc(100vh - 122px); /* will cover the 100% of viewport minus footer */
+    min-height: calc(100vh - 198px); /* will cover the 100% of viewport minus footer and header */
+    max-width: 960px;
     overflow: hidden;
     display: block;
-    background-image: url("./images/background.gif");
     padding-bottom: 24px;
+    padding: 76px 24px 24px 24px;
+    margin: auto;
 }
 
-.content {
-    padding: 140px 24px 24px 24px;
-    max-width: 1080px;
-    margin: 0 auto;
+.root{
+    display: flex;
+
+    main{
+        width: 100%;
+        background-color: #fafafa;
+    }
+    
 }
 
-h1,
-h2,
-h3,
-a {
-    color: white;
+.left-drawer{
+    // display: flex;
+    width: 240px;
+    flex-shrink: 0;
+    z-index: 1000;
 }
 
-.loading-wrapper {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    padding: 100px 24px 24px 24px;
-    width: 200px;
+.drawer-paper{
+    width: 240px;
+}
 
-    h2 {
-        margin: 0;
+.drawer-container{
+    overflow: auto;
+
+    .MuiList-root{
+        padding-top: 78px;
     }
 }
 

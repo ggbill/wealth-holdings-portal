@@ -1,4 +1,3 @@
-import useMrGFunctions from "./useMrGFunctions"
 
 interface Options {
     method: string,
@@ -7,7 +6,6 @@ interface Options {
 }
 
 const useFetch = (collection: string) => {
-    const mrGFunctions = useMrGFunctions()
     const url = process.env.PUBLIC_URL || "http://localhost:8080"
     const stub = `${url}/${collection}`
 
@@ -16,48 +14,19 @@ const useFetch = (collection: string) => {
         "Content-Type": "application/json"
     };
 
-    const customFetch = async (url, method, body, headers) => {
+    const customFetch = (url, method, body, headers) => {
         const options: Options = {
             method,
             headers,
             body
         };
 
-        if (body) {
+        if (body){
             options.body = JSON.stringify(body)
-        }
+        } 
 
-
-        //TODO need to split response into response type and payload to differentiate between file types and folders
         return fetch(url, options)
-            .then( async response => {
-                for (var pair of response.headers.entries()) {
-                    // console.log(`${pair[0]}: ${pair[1]}`)
-
-                    if (pair[0] === "content-type") {
-                        if (mrGFunctions.isVideoFormat(pair[1].split("/")[1]) ||
-                            mrGFunctions.isImageFormat(pair[1].split("/")[1]) ||
-                            mrGFunctions.isAudioFormat(pair[1].split("/")[1])    
-                        ) {
-                            return ({
-                                contentType: pair[1],
-                                contentBody: await response.blob()
-                            })
-                        } else if (mrGFunctions.isPDFFormat(pair[1].split("/")[1])){
-                            return ({
-                                contentType: pair[1],
-                                contentBody: await response.blob()
-                            })
-                        }else {
-                            return ({
-                                contentType: pair[1],
-                                contentBody: await response.json()
-                            })                            
-                        }
-                    }
-                }
-            })
-
+            .then(response => response.json())
             .catch(err => {
                 throw new Error(err);
             });

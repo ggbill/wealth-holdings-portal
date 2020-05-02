@@ -7,11 +7,11 @@ const Footer = () => {
     return (
         <section className="footer-section">
             <div className="left-content">
-                Email: <a href="mailto:thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a>
+                {/* Email: <a href="mailto:thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a> */}
             </div>
             <div className="middle-content">
-                <Link to={'/'}>
-                    <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} />
+                <Link className="clickable-icon" to={'/'}>
+                    <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                 </Link>
 
             </div>

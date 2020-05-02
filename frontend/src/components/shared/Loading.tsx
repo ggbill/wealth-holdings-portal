@@ -26,7 +26,7 @@ const Loading = () => {
         <div className="content">
             {isDisplayLoading ?
                 <div className="loading-wrapper">
-                    <img className="logo" alt="logo" src={require("../../images/dancing_minion.gif")} />
+                    {/* <img className="logo" alt="logo" src={require("../../images/dancing_minion.gif")} /> */}
                     <h2>Loading...</h2>
                 </div > : null
             }

@@ -1,5 +1,5 @@
 {
-  "name": "mrgmaths-frontend",
+  "name": "wealth-holdings-frontend",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
