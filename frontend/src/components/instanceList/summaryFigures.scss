@@ -19,9 +19,9 @@
 
     .MuiBox-root {
         .MuiCard-root {
-            width: 200px;
+            width: 250px;
             text-align: center;
-            margin: 12px auto 12px 0;
+            margin: 12px 24px 12px 0;
             opacity: 0; //must start invisible
             animation: FadeIn 0.2s linear;
             animation-fill-mode: forwards;

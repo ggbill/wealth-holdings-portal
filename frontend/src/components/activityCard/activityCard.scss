@@ -17,7 +17,7 @@
 .activity-card.MuiCard-root {
     display: flex;
     align-items: center;
-    max-width: 260px;
+    max-width: 250px;
     margin: 12px;
     text-align: center;
     opacity: 0; //must start invisible
@@ -73,10 +73,10 @@
             box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
             
 
-            >*{
+            span{
                 display: flex;
                 flex-grow: 1;
-                padding: 6px 2px;
+                padding: 3px 12px;
                 text-align: center;
                 flex-direction: column;
             }

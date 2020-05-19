@@ -4,10 +4,19 @@ export namespace KissFlowController {
 
     export async function WriteWebhookToDB(webhookBody: any): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-            // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
+            console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
 
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
+
+            let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee: number;
+
+            if (webhookBody.AUM){ aum = Number(webhookBody.AUM.split(" ")[0])}
+            if (webhookBody.Recurring_Fees){ recurringFees = Number(webhookBody.Recurring_Fees.split(" ")[0])}
+            if (webhookBody.Turnover){ turnover = Number(webhookBody.Turnover.split(" ")[0])}
+            if (webhookBody.EBITDA){ ebitda = Number(webhookBody.EBITDA.split(" ")[0])}
+            if (webhookBody.Valuation){ valuation = Number(webhookBody.Valuation.split(" ")[0])}
+            if (webhookBody.Wealth_Holdings_Fee){ wealthHoldingsFee = Number(webhookBody.Wealth_Holdings_Fee.split(" ")[0])}
 
             Webhook.create({
                 ...webhookBodyNoId,
@@ -18,22 +27,24 @@ export namespace KissFlowController {
                 preferredEmail: webhookBody.Preferred_Email,
                 preferredPhone: webhookBody.Preferred_Phone,
                 firmName: webhookBody.Firm_Name,
+                companyType: webhookBody.Company_Type,
+                isSimplyBizMember: webhookBody.Is_SimplyBiz_Member,
                 closeCase: webhookBody.Close_Case,
                 reEngage: webhookBody.ReEngage_In_Future,
                 initialTransactionReferenceNumber: webhookBody.Transaction_Reference_Number,
-                aum: webhookBody.AUM,
-                recurringFees: webhookBody.Recurring_Fees,
-                turnover: webhookBody.Turnover,
-                ebitda: webhookBody.EBITDA,
+                aum: aum,
+                recurringFees: recurringFees,
+                turnover: turnover,
+                ebitda: ebitda,
                 planners: webhookBody.Planners,
                 clients: webhookBody.Clients,
                 customers: webhookBody.Customers,
                 purchasingHub: webhookBody.Purchasing_Hub,
-                valuation: webhookBody.Valuation,
-                wealthHoldingsFee: webhookBody.Wealth_Holdings_Fee,
+                valuation: valuation,
+                wealthHoldingsFee: wealthHoldingsFee,
                 completionDate: webhookBody.Completion_Date,
                 purchaseType: webhookBody.Purchase_Type,
-                paymentSchedule: webhookBody.Payment_Schedule,
+                paymentSchedule: webhookBody['Table::Model_sWhDBR6MiD'],
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1
             }, function (err, webhook: IWebhook) {
                 if (err) {
@@ -67,15 +78,6 @@ export namespace KissFlowController {
                         planners: { $first: "$planners" },
                         clients: { $first: "$clients" },
                         customers: { $first: "$customers" },
-                        //TODO - Replace this with SLA once Kissflow product team make updates
-                        SLA_Initial_Fee_Payment: { $first: "$SLA_Initial_Fee_Payment" },
-                        SLA_HLDD: { $first: "$SLA_HLDD" },
-                        SLA_Heads_Of_Terms: { $first: "$SLA_Heads_Of_Terms" },
-                        SLA_DDD: { $first: "$SLA_DDD" },
-                        SLA_Formal_Offer: { $first: "$SLA_Formal_Offer" },
-                        SLA_Transaction_Agreement: { $first: "$SLA_Transaction_Agreement" },
-                        SLA_Final_Fee_Payment: { $first: "$SLA_Final_Fee_Payment" },
-                        SLA_Onboard_Lead: { $first: "$SLA_Onboard_Lead" }
                     }
                 }], function (err, result) {
                     if (err) {
@@ -84,14 +86,26 @@ export namespace KissFlowController {
                     }
 
                     let filteredResult = result.filter(result => result._current_step !== null)
-                    filteredResult.forEach(result => {
-                        if (result.aum) { result.aum = Number(result.aum.split(" ")[0]) }
-                        if (result.recurringFees) { result.recurringFees = Number(result.recurringFees.split(" ")[0]) }
-                        if (result.turnover) { result.turnover = Number(result.turnover.split(" ")[0]) }
-                        if (result.ebitda) { result.ebitda = Number(result.ebitda.split(" ")[0]) }
-                    });
+                    // filteredResult.forEach(result => {
+                    //     if (result.aum) { result.aum = Number(result.aum.split(" ")[0]) }
+                    //     if (result.recurringFees) { result.recurringFees = Number(result.recurringFees.split(" ")[0]) }
+                    //     if (result.turnover) { result.turnover = Number(result.turnover.split(" ")[0]) }
+                    //     if (result.ebitda) { result.ebitda = Number(result.ebitda.split(" ")[0]) }
+                    // });
                     resolve(filteredResult)
                 });
+        })
+    }
+
+    export async function GetInstanceDetails(kissflowId: string): Promise<any> {
+        return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
+
+            Webhook.find({ _kissflow_id: kissflowId }, function (err, result) {
+                if (err) {
+                    console.error("Error: " + err);
+                }
+                resolve(result);
+            })
         })
     }
 }

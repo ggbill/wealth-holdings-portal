@@ -69,7 +69,7 @@ const SummaryFigures = (props: InputProps) => {
                                 {
                                     summaryFigure.isCurrency ?
                                         <span className="value">{new Intl.NumberFormat('en-US', {style: 'currency', currency: 'GBP', minimumFractionDigits: 0}).format(summaryFigure.value)}</span> :
-                                        <span className="value">{summaryFigure.value}</span>
+                                        <span className="value">{new Intl.NumberFormat().format(summaryFigure.value)}</span>
                                 }
 
                             </CardContent>

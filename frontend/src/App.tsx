@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, Switch } from "react-router-dom"
+import { Router, Route, Switch, Link } from "react-router-dom"
 import Home from './components/home/Home'
 import HttpsRedirect from 'react-https-redirect'
 // import ReactGA from'react-ga'
@@ -10,9 +10,9 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui
 import BlockIcon from '@material-ui/icons/Block';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import ActivePipeline from './components/activePipeline/ActivePipeline';
-import { Link } from 'react-router-dom'
 import ClosedInstances from './components/closedInstances/ClosedInstances';
 import InstanceList from './components/instanceList/InstanceList';
+import InstanceDetails from './components/instanceDetails/InstanceDetails';
 
 const history = createBrowserHistory();
 
@@ -61,6 +61,7 @@ const App = () => {
                                 <Route path="/formal-offer" component={InstanceList} exact />
                                 <Route path="/transaction-agreement" component={InstanceList} exact />
                                 <Route path="/final-fee-payment" component={InstanceList} exact />
+                                <Route path="/instance-details/:id" component={InstanceDetails}/>
                             </Switch>
                         </div>
                         <Footer />

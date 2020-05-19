@@ -2,114 +2,72 @@ import moment from 'moment'
 
 const useCommonFunctions = () => {
 
+    let activitySummaries: App.ActivitySummary[] = [
+        { name: "Onboard Lead", link: "onboard-lead", redSla: 2, amberSla: 1, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Initial Fee Payment", link: "initial-fee-payment", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "High Level Due Diligence", link: "high-level-due-diligence", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Heads of Terms", link: "heads-of-terms", redSla: 42, amberSla: 10, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Detailed Due Diligence", link: "detailed-due-diligence", redSla: 56, amberSla: 12, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Formal Offer", link: "formal-offer", redSla: 14, amberSla: 5, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Transaction Agreement", link: "transaction-agreement", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        { name: "Final Fee Payment", link: "final-fee-payment", redSla: 30, amberSla: 2, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+    ]
+
+    const calculateActivitySummaries = (activeCases: App.ActiveCase[]): App.ActivitySummary[] => {
+        activeCases.forEach(activeCase => {
+            let isActivityNameFound = false
+            activitySummaries.forEach(activitySummary => {
+                if (activeCase._current_step === activitySummary.name) {
+                    isActivityNameFound = true
+                    activitySummary.totalCount++
+                    if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                    ) {
+                        activitySummary.greenCount++
+                    } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                    ) {
+                        activitySummary.amberCount++
+                    } else {
+                        activitySummary.redCount++
+                    }
+                }
+            });
+
+            if (!isActivityNameFound) {
+                console.log(`Activity name not found: ${activeCase._current_step}`)
+            }
+        });
+
+        return activitySummaries
+    }
+
     const determineRAGStatus = (activeCase: App.ActiveCase): string => {
-        if (activeCase._current_step === "Onboard Lead") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Onboard_Lead, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Onboard_Lead, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Onboard_Lead, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Onboard_Lead, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Initial Fee Payment") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Initial_Fee_Payment, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Initial_Fee_Payment, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Initial_Fee_Payment, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Initial_Fee_Payment, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "High Level Due Diligence") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_HLDD, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_HLDD, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_HLDD, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_HLDD, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Heads of Terms") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Heads_Of_Terms, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Heads_Of_Terms, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Heads_Of_Terms, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Heads_Of_Terms, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Detailed Due Diligence") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_DDD, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_DDD, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_DDD, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_DDD, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Formal Offer") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Formal_Offer, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Formal_Offer, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Formal_Offer, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Formal_Offer, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Transaction Agreement") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Transaction_Agreement, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Transaction_Agreement, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Transaction_Agreement, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Transaction_Agreement, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else if (activeCase._current_step === "Final Fee Payment") {
-            if (moment(activeCase._created_at).add(activeCase.SLA_Final_Fee_Payment, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Final_Fee_Payment, "days").subtract(1, "day").isAfter(moment())
-            ) {
-                return "GREEN"
-            } else if (moment(activeCase._created_at).add(activeCase.SLA_Final_Fee_Payment, "days").isAfter(moment()) &&
-                moment(activeCase._created_at).add(activeCase.SLA_Final_Fee_Payment, "days").subtract(1, "day").isBefore(moment())
-            ) {
-                return "AMBER"
-            } else {
-                return "RED"
-            }
-        } else{
-            console.log("Unknown Step Name")
-            return "UNKNOWN"
-        }
 
+        let ragStatus = "N/A"
+        activitySummaries.forEach(activitySummary => {
+            if (activeCase._current_step === activitySummary.name) {
+                if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                ) {
+                    ragStatus =  "Green"
+                } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                ) {
+                    ragStatus =  "Amber"
+                } else {
+                    ragStatus =  "Red"
+                }
+            }
+        });
 
+        return ragStatus
 
     }
 
     return {
-        determineRAGStatus,
+        calculateActivitySummaries,
+        determineRAGStatus
     };
 };
 export default useCommonFunctions;

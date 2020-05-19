@@ -1,0 +1,17 @@
+.rag-circle {
+    // width: 30px;
+    // height: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    margin: auto;
+
+    &.green {
+        background-color: #57ab6e;
+    }
+    &.amber {
+        background-color: #ff8c42;
+    }
+    &.red {
+        background-color: #ee6055;
+    }
+}

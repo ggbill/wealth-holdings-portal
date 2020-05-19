@@ -22,7 +22,22 @@ router.post("/hook", (request: Request, response: Response) => {
 router.get("/getLatestDataForActiveCases", (request: Request, response: Response) => {
     try {
         KissFlowController.GetLatestDataForActiveCases().then(data => {
-            // console.log(JSON.stringify(data))
+            response.json(data)
+        }).catch(err => {
+            response.status(500);
+            response.end;
+            console.error("Error: ", err)
+        })
+    } catch (err) {
+        response.status(500);
+        response.end;
+        console.error("Error: ", err)
+    }
+})
+
+router.get("/getInstanceDetails/:id", (request: Request, response: Response) => {
+    try {
+        KissFlowController.GetInstanceDetails(request.params.id).then(data => {
             response.json(data)
         }).catch(err => {
             response.status(500);

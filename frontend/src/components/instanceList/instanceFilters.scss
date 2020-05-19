@@ -1,17 +1,33 @@
-.filters{
+.filters {
+    display: flex;
+    flex-direction: column;
 
-    h2{
-        margin-bottom: 12px
+    .dropdown-wrapper {
+        // flex-direction: row;
+        padding-bottom: 12px;
+    }
+
+    .MuiButton-root {
+        width: 200px;
+    }
+
+    h2 {
+        margin-bottom: 12px;
     }
 
     margin-bottom: 48px;
 
-    .MuiFormControl-root{
+    .MuiFormControl-root {
         min-width: 200px;
         margin-right: 48px;
 
-        &.assigned-bdm{
+        &.assigned-bdm {
             margin-right: 0px;
         }
+    }
+
+    .MuiLink-root {
+        cursor: pointer;
+        width: fit-content;
     }
 }

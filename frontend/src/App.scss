@@ -1,6 +1,6 @@
 .full-height-content {
     min-height: calc(100vh - 198px); /* will cover the 100% of viewport minus footer and header */
-    max-width: 960px;
+    max-width: 1100px;
     overflow: hidden;
     display: block;
     padding-bottom: 24px;
@@ -13,7 +13,8 @@
 
     main{
         width: 100%;
-        background-color: #fafafa;
+        // background-color: #fafafa;
+        background-color: #efefef;
     }
     
 }
@@ -45,5 +46,10 @@
 
     .full-height-content {
         min-height: calc(100vh - 183px); /* will cover the 100% of viewport minus footer */
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .full-height-content {
+        padding: 76px 125px 24px 24px;
     }
 }
