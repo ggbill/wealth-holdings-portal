@@ -5,6 +5,9 @@ const router = require('express').Router();
 
 router.post("/hook", (request: Request, response: Response) => {
     try {
+        //immediately respond
+        response.status(200).end()
+
         KissFlowController.WriteWebhookToDB(request.body).then(data => {
             response.status(200).end()
         }).catch(err => {

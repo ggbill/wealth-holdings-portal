@@ -37,45 +37,6 @@ const ActivePipeline = ({ match }) => {
 
         let totalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
 
-        // let activitySummaries: App.ActivitySummary[] = [
-        //     { name: "Onboard Lead", link: "onboard-lead", redSla: 2, amberSla: 1, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Initial Fee Payment", link: "initial-fee-payment", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "High Level Due Diligence", link: "high-level-due-diligence", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Heads of Terms", link: "heads-of-terms", redSla: 42, amberSla: 10, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Detailed Due Diligence", link: "detailed-due-diligence", redSla: 56, amberSla: 12, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Formal Offer", link: "formal-offer", redSla: 14, amberSla: 5, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Transaction Agreement", link: "transaction-agreement", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        //     { name: "Final Fee Payment", link: "final-fee-payment", redSla: 30, amberSla: 2, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-        // ]
-
-        // commonFunctions.determineRAGStatuses(activeCases)
-
-        // activeCases.forEach(activeCase => {
-        //     // console.log(JSON.stringify(activeCase))
-        //     let activeCaseNameFound = false
-        //     activitySummaries.forEach(activitySummary => {
-        //         if (activeCase._current_step === activitySummary.name) {
-        //             activitySummary.totalCount++
-        //             totalActivitySummary.totalCount++
-        //             activeCaseNameFound = true
-        //             if (commonFunctions.determineRAGStatus(activeCase) === "GREEN") {
-        //                 activitySummary.greenCount++
-        //                 totalActivitySummary.greenCount++
-        //             } else if (commonFunctions.determineRAGStatus(activeCase) === "AMBER") {
-        //                 activitySummary.amberCount++
-        //                 totalActivitySummary.amberCount++
-        //             } else {
-        //                 activitySummary.redCount++
-        //                 totalActivitySummary.redCount++
-        //             }
-        //         }
-        //     });
-
-        //     if (!activeCaseNameFound) {
-        //         console.log(`could not match active case name ${activeCase._current_step}`)
-        //     }
-
-        // });
         let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases)
         setActivitySummaries(tempActivitySummaries)
 
