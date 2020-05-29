@@ -4,7 +4,7 @@
     overflow: hidden;
     display: block;
     padding-bottom: 24px;
-    padding: 76px 24px 24px 24px;
+    padding: 76px 24px 48px 24px;
     margin: auto;
 }
 
@@ -35,6 +35,10 @@
 
     .MuiList-root{
         padding-top: 78px;
+
+        .MuiTypography-body1{
+            font-size: 0.9rem;
+        }
     }
 }
 
@@ -50,6 +54,6 @@
 }
 @media only screen and (min-width: 1500px) {
     .full-height-content {
-        padding: 76px 125px 24px 24px;
+        padding: 76px 125px 48px 24px;
     }
 }

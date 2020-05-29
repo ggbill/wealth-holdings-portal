@@ -29,8 +29,10 @@ export namespace KissFlowController {
                 firmName: webhookBody.Firm_Name,
                 companyType: webhookBody.Company_Type,
                 isSimplyBizMember: webhookBody.Is_SimplyBiz_Member,
-                closeCase: webhookBody.Close_Case,
-                reEngage: webhookBody.ReEngage_In_Future,
+                isCloseCase: webhookBody.Close_Case,
+                closeCaseDescription: webhookBody.Close_Case_Description,
+                isReEngage: webhookBody.ReEngage_In_Future,
+                reEngageDate: webhookBody.ReEngage_Date,
                 initialTransactionReferenceNumber: webhookBody.Transaction_Reference_Number,
                 aum: aum,
                 recurringFees: recurringFees,
@@ -59,8 +61,6 @@ export namespace KissFlowController {
 
     export async function GetLatestDataForActiveCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-            // console.log("GetLatestDataForActiveCases()")
-
             Webhook.aggregate([
                 { $sort: { "_progress": -1 } },
                 {
@@ -69,8 +69,10 @@ export namespace KissFlowController {
                         firmName: { $first: "$firmName" },
                         maxProgress: { $max: "$_progress" },
                         assignedBdm: { $first: { $arrayElemAt: ["$_current_assigned_to", 0] } },
+                        previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
+                        _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         aum: { $first: "$aum" },
                         recurringFees: { $first: "$recurringFees" },
                         turnover: { $first: "$turnover" },
@@ -86,15 +88,21 @@ export namespace KissFlowController {
                     }
 
                     let filteredResult = result.filter(result => result._current_step !== null)
-                    // filteredResult.forEach(result => {
-                    //     if (result.aum) { result.aum = Number(result.aum.split(" ")[0]) }
-                    //     if (result.recurringFees) { result.recurringFees = Number(result.recurringFees.split(" ")[0]) }
-                    //     if (result.turnover) { result.turnover = Number(result.turnover.split(" ")[0]) }
-                    //     if (result.ebitda) { result.ebitda = Number(result.ebitda.split(" ")[0]) }
-                    // });
                     resolve(filteredResult)
                 });
         })
+    }
+
+    export async function GetClosedCases(): Promise<any> {
+        return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
+            Webhook
+                .find({_status: "Completed"}, function (err, result) {
+                    if (err) {
+                        console.error("Error: " + err);
+                    }
+                    resolve(result);
+                });
+        });
     }
 
     export async function GetInstanceDetails(kissflowId: string): Promise<any> {

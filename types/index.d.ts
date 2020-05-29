@@ -5,6 +5,8 @@ declare module App {
         firmName: string,
         maxProgress: number,
         assignedBdm: any,
+        _last_action_performed_at: Date,
+        previousStep: any,
         _current_step: string,
         _created_at: Date,
         aum: number,
@@ -14,6 +16,8 @@ declare module App {
         planners: number,
         clients: number,
         customers: number,
+        closeCase: boolean,
+        reEngage: boolean
     }
 
     interface ActivitySummary {

@@ -1,0 +1,51 @@
+.total-instances-pie-chart {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: 0 12px 0 0;
+
+    .MuiCard-root {
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        h2 {
+            margin: 0 0 12px 0;
+        }
+
+        .MuiCardContent-root {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 12px;
+            align-items: center;
+
+            .chart-wrapper{
+                display: flex;
+                flex-grow: 1;
+                flex-direction: column;
+                justify-content: center;
+            }
+        }
+
+        .MuiCardActions-root {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            justify-content: flex-end;
+            padding: 0;
+
+            .MuiButton-root {
+                color: rgb(95, 157, 226);
+                font-size: 0.8em;
+                padding-right: 6px;
+            }
+        }
+
+        // canvas{
+        //     height: 250px !important;
+        //     width: 400px !important;
+        // }
+    }
+}

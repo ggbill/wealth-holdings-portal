@@ -3,7 +3,7 @@ import './activePipeline.scss';
 import useFetch from "../../hooks/useFetch"
 import { Box } from '@material-ui/core'
 import Loading from '../shared/Loading';
-import ActivityCard from '../activityCard/ActivityCard'
+import ActivityCard from '../shared/ActivityCard'
 import useCommonFunctions from '../../hooks/useCommonFunctions';
 
 const ActivePipeline = ({ match }) => {

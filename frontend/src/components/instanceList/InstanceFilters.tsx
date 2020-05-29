@@ -8,7 +8,9 @@ interface InputProps {
     setFilteredActiveCases: (filteredActiveCases: App.ActiveCase[]) => void
     setTableFilters: (tableFilters: App.TableFilters) => void
     tableFilters: App.TableFilters
+    path: string
 }
+
 const InstanceFilters = (props: InputProps) => {
     const [uniqueActivityNames, setUniqueActivityNames] = useState<string[]>([])
     const [uniqueBdmNames, setUniqueBdmNames] = useState<string[]>([])
@@ -26,7 +28,36 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase.assignedBdm.Name)
         setUniqueBdmNames([...new Set(uniqueBdmNames)])
 
-
+        let activeCaseFound = false
+        uniqueActivityNames.forEach(uniqueActivityName => {
+            if (!activeCaseFound) {
+                if (props.path === "/onboard-lead" && uniqueActivityName == "Onboard Lead") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Onboard Lead" })
+                } else if (props.path === "/initial-fee-payment" && uniqueActivityName === "Initial Fee Payment") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Initial Fee Payment" })
+                } else if (props.path === "/high-level-due-diligence" && uniqueActivityName === "High Level Due Diligence") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "High Level Due Diligence" })
+                } else if (props.path === "/heads-of-terms" && uniqueActivityName === "Heads of Terms") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Heads of Terms" })
+                } else if (props.path === "/detailed-due-diligence" && uniqueActivityName === "Detailed Due Diligence") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Detailed Due Diligence" })
+                } else if (props.path === "/formal-offer" && uniqueActivityName === "Formal Offer") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Formal Offer" })
+                } else if (props.path === "/transaction-agreement" && uniqueActivityName === "Transaction Agreement") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Transaction Agreement" })
+                } else if (props.path === "/final-fee-payment" && uniqueActivityName === "Final Fee Payment") {
+                    activeCaseFound = true
+                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Final Fee Payment" })
+                }
+            }
+        });
     }
 
     const filterActiveCases = (): void => {
@@ -41,6 +72,7 @@ const InstanceFilters = (props: InputProps) => {
         });
 
         props.setFilteredActiveCases(filteredActiveCases)
+
     }
 
     const clearFilters = (): void => {
@@ -49,7 +81,6 @@ const InstanceFilters = (props: InputProps) => {
             ragStatus: "All",
             assignedBdm: "All"
         })
-
     }
 
     const handleChange = (event) => {
@@ -130,8 +161,8 @@ const InstanceFilters = (props: InputProps) => {
             </div>
             {
                 (props.tableFilters.currentActivity !== "All" ||
-                props.tableFilters.ragStatus !== "All" ||
-                props.tableFilters.assignedBdm !== "All") &&
+                    props.tableFilters.ragStatus !== "All" ||
+                    props.tableFilters.assignedBdm !== "All") &&
 
                 <Link onClick={clearFilters}>
                     Clear Filters

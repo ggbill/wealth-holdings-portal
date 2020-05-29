@@ -31,8 +31,10 @@ export interface IWebhook extends Document {
     firmName: string,
     companyType: string, 
     isSimplyBizMember: string,
-    closeCase: boolean,
-    reEngage: boolean,
+    isCloseCase: boolean,
+    closeCaseReason: string,
+    isReEngage: boolean,
+    reEngageDate: Date,
     initialTransactionReference: string,
     aum: number,
     recurringFees: number,
@@ -49,8 +51,6 @@ export interface IWebhook extends Document {
     paymentSchedule: Object[],
     finalTransactionReference: string,
 }
-
-
 
 const WebhookSchema: Schema = new Schema({
     _last_action: { type: String, required: true },
@@ -82,8 +82,10 @@ const WebhookSchema: Schema = new Schema({
     firmName: { type: String },
     companyType:{ type: String },
     isSimplyBizMember:{ type: String },
-    closeCase: { type: Boolean },
-    reEngage: { type: Boolean },
+    isCloseCase: { type: Boolean },
+    closeCaseReason: { type: String },
+    isReEngage: { type: Boolean },
+    reEngageDate: { type: Date },
     initialTransactionReferenceNumber: { type: String },
     aum: { type: Number },
     recurringFees: { type: Number },

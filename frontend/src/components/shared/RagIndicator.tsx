@@ -8,8 +8,6 @@ interface InputProps {
 
 const RagIndicator = (props: InputProps) => {
 
-    console.log(props.widthPx)
-
     if (props.ragStatus === "Green"){
         return (
             <div style={{width: `${props.widthPx}px`, height: `${props.widthPx}px`}} className="rag-circle green"></div>

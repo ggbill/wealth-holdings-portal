@@ -1,0 +1,12 @@
+.action-log {
+    .MuiCardContent-root:last-child{
+        padding-bottom: 6px;
+
+        .MuiTableCell-root{
+            a{
+                color: inherit;
+                font-weight: 500;
+            }
+        }
+    }
+}

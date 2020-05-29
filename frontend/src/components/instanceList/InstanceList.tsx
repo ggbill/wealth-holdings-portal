@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { Link } from 'react-router-dom'
 import RagIndicator from '../shared/RagIndicator'
 
-const InstanceList = () => {
+const InstanceList = ({ match }) => {
     const isCancelled = useRef(false)
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)
@@ -24,7 +24,6 @@ const InstanceList = () => {
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
     const [tableFilters, setTableFilters] = useState<App.TableFilters>({ currentActivity: "All", assignedBdm: "All", ragStatus: "All" })
-
 
     const commonFunctions = useCommonFunctions()
 
@@ -131,6 +130,7 @@ const InstanceList = () => {
                 setFilteredActiveCases={setFilteredActiveCases}
                 setTableFilters={setTableFilters}
                 tableFilters={tableFilters}
+                path={match.path}
             />
             {/* {JSON.stringify(filteredActiveCases)} */}
 

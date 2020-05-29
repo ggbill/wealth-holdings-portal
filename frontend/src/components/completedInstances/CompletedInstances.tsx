@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import './closedInstances.scss'
+import './completedInstances.scss'
 import useFetch from "../../hooks/useFetch"
 import Loading from '../shared/Loading'
 import SummaryFigures from '../instanceList/SummaryFigures'
@@ -14,7 +14,7 @@ import moment from 'moment'
 
 
 
-const ClosedInstances = () => {
+const CompletedInstances = () => {
 
     const isCancelled = useRef(false)
     const kissflowApi = useFetch("kissflow")
@@ -38,7 +38,7 @@ const ClosedInstances = () => {
         kissflowApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setClosedCases(data.filter(result => result.closeCase))
+                    setClosedCases(data.filter(result => !result.closeCase))
                     setLoading(false)
                 }
             })
@@ -81,7 +81,7 @@ const ClosedInstances = () => {
 
     return (
         <div className="closed-instance-list">
-            <h1>Closed Instances</h1>
+            <h1>Completed Instances</h1>
 
             <SummaryFigures
                 activeCases={closedCases}
@@ -132,4 +132,4 @@ const ClosedInstances = () => {
     )
 }
 
-export default ClosedInstances
+export default CompletedInstances
