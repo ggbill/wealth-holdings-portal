@@ -30,6 +30,7 @@ export namespace KissFlowController {
                 companyType: webhookBody.Company_Type,
                 isSimplyBizMember: webhookBody.Is_SimplyBiz_Member,
                 isCloseCase: webhookBody.Close_Case,
+                closeCaseReason: webhookBody.Reason,
                 closeCaseDescription: webhookBody.Close_Case_Description,
                 isReEngage: webhookBody.ReEngage_In_Future,
                 reEngageDate: webhookBody.ReEngage_Date,
