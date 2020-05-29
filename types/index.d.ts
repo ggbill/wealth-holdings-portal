@@ -16,8 +16,11 @@ declare module App {
         planners: number,
         clients: number,
         customers: number,
-        closeCase: boolean,
-        reEngage: boolean
+        isCloseCase: boolean,
+        closeCaseReason: string,
+        closeCaseDescription: string,
+        isReEngage: boolean,
+        reEngageDate: Date,
     }
 
     interface ActivitySummary {
@@ -69,8 +72,11 @@ declare module App {
         firmName: string,
         companyType: string, 
         isSimplyBizMember: string,
-        closeCase: boolean,
-        reEngage: boolean,
+        isCloseCase: boolean,
+        closeCaseReason: string,
+        closeCaseDescription: string,
+        isReEngage: boolean,
+        reEngageDate: Date,
         initialTransactionReference: string,
         aum: number,
         recurringFees: number,

@@ -23,7 +23,6 @@ const CompletedInstances = () => {
     const [closedCases, setClosedCases] = useState<App.ActiveCase[]>([])
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
-    const commonFunctions = useCommonFunctions()
 
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {
@@ -122,7 +121,7 @@ const CompletedInstances = () => {
                         {closedCases.map((closedCase: App.ActiveCase) => (
                             <TableRow key={closedCase._id}>
                                 <TableCell> <Link to={'/instance-details/' + closedCase._id}>{closedCase.firmName}</Link></TableCell>
-                                <TableCell align="center">{String(closedCase.reEngage)}</TableCell>
+                                <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

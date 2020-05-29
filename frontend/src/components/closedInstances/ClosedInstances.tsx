@@ -122,7 +122,7 @@ const ClosedInstances = () => {
                         {closedCases.map((closedCase: App.ActiveCase) => (
                             <TableRow key={closedCase._id}>
                                 <TableCell> <Link to={'/instance-details/' + closedCase._id}>{closedCase.firmName}</Link></TableCell>
-                                <TableCell align="center">{String(closedCase.reEngage)}</TableCell>
+                                <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
