@@ -4,7 +4,7 @@ export namespace KissFlowController {
 
     export async function WriteWebhookToDB(webhookBody: any): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-            console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
+            // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
 
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
@@ -107,9 +107,22 @@ export namespace KissFlowController {
     }
 
     export async function GetInstanceDetails(kissflowId: string): Promise<any> {
+        console.log(kissflowId)
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
 
             Webhook.find({ _kissflow_id: kissflowId }, function (err, result) {
+                if (err) {
+                    console.error("Error: " + err);
+                }
+                resolve(result);
+            })
+        })
+    }
+
+    export async function GetActions(): Promise<any> {
+        return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
+
+            Webhook.find({}, function (err, result) {
                 if (err) {
                     console.error("Error: " + err);
                 }

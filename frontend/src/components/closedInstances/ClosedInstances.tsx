@@ -20,7 +20,7 @@ const ClosedInstances = () => {
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [closedCases, setClosedCases] = useState<App.ActiveCase[]>([])
+    const [closedCases, setClosedCases] = useState<App.ClosedCase[]>([])
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
     const commonFunctions = useCommonFunctions()
@@ -38,7 +38,7 @@ const ClosedInstances = () => {
         kissflowApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setClosedCases(data.filter(result => result.closeCase))
+                    setClosedCases(data.filter(result => result.isCloseCase))
                     setLoading(false)
                 }
             })
@@ -83,9 +83,9 @@ const ClosedInstances = () => {
         <div className="closed-instance-list">
             <h1>Closed Instances</h1>
 
-            <SummaryFigures
+            {/* <SummaryFigures
                 activeCases={closedCases}
-            />
+            /> */}
 
             <h2>Firms</h2>
             <Paper>
@@ -119,9 +119,9 @@ const ClosedInstances = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {closedCases.map((closedCase: App.ActiveCase) => (
-                            <TableRow key={closedCase._id}>
-                                <TableCell> <Link to={'/instance-details/' + closedCase._id}>{closedCase.firmName}</Link></TableCell>
+                        {closedCases.map((closedCase: App.ClosedCase) => (
+                            <TableRow key={closedCase._kissflow_id}>
+                                <TableCell> <Link to={'/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
                                 <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
                             </TableRow>
                         ))}

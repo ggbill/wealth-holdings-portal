@@ -20,7 +20,7 @@ const CompletedInstances = () => {
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [closedCases, setClosedCases] = useState<App.ActiveCase[]>([])
+    const [closedCases, setClosedCases] = useState<App.ClosedCase[]>([])
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
 
@@ -37,7 +37,7 @@ const CompletedInstances = () => {
         kissflowApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setClosedCases(data.filter(result => !result.closeCase))
+                    setClosedCases(data.filter(result => !result.isCloseCase))
                     setLoading(false)
                 }
             })
@@ -82,9 +82,9 @@ const CompletedInstances = () => {
         <div className="closed-instance-list">
             <h1>Completed Instances</h1>
 
-            <SummaryFigures
+            {/* <SummaryFigures
                 activeCases={closedCases}
-            />
+            /> */}
 
             <h2>Firms</h2>
             <Paper>
@@ -118,9 +118,9 @@ const CompletedInstances = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {closedCases.map((closedCase: App.ActiveCase) => (
+                        {closedCases.map((closedCase: App.ClosedCase) => (
                             <TableRow key={closedCase._id}>
-                                <TableCell> <Link to={'/instance-details/' + closedCase._id}>{closedCase.firmName}</Link></TableCell>
+                                <TableCell> <Link to={'/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
                                 <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
                             </TableRow>
                         ))}

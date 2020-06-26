@@ -6,7 +6,7 @@ import Loading from '../shared/Loading'
 import TotalInstancesPieChart from './TotalInstancesPieChart'
 import ActivityBarChart from './ActivityBarChart'
 import _ from 'lodash';
-import LatestActivities from './LatestActions'
+import LatestActions from './LatestActions'
 
 const Home = () => {
 
@@ -16,10 +16,11 @@ const Home = () => {
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
     const [activeCases, setActiveCases] = useState<App.ActiveCase[]>([])
+    const [actions, setActions] = useState<App.ActivityDetail[]>([])
     // const [newActiveCases, setNewActiveCases] = useState<App.ActiveCase[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
     const commonFunctions = useCommonFunctions()
-   
+
 
     const getLatestDataForActiveCases = (): void => {
         setLoading(true)
@@ -28,6 +29,23 @@ const Home = () => {
                 if (!isCancelled.current) {
                     calculateActivitySummaries(data)
                     setActiveCases(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const getActions = (): void => {
+        setLoading(true)
+        kissflowApi.get("getActions")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setActions(data)
                     setLoading(false)
                 }
             })
@@ -56,6 +74,7 @@ const Home = () => {
 
     React.useEffect(() => {
         getLatestDataForActiveCases();
+        getActions();
         // let pollDb = setInterval(() => getLatestDataForActiveCases(), 10000)
         return () => {
             isCancelled.current = true;
@@ -109,9 +128,11 @@ const Home = () => {
                             activitySummaries={activitySummaries}
                         />
                     </div>
+                    {/* {actions && */}
                     <div className="row-2">
-                        <LatestActivities activeCases={activeCases} />
+                        <LatestActions actions={actions} />
                     </div>
+                    {/* } */}
 
                 </div>
             }

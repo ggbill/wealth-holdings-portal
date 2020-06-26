@@ -6,29 +6,29 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 interface InputProps {
-    activeCases: App.ActiveCase[]
+    actions: App.ActivityDetail[]
 }
 
 const LatestActions = (props: InputProps) => {
 
     const isCancelled = useRef(false)
-    const [latestActiveCases, setLatestActiveCases] = useState<App.ActiveCase[]>([])
+    const [latestActions, setLatestActions] = useState<App.ActivityDetail[]>([])
 
-    const filterLatestActivities = () => {
-        props.activeCases.sort((a,b)=>new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime());
-        setLatestActiveCases(props.activeCases.slice(0,5))
+    const filterLatestActions = () => {
+        props.actions.sort((a,b)=>new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime());
+        setLatestActions(props.actions.slice(0,5))
     }
 
     React.useEffect(() => {
-        filterLatestActivities();
+        filterLatestActions();
         return () => {
             isCancelled.current = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
-    }, []);
+    }, [props]);
 
     return (
-        <div className="latest-activities">
+        <div className="latest-actions">
             <h3>Latest Actions</h3>
             <Card>
             <CardContent>
@@ -42,7 +42,7 @@ const LatestActions = (props: InputProps) => {
                                 <span>Firm Name</span>
                             </TableCell>
                             <TableCell>
-                                <span>Assigned BDM</span>
+                                <span>Actioned By</span>
                             </TableCell>
                             <TableCell>
                                 <span>Completed Date</span>
@@ -50,12 +50,12 @@ const LatestActions = (props: InputProps) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {latestActiveCases.map((activeCase: App.ActiveCase) => (
-                            <TableRow key={activeCase._id}>
-                                <TableCell>{activeCase.previousStep.Name}</TableCell>
-                                <TableCell><Link to={'/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
-                                <TableCell>{activeCase.assignedBdm.Name}</TableCell>
-                                <TableCell>{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                        {latestActions.map((action: App.ActivityDetail) => (
+                            <TableRow key={action._id}>
+                                <TableCell>{action._current_context[0].Name}</TableCell>
+                                <TableCell><Link to={'/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
+                                <TableCell>{action._last_action_performed_by.Name}</TableCell>
+                                <TableCell>{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

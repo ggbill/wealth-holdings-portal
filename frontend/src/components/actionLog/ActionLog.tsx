@@ -13,16 +13,16 @@ const ActionLog = () => {
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [activeCases, setActiveCases] = useState<App.ActiveCase[]>([])
+    const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const getLatestDataForActiveCases = (): void => {
+    const getActions = (): void => {
         setLoading(true)
-        kissflowApi.get("getLatestDataForActiveCases")
+        kissflowApi.get("getActions")
             .then(data => {
                 if (!isCancelled.current) {
-                    setActiveCases(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                    setActions(data.sort((a,b)=>new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
                     setLoading(false)
                 }
             })
@@ -44,7 +44,7 @@ const ActionLog = () => {
     };
 
     React.useEffect(() => {
-        getLatestDataForActiveCases();
+        getActions();
         return () => {
             isCancelled.current = true;
         };
@@ -86,12 +86,12 @@ const ActionLog = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {activeCases.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((activeCase: App.ActiveCase) => (
-                                <TableRow key={activeCase._id}>
-                                    <TableCell>{activeCase.previousStep.Name}</TableCell>
-                                    <TableCell><Link to={'/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
-                                    <TableCell>{activeCase.assignedBdm.Name}</TableCell>
-                                    <TableCell>{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                            {actions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((action: App.ActivityDetail) => (
+                                <TableRow key={action._id}>
+                                    <TableCell>{action._current_context[0].Name}</TableCell>
+                                    <TableCell><Link to={'/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
+                                    <TableCell>{action._last_action_performed_by.Name}</TableCell>
+                                    <TableCell>{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -99,7 +99,7 @@ const ActionLog = () => {
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 50]}
                         component="div"
-                        count={activeCases.length}
+                        count={actions.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onChangePage={handleChangePage}

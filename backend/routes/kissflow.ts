@@ -70,4 +70,20 @@ router.get("/getInstanceDetails/:id", (request: Request, response: Response) => 
     }
 })
 
+router.get("/getActions", (request: Request, response: Response) => {
+    try {
+        KissFlowController.GetActions().then(data => {
+            response.json(data)
+        }).catch(err => {
+            response.status(500);
+            response.end;
+            console.error("Error: ", err)
+        })
+    } catch (err) {
+        response.status(500);
+        response.end;
+        console.error("Error: ", err)
+    }
+})
+
 export default router;

@@ -14,7 +14,7 @@ server.on('error', (err) => {
 
 server.on('listening', async () => {
     console.info(`Listening on a port ${PORT}`);
-    mongoose.connect(process.env.MONGODB_URI || "mongodb://dbadmin:aN0icePwd!@ds045007.mlab.com:45007/heroku_vsll0v1h", {
+    mongoose.connect(process.env.MONGODB_URI || "mongodb://dbadmin:W3althH0ld1ng5!@ds253309-a0.mlab.com:53309/heroku_gl9n4dmp", {
         useNewUrlParser: true,
         useFindAndModify: false
     });
