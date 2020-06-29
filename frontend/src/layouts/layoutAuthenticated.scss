@@ -1,0 +1,22 @@
+.left-drawer{
+    // display: flex;
+    width: 240px;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.drawer-paper{
+    width: 240px;
+}
+
+.drawer-container{
+    overflow: auto;
+
+    .MuiList-root{
+        padding-top: 78px;
+
+        .MuiTypography-body1{
+            font-size: 0.9rem;
+        }
+    }
+}

@@ -22,7 +22,7 @@ class Auth {
         this.auth0.parseHash((err, authResult) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
-                window.location.href = '/'
+                window.location.href = '/dashboard'
             } else if (err) {
                 alert(`Error: ${err.error}.`);
                 // window.location.href = '/'

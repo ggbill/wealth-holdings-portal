@@ -8,8 +8,13 @@ import ActivityBarChart from './ActivityBarChart'
 import _ from 'lodash';
 import LatestActions from './LatestActions'
 
-const Home = () => {
+interface InputProps {
+    auth: any
+}
 
+const Home = (props: InputProps) => {
+
+    const { isAuthenticated } = props.auth;
     const isCancelled = useRef(false)
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)

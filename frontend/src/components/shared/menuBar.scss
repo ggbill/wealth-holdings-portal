@@ -1,7 +1,7 @@
 .MuiAppBar-root.menu-bar {
     position: fixed;
     padding: 6px 0;
-    z-index: 10000;
+    z-index: 10;
 
     &.MuiAppBar-colorPrimary {
         flex-grow: 1;
@@ -28,12 +28,25 @@
     .MuiToolbar-root {
         justify-content: space-between;
 
-        .link-button {
+        // .link-button {
+        //     color: white;
+        //     font-weight: bold;
+        //     &:hover {
+        //         color: #4abae6;
+        //     }
+        // }
+
+        .MuiButton-root:hover{
+            background-color: unset;
+        }
+
+        .clickable-icon {
             color: white;
-            font-weight: bold;
-            &:hover {
-                color: #4abae6;
-            }
+        }
+
+        .authorised-email{
+            color: white;
+            font-size: 0.75em;
         }
     }
 
@@ -43,6 +56,10 @@
         padding: 0;
         min-width: 36px;
     }
+}
+
+.MuiMenu-paper{
+    width: 150px;
 }
 
 .menu-drawer {

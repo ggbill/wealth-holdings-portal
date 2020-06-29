@@ -1,15 +1,22 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { AppBar, Toolbar, Button, Drawer, MenuItem } from '@material-ui/core'
+import React, { useState, useLayoutEffect, useEffect } from 'react'
+import { AppBar, Toolbar, Button, Drawer, Menu, MenuItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import "./menuBar.scss"
-import LinkButton from './LinkButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import CloseIcon from '@material-ui/icons/Close'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-const MenuBar = () => {
+interface InputProps {
+    auth: any
+}
+
+const MenuBar = (props: InputProps) => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+
+    const { getProfile, isAuthenticated } = props.auth;
 
     const toggleDrawer = (open: boolean) => event => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -19,7 +26,12 @@ const MenuBar = () => {
         setIsDrawerOpen(open);
     };
 
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
     const handleClose = () => {
+        setAnchorEl(null);
         setIsDrawerOpen(false);
     };
 
@@ -31,6 +43,11 @@ const MenuBar = () => {
         }
     };
 
+    const logOut = () => {
+        setAnchorEl(null);
+        props.auth.logout();
+    }
+
     useLayoutEffect(() => {
         window.addEventListener('scroll', handleScroll);
 
@@ -40,17 +57,35 @@ const MenuBar = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, []);
 
+    useEffect(() => {
+        if (isAuthenticated()) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                console.log(profile)
+                setAuthorisedUserProfile(profile)
+            });
+        }
+
+    }, []);
+
     return (
         <>
             <AppBar position="fixed" className={scrollClass}>
                 <Toolbar>
-                    <Link className="clickable-icon" to={'/'}>
+                    <Link className="clickable-icon" to={'/dashboard'}>
                         <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                     </Link>
                     <div className="menu-items">
-                        <LinkButton className="link-button" to='/about'><AccountCircleIcon /></LinkButton>
+                        {/* <LinkButton className="link-button" to='/about'><AccountCircleIcon /></LinkButton> */}
+                        <Link onClick={handleClick} className="authorised-email">
+                            {authorisedUserProfile && authorisedUserProfile.name}
+                            <Button className="clickable-icon" aria-controls="logout-menu" aria-haspopup="true">
+                            <AccountCircleIcon />
+                        </Button>
+                        </Link>
                         
-
                     </div>
                     <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
                         <MenuIcon />
@@ -75,6 +110,18 @@ const MenuBar = () => {
                     {/* <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} /> */}
                 </div>
             </Drawer>
+            <Menu
+                id="logout-menu"
+                anchorEl={anchorEl}
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={logOut}>Log Out</MenuItem>
+            </Menu>
         </>
     )
 }
