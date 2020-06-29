@@ -136,7 +136,7 @@ const App = () => {
                                     path={subRoute.path}
                                     exact={subRoute.exact}
                                     // render={(props) => (auth.isAuthenticated() ? <subRoute.component {...props} /> : <Redirect to={{pathname:"/", search:"status=unauthorised"}}/>)}
-                                    render={() => (auth.isAuthenticated() ? <subRoute.component auth={auth} /> : <Redirect to={{pathname:"/", search:"unauthorised"}}/>)}
+                                    render={(props) => (auth.isAuthenticated() ? <subRoute.component auth={auth} {...props}/> : <Redirect to={{pathname:"/", search:"unauthorised"}}/>)}
                                 />
                             )}
                         </route.layout>
