@@ -124,7 +124,7 @@ const InstanceList = ({ match }) => {
 
     return (
         <div className="instance-list">
-            <h1>Live Instances</h1>
+
             <InstanceFilters
                 activeCases={activeCases}
                 setFilteredActiveCases={setFilteredActiveCases}
@@ -175,7 +175,7 @@ const InstanceList = ({ match }) => {
                                     }
                                 </div>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" style={determineHeaderRowStyle()}>
                                     <div onClick={() => handleSort("_created_at")} className="tableHeaderCell">
                                         <span>Activity Start Date</span>
@@ -187,7 +187,7 @@ const InstanceList = ({ match }) => {
                                     </div>
                                 </div>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" style={determineHeaderRowStyle()}>
                                     <div onClick={() => handleSort("ragStatus")} className="tableHeaderCell">
                                         <span>RAG Status</span>
@@ -207,7 +207,7 @@ const InstanceList = ({ match }) => {
                                     }
                                 </div>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" style={determineHeaderRowStyle()}>
                                     <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
                                         <span>Assigned BDM</span>
@@ -234,17 +234,18 @@ const InstanceList = ({ match }) => {
                             <TableRow key={activeCase._id}>
                                 <TableCell> <Link to={'/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
-                                <TableCell align="center">{moment(activeCase._created_at).format("HH:mm DD/MM/YYYY")}</TableCell>
-                                <TableCell align="center">
+                                <TableCell className="hide-on-mobile" align="center">{moment(activeCase._created_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                                <TableCell className="hide-on-mobile" align="center">
                                     <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase)} widthPx={30} />
                                 </TableCell>
-                                <TableCell align="center">{activeCase.assignedBdm.Name}</TableCell>
+                                <TableCell className="hide-on-mobile" align="center">{activeCase.assignedBdm.Name}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </Paper>
         </div >
+
     )
 }
 

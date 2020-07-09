@@ -74,12 +74,10 @@ const ActivePipeline = ({ match }) => {
 
     return (
         <div className="content active-pipeline">
-            <h1>Active Pipeline</h1>
+
             <p>The figures below represent a snapshot of the firms that are currently live in the system.</p>
             <Box className="total-instances-box" display="flex" flexDirection="row" flexWrap="wrap">
                 <ActivityCard activitySummary={totalActivitySummary} index={0} />
-                {/* <div className="ghost-card"></div>
-                <div className="ghost-card"></div> */}
             </Box>
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {activitySummaries.map((activitySummary: App.ActivitySummary, index: number) => {
@@ -88,6 +86,7 @@ const ActivePipeline = ({ match }) => {
                     )
                 })}
             </Box>
+
         </div >
     )
 }

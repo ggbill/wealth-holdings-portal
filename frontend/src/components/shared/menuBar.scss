@@ -6,6 +6,7 @@
     &.MuiAppBar-colorPrimary {
         flex-grow: 1;
         background-color: #57AB6E;
+        border-bottom: solid 1px #4d9e63;
 
         &.no-shadow {
             box-shadow: none;
@@ -50,12 +51,12 @@
         }
     }
 
-    .hamburger-menu {
-        display: none;
-        color: white;
-        padding: 0;
-        min-width: 36px;
-    }
+    // .hamburger-menu {
+    //     display: none;
+    //     color: white;
+    //     padding: 0;
+    //     min-width: 36px;
+    // }
 }
 
 .MuiMenu-paper{
@@ -97,16 +98,13 @@
 @media only screen and (max-width: 600px) {
     .MuiAppBar-root.menu-bar {
         padding: 4px 0 0 0;
-        .logo {
-            width: 240px;
-        }
 
-        .hamburger-menu {
-            display: block;
-        }
+        // .hamburger-menu {
+        //     display: block;
+        // }
     }
 
-    .menu-items {
+    .username {
         display: none;
     }    
 }

@@ -63,7 +63,6 @@ const SummaryFigures = (props: InputProps) => {
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {summaryFigures.map((summaryFigure: SummaryFigure, index: number) => (
                     <Card key={index} style={{ animationDelay: `${index * 0.1}s` }}>
-                        <CardActionArea component={Link} to={`/`}>
                             <CardContent>
                                 <span>{summaryFigure.name}</span>
                                 {
@@ -73,7 +72,6 @@ const SummaryFigures = (props: InputProps) => {
                                 }
 
                             </CardContent>
-                        </CardActionArea>
                     </Card>
                 ))}
             </Box>

@@ -31,3 +31,21 @@
         width: fit-content;
     }
 }
+
+/* Tablets */
+@media only screen and (max-width: 767px){
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px)  {
+    .filters{
+        .MuiFormControl-root{
+            width: 100%;
+        }
+        .MuiFormControl-root:not(:last-child){
+            margin: 0 0 24px 0;
+        }
+    }
+
+}

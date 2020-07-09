@@ -1,6 +1,20 @@
-.left-drawer{
-    // display: flex;
-    width: 240px;
+.full-height-content {
+    min-height: calc(100vh - 222px); /* will cover the 100% of viewport minus footer and header */
+    max-width: 1100px;
+    overflow: hidden;
+    display: block;
+    padding: 24px 24px 48px 24px;
+    margin: auto auto auto 240px;
+}
+
+.mobile-drawer{
+    display: none;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.desktop-drawer{
+    display: block;
     flex-shrink: 0;
     z-index: 1;
 }
@@ -12,11 +26,88 @@
 .drawer-container{
     overflow: auto;
 
+    .MuiAppBar-colorPrimary{
+        background-color: #57AB6E;
+        border-bottom: solid 1px #4d9e63;
+        box-shadow: none;
+        width: 240px;
+        left: 0;
+    }
+
     .MuiList-root{
         padding-top: 78px;
 
         .MuiTypography-body1{
             font-size: 0.9rem;
+        }
+    }
+}
+
+.header-bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 76px;
+    // Reduce the size of the app bar by the width of the drawer and shift it left.
+    margin-left: 240px;
+    width: calc(100% - 24px - 240px);
+    height: 40px;
+    background-color: #57AB6E;
+    padding: 12px;
+
+    span{
+        color: white;
+        font-size: 1.3em;
+    }
+
+    .MuiIconButton-root{
+        display: none;
+    }
+
+
+}
+
+/* Tablets */
+@media only screen and (max-width: 767px){
+
+    .full-height-content {
+        margin: auto;
+    }
+
+    .header-bar{
+        margin-top: 76px;
+        margin-left: 0;
+        width: calc(100% - 24px);
+        padding: 6px 12px;
+
+        .MuiIconButton-root{
+            display: block;
+        }
+    }
+
+    .mobile-drawer{
+        display: block;
+    }
+
+    .desktop-drawer{
+        display: none;
+    }
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px)  {
+    .full-height-content {
+        padding: 12px 12px 24px 12px;
+    }
+
+    .header-bar{
+        margin-top: 61px;
+    }
+
+    .drawer-container{
+        .MuiList-root{
+            padding-top: 57px;
         }
     }
 }

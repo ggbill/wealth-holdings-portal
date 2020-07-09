@@ -2,17 +2,6 @@ import moment from 'moment'
 
 const useCommonFunctions = () => {
 
-    // let activitySummaries: App.ActivitySummary[] = [
-    //     { name: "Onboard Lead", link: "onboard-lead", redSla: 2, amberSla: 1, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Initial Fee Payment", link: "initial-fee-payment", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "High Level Due Diligence", link: "high-level-due-diligence", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Heads of Terms", link: "heads-of-terms", redSla: 42, amberSla: 10, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Detailed Due Diligence", link: "detailed-due-diligence", redSla: 56, amberSla: 12, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Formal Offer", link: "formal-offer", redSla: 14, amberSla: 5, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Transaction Agreement", link: "transaction-agreement", redSla: 28, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    //     { name: "Final Fee Payment", link: "final-fee-payment", redSla: 30, amberSla: 2, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-    // ]
-
     const calculateActivitySummaries = (activeCases: App.ActiveCase[]): App.ActivitySummary[] => {
 
         let activitySummaries: App.ActivitySummary[] = [

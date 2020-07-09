@@ -60,11 +60,11 @@ const InstanceDetails = ({ match }) => {
 
     return (
         <div className="instance-details">
+
             <Link className="clickable-icon" to={'/all-instances'}>
                 <ArrowBackIosIcon />
                 <span>Back to list</span>
             </Link>
-            <h1>Instance Details</h1>
             <h2>Overview</h2>
             {lastestActivityDetail &&
                 <div className="summary-details-wrapper">
@@ -152,8 +152,8 @@ const InstanceDetails = ({ match }) => {
                                 >
                                     <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
                                     {/* <span className="panel-header-activity-name">{activityDetail._current_step}</span> */}
-                                    <span className="panel-header-completed-label">Completed:</span>
-                                    <span className="panel-header-completed-date">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                                    <span className="panel-header-completed-label hide-on-mobile">Completed:</span>
+                                    <span className="panel-header-completed-date hide-on-mobile">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     {/* <p>{JSON.stringify(activityDetail)}</p> */}

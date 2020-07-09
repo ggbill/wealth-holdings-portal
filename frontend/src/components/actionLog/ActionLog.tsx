@@ -22,7 +22,7 @@ const ActionLog = () => {
         kissflowApi.get("getActions")
             .then(data => {
                 if (!isCancelled.current) {
-                    setActions(data.sort((a,b)=>new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                    setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
                     setLoading(false)
                 }
             })
@@ -65,7 +65,7 @@ const ActionLog = () => {
 
     return (
         <div className="action-log">
-            <h2>Action Log</h2>
+
             <Card>
                 <CardContent>
                     <Table>
@@ -80,7 +80,7 @@ const ActionLog = () => {
                                 <TableCell>
                                     <span>Assigned BDM</span>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="hide-on-mobile">
                                     <span>Completed Date</span>
                                 </TableCell>
                             </TableRow>
@@ -91,7 +91,7 @@ const ActionLog = () => {
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     <TableCell><Link to={'/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
                                     <TableCell>{action._last_action_performed_by.Name}</TableCell>
-                                    <TableCell>{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                                    <TableCell className="hide-on-mobile">{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -108,6 +108,8 @@ const ActionLog = () => {
                 </CardContent>
             </Card>
         </div>
+
+
     )
 }
 

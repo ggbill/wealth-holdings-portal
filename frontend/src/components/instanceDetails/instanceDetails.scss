@@ -1,5 +1,4 @@
 .instance-details{
-
     .clickable-icon{
         display: flex;
         flex-direction: row;
@@ -15,11 +14,7 @@
             padding-bottom: 3px;
             font-size: 0.7em;
         }
-
-
     }
-
-
 
     .summary-details-wrapper{
         display: flex;
@@ -56,8 +51,6 @@
         }
     }
 
-    
-
     .MuiExpansionPanelDetails-root{
         display: flex;
         flex-direction: column;
@@ -65,7 +58,6 @@
         div.data-section{
             margin-bottom: 12px;
             padding-bottom: 12px;
-            // border-bottom: 1px solid #00000029;
         }
 
         .MuiFormControl-root{
@@ -78,12 +70,37 @@
 
         .MuiPaper-root{
             max-width: 700px;
+        }
+    }
+}
 
-            .payment-schedule-table{
-                
+/* Tablets */
+@media only screen and (max-width: 767px){
+    
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px)  {
+    .instance-details{
+        .summary-details-wrapper{    
+            .MuiFormControl-root{
+                width: 100%;
+                margin: 0 0 24px 0;
+            }
+            .MuiFormControl-root:last-child{
+                margin: 0;
             }
         }
 
-        
-    }
+        .data-section{
+            .MuiFormControl-root{
+                width: 100%;
+                margin: 0 0 24px 0;
+            }
+            .MuiFormControl-root:last-child{
+                margin: 0;
+            }
+        }
+    }   
 }

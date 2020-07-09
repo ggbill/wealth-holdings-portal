@@ -87,21 +87,6 @@ const TotalInstancesPieChart = (props: InputProps) => {
         }
     }, [chartContainer]);
 
-    // useEffect(() => {
-    //     console.log(props)
-    //     if (chartInstance) {
-    //         console.log("chart instance")
-    //         console.log(chartInstance.data.datasets[0].data)
-    //         if ((chartInstance.data.datasets[0].data[0] !== props.onTimeCount) ||
-    //             (chartInstance.data.datasets[0].data[1] !== props.atRiskCount) ||
-    //             (chartInstance.data.datasets[0].data[2] !== props.overdueCount)) {
-    //             console.log("update data")
-    //             const data = [props.onTimeCount, props.atRiskCount, props.overdueCount]
-    //             updateDataset(0, data)
-    //         }
-    //     }
-    // }, [props]);
-
     return (
         <div className="total-instances-pie-chart">
             <h3>Active Instances</h3>
@@ -109,14 +94,8 @@ const TotalInstancesPieChart = (props: InputProps) => {
                 <CardContent>
                     <h2>Total: {props.onTimeCount + props.atRiskCount + props.overdueCount}</h2>
                     <div className="chart-wrapper">
-                        {/* <Pie
-                            data={data}
-                            options={options}
-                            ref={(reference) => setChartReference(reference)}
-                        /> */}
                         <canvas ref={chartContainer} />
                     </div>
-
                 </CardContent>
 
                 <CardActions>

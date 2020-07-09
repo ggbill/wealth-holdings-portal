@@ -12,8 +12,8 @@
             align-items: center;
             justify-content: space-between;
 
-            .MuiTableCell-root{
-                a{
+            .MuiTableCell-root {
+                a {
                     color: inherit;
                     font-weight: 500;
                 }
@@ -35,3 +35,10 @@
         }
     }
 }
+
+// /* Extra small devices (phones, 600px and down) */
+// @media only screen and (max-width: 600px) {
+//     .hide-on-mobile {
+//         display: none !important;
+//     }
+// }

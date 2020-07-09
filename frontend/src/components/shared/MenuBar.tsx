@@ -13,18 +13,9 @@ interface InputProps {
 const MenuBar = (props: InputProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
 
     const { getProfile, isAuthenticated } = props.auth;
-
-    const toggleDrawer = (open: boolean) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        setIsDrawerOpen(open);
-    };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -32,7 +23,6 @@ const MenuBar = (props: InputProps) => {
 
     const handleClose = () => {
         setAnchorEl(null);
-        setIsDrawerOpen(false);
     };
 
     const handleScroll = () => {
@@ -63,7 +53,6 @@ const MenuBar = (props: InputProps) => {
                 if (err) {
                     console.log(err)
                 }
-                console.log(profile)
                 setAuthorisedUserProfile(profile)
             });
         }
@@ -79,37 +68,15 @@ const MenuBar = (props: InputProps) => {
                     </Link>
                     <div className="menu-items">
                         {/* <LinkButton className="link-button" to='/about'><AccountCircleIcon /></LinkButton> */}
-                        <Link onClick={handleClick} className="authorised-email">
-                            {authorisedUserProfile && authorisedUserProfile.name}
+                        <Link to='#' onClick={handleClick} className="authorised-email">
+                            {authorisedUserProfile && <span className="username">{authorisedUserProfile.name}</span>}
                             <Button className="clickable-icon" aria-controls="logout-menu" aria-haspopup="true">
                             <AccountCircleIcon />
                         </Button>
                         </Link>
-                        
                     </div>
-                    <Button className="clickable-icon hamburger-menu" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(true)}>
-                        <MenuIcon />
-                    </Button>
                 </Toolbar>
             </AppBar>
-            <Drawer
-                anchor="top"
-                open={isDrawerOpen}
-                onClose={toggleDrawer(false)}
-                className="menu-drawer"
-            >
-                <div className="close-icon-container">
-                    <Button className="clickable-icon" aria-controls="simple-menu" aria-haspopup="true" onClick={toggleDrawer(false)}>
-                        <CloseIcon />
-                    </Button>
-                </div>
-                <Link to='/about' style={{ textDecoration: 'none', color: 'black' }}>
-                    <MenuItem onClick={handleClose}>About</MenuItem>
-                </Link>
-                <div className="drawer-footer">
-                    {/* <img className="logo" alt="logo" src={require("../../images/G-with-glow.png")} /> */}
-                </div>
-            </Drawer>
             <Menu
                 id="logout-menu"
                 anchorEl={anchorEl}

@@ -29,7 +29,6 @@ const Login = (props) => {
                 if (err) {
                     console.log(err)
                 }
-                console.log(profile)
                 setAuthorisedUserProfile(profile)
             });
         }
@@ -38,7 +37,6 @@ const Login = (props) => {
 
     return (
         <div className="login flex-container">
-            {/* <div className="half-background"></div> */}
             <Card className="login-card">
                 <Card className="image-card">
                     <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-colour.svg")} />

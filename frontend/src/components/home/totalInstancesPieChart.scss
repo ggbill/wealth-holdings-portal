@@ -42,10 +42,21 @@
                 padding-right: 6px;
             }
         }
-
-        // canvas{
-        //     height: 250px !important;
-        //     width: 400px !important;
-        // }
     }
+}
+
+@media only screen and (max-width: 1000px){
+    .total-instances-pie-chart {
+
+        max-width: unset;
+        width: 100%;
+        margin: 0;
+    }
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    
+
 }

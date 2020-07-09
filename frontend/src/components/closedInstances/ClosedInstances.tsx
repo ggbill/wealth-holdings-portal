@@ -3,7 +3,7 @@ import './closedInstances.scss'
 import useFetch from "../../hooks/useFetch"
 import Loading from '../shared/Loading'
 import SummaryFigures from '../instanceList/SummaryFigures'
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper} from "@material-ui/core"
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@material-ui/core"
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import CloseIcon from '@material-ui/icons/Close'
@@ -81,7 +81,7 @@ const ClosedInstances = () => {
 
     return (
         <div className="closed-instance-list">
-            <h1>Closed Instances</h1>
+
 
             {/* <SummaryFigures
                 activeCases={closedCases}
@@ -113,7 +113,7 @@ const ClosedInstances = () => {
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
                                             ) : null
                                         }
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -128,6 +128,7 @@ const ClosedInstances = () => {
                     </TableBody>
                 </Table>
             </Paper>
+
         </div >
     )
 }

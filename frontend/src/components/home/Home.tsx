@@ -122,7 +122,6 @@ const Home = (props: InputProps) => {
         <>
             {activeCases &&
                 <div className="content home-page">
-                    <h1>Reporting Portal</h1>
                     <div className="row-1">
                         <TotalInstancesPieChart
                             onTimeCount={totalActivitySummary.greenCount}
@@ -133,11 +132,9 @@ const Home = (props: InputProps) => {
                             activitySummaries={activitySummaries}
                         />
                     </div>
-                    {/* {actions && */}
                     <div className="row-2">
                         <LatestActions actions={actions} />
                     </div>
-                    {/* } */}
 
                 </div>
             }

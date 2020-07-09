@@ -1,85 +1,97 @@
-.login {
-    &.flex-container {
+.login.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 24px);
+    background-color: #29434e;
+    padding: 12px;
+
+    .MuiCard-root.login-card {
         display: flex;
         flex-direction: column;
+        width: 500px;
         align-items: center;
-        justify-content: center;
-        height: 100%;
-        background-color: #29434e;
+        padding: 12px;
+        overflow: initial;
+        text-align: center;
+        z-index: 100;
 
-        // .half-background{
-        //     background-color: #29434E;
-        //     height: 50%;
-        //     width: 100%;
-        //     position: absolute;
-        //     top:0;
-        //     z-index: 1;
-        // }
+        h2 {
+            margin: 0;
+        }
 
-        .MuiCard-root.login-card {
-            display: flex;
-            flex-direction: column;
-            width: 500px;
-            align-items: center;
-            padding: 12px;
-            overflow: initial;
-            text-align: center;
-            z-index: 100;
+        .button-wrapper {
+            width: 100%;
+            margin: 22px 0 0 0;
 
-            h2 {
-                margin: 0;
+            .validation-text {
+                font-size: 0.75em;
+                color: red;
             }
 
-            .button-wrapper{
+            .MuiButton-root {
                 width: 100%;
-                margin: 22px 0 0 0;
-
-                .validation-text{
-                    font-size: 0.75em;
-                    color: red;
-                }
-
-                .MuiButton-root {
-                    width: 100%;
-                    background-color: #58ab6e;
-                    color: white;
-                    margin-top: 2px;
-                }
-            }
-
-            .MuiCard-root.image-card {
-                display: flex;
-                position: relative;
-                top: -15%;
-                z-index: 100;
-                height: 100px;
-                padding: 6px 24px;
-                img {
-                    width: 200px;
-                }
-            }
-        }
-
-        .medium-text{
-            font-size: 0.85em;
-        }
-
-        .small-text {
-            font-size: 0.75em;
-            text-align: center;
-
-            a{
-                color: blue;
-            }
-
-            &.white {
-                width: 500px;
+                background-color: #58ab6e;
                 color: white;
-                
-                a {
-                    color: white;
-                }
-            }  
+                margin-top: 2px;
+            }
         }
+
+        .MuiCard-root.image-card {
+            display: flex;
+            position: relative;
+            top: -15%;
+            z-index: 100;
+            height: 100px;
+            padding: 6px 24px;
+            img {
+                width: 200px;
+            }
+        }
+    }
+
+    .medium-text {
+        font-size: 0.85em;
+    }
+
+    .small-text {
+        font-size: 0.75em;
+        text-align: center;
+
+        a {
+            color: blue;
+        }
+
+        &.white {
+            width: 500px;
+            color: white;
+
+            a {
+                color: white;
+            }
+        }
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .login.flex-container {
+        .MuiCard-root.login-card {
+            width: unset;
+        }
+
+        h2{
+            font-size: 1.2em;
+            line-height: 1em;
+            margin-bottom: 12px;
+        }
+
+        .small-text {    
+            &.white {
+                width: unset;
+            }
+        }
+        
     }
 }

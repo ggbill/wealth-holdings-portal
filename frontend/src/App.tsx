@@ -28,124 +28,121 @@ const App = () => {
         }
     };
 
-    const layoutProps = {
-        auth: auth
-    }
+    // const layoutProps = {
+    //     auth: auth
+    // }
 
     const routes = [
-        // {
-        //     layout: LayoutAnonymous,
-        //     subRoutes: [
-        //         {
-        //             exact: true,
-        //             path: "/",
-        //             component: Login,
-        //         },
-        //     ]
-        // },
         {
-            layout: LayoutAuthenticated,
-            subRoutes: [
-                {
-                    path: "/dashboard",
-                    component: Home,
-                    exact: true
-                },
-                {
-                    path: "/active-pipeline",
-                    component: ActivePipeline,
-                    exact: true
-                },
-                {
-                    path: "/action-log",
-                    component: ActionLog,
-                    exact: true
-                },
-                {
-                    path: "/closed-instances",
-                    component: ClosedInstances,
-                    exact: true
-                },
-                {
-                    path: "/completed-instances",
-                    component: CompletedInstances,
-                    exact: true
-                },
-                {
-                    path: "/all-instances",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/onboard-lead",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/initial-fee-payment",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/high-level-due-diligence",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/heads-of-terms",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/detailed-due-diligence",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/formal-offer",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/transaction-agreement",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/final-fee-payment",
-                    component: InstanceList,
-                    exact: true
-                },
-                {
-                    path: "/instance-details/:id",
-                    component: InstanceDetails,
-                }
-            ]
+            path: "/dashboard",
+            component: Home,
+            exact: true,
+            title: "Dashboard"
+        },
+        {
+            path: "/active-pipeline",
+            component: ActivePipeline,
+            exact: true,
+            title: "Active Pipeline"
+        },
+        {
+            path: "/action-log",
+            component: ActionLog,
+            exact: true,
+            title: "Action Log"
+        },
+        {
+            path: "/closed-instances",
+            component: ClosedInstances,
+            exact: true,
+            title: "Closed Instances"
+        },
+        {
+            path: "/completed-instances",
+            component: CompletedInstances,
+            exact: true,
+            title: "Completed Instances"
+        },
+        {
+            path: "/all-instances",
+            component: InstanceList,
+            exact: true,
+            title: "All Instances"
+        },
+        {
+            path: "/onboard-lead",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/initial-fee-payment",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/high-level-due-diligence",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/heads-of-terms",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/detailed-due-diligence",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/formal-offer",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/transaction-agreement",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/final-fee-payment",
+            component: InstanceList,
+            exact: true,
+            title: "Live Instances"
+        },
+        {
+            path: "/instance-details/:id",
+            component: InstanceDetails,
+            title: "Instance Details"
         }
+
     ];
 
     return (
         <Router history={history}>
             <Switch>
                 {routes.map((route, i) =>
-                    <Route key={i} exact={route.subRoutes.some(r => r.exact)} path={(route.subRoutes as any[]).map(r => r.path)}>
-                        <route.layout {...layoutProps}>
-                            {(route.subRoutes as any[]).map((subRoute, i) =>
+                    <Route key={i} exact={route.exact} path={route.path}>
+                        <LayoutAuthenticated auth={auth} title={route.title}>
                                 <Route
                                     key={i}
-                                    path={subRoute.path}
-                                    exact={subRoute.exact}
-                                    // render={(props) => (auth.isAuthenticated() ? <subRoute.component {...props} /> : <Redirect to={{pathname:"/", search:"status=unauthorised"}}/>)}
-                                    render={(props) => (auth.isAuthenticated() ? <subRoute.component auth={auth} {...props}/> : <Redirect to={{pathname:"/", search:"unauthorised"}}/>)}
+                                    path={route.path}
+                                    exact={route.exact}
+                                    render={(props) => (auth.isAuthenticated() ? <route.component auth={auth} {...props} /> : <Redirect to={{ pathname: "/", search: "unauthorised" }} />)}
                                 />
-                            )}
-                        </route.layout>
+                        </LayoutAuthenticated>
                     </Route>
                 )}
                 <Route path="/" exact={true}>
                     <LayoutAnonymous>
-                        <Route path="/" exact={true} render={(props) => <Login auth={auth} {...props}/> } />
-                        {/* <Route path="/" exact={true} render={() => <Login auth={auth}/> } /> */}
+                        <Route path="/" exact={true} render={(props) => <Login auth={auth} {...props} />} />
                     </LayoutAnonymous>
                 </Route>
                 <Route path="/callback" render={props => {

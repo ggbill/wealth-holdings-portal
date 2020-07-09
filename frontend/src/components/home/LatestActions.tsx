@@ -44,7 +44,7 @@ const LatestActions = (props: InputProps) => {
                             <TableCell>
                                 <span>Actioned By</span>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hide-on-mobile">
                                 <span>Completed Date</span>
                             </TableCell>         
                         </TableRow>
@@ -55,7 +55,7 @@ const LatestActions = (props: InputProps) => {
                                 <TableCell>{action._current_context[0].Name}</TableCell>
                                 <TableCell><Link to={'/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
                                 <TableCell>{action._last_action_performed_by.Name}</TableCell>
-                                <TableCell>{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                                <TableCell className="hide-on-mobile">{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
