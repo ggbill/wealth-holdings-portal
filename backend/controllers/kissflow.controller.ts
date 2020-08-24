@@ -4,19 +4,19 @@ export namespace KissFlowController {
 
     export async function WriteWebhookToDB(webhookBody: any): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-            // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
+            console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
 
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
 
             let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee: number;
 
-            if (webhookBody.AUM){ aum = Number(webhookBody.AUM.split(" ")[0])}
-            if (webhookBody.Recurring_Fees){ recurringFees = Number(webhookBody.Recurring_Fees.split(" ")[0])}
-            if (webhookBody.Turnover){ turnover = Number(webhookBody.Turnover.split(" ")[0])}
-            if (webhookBody.EBITDA){ ebitda = Number(webhookBody.EBITDA.split(" ")[0])}
-            if (webhookBody.Valuation){ valuation = Number(webhookBody.Valuation.split(" ")[0])}
-            if (webhookBody.Wealth_Holdings_Fee){ wealthHoldingsFee = Number(webhookBody.Wealth_Holdings_Fee.split(" ")[0])}
+            if (webhookBody.AUM) { aum = Number(webhookBody.AUM.split(" ")[0]) }
+            if (webhookBody.Recurring_Fees) { recurringFees = Number(webhookBody.Recurring_Fees.split(" ")[0]) }
+            if (webhookBody.Turnover) { turnover = Number(webhookBody.Turnover.split(" ")[0]) }
+            if (webhookBody.EBITDA) { ebitda = Number(webhookBody.EBITDA.split(" ")[0]) }
+            if (webhookBody.Valuation) { valuation = Number(webhookBody.Valuation.split(" ")[0]) }
+            if (webhookBody.Wealth_Holdings_Fee) { wealthHoldingsFee = Number(webhookBody.Wealth_Holdings_Fee.split(" ")[0]) }
 
             Webhook.create({
                 ...webhookBodyNoId,
@@ -29,6 +29,7 @@ export namespace KissFlowController {
                 firmName: webhookBody.Firm_Name,
                 companyType: webhookBody.Company_Type,
                 isSimplyBizMember: webhookBody.Is_SimplyBiz_Member,
+                representing: webhookBody.Representing,
                 isCloseCase: webhookBody.Close_Case,
                 closeCaseReason: webhookBody.Close_Case_Reason,
                 closeCaseDescription: webhookBody.Close_Case_Description,
@@ -47,7 +48,8 @@ export namespace KissFlowController {
                 wealthHoldingsFee: wealthHoldingsFee,
                 completionDate: webhookBody.Completion_Date,
                 purchaseType: webhookBody.Purchase_Type,
-                paymentSchedule: webhookBody['Table::Model_sWhDBR6MiD'],
+                paymentSchedule: webhookBody['Table::Model_GbfCGNWSwGm'],
+                prospectiveOffers: webhookBody['Table::Model_97Pp9ozIxK'],
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1
             }, function (err, webhook: IWebhook) {
                 if (err) {
@@ -69,7 +71,7 @@ export namespace KissFlowController {
                         _id: '$_kissflow_id',
                         firmName: { $first: "$firmName" },
                         maxProgress: { $max: "$_progress" },
-                        assignedBdm: { $first: { $arrayElemAt: ["$_current_assigned_to", 0] } },
+                        _current_assigned_to: { $first: { $arrayElemAt: ["$_current_assigned_to", 0] } },
                         previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
@@ -81,6 +83,7 @@ export namespace KissFlowController {
                         planners: { $first: "$planners" },
                         clients: { $first: "$clients" },
                         customers: { $first: "$customers" },
+                        representing: { $first: "$representing" },
                     }
                 }], function (err, result) {
                     if (err) {
@@ -97,7 +100,7 @@ export namespace KissFlowController {
     export async function GetClosedCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             Webhook
-                .find({_status: "Completed"}, function (err, result) {
+                .find({ _status: "Completed" }, function (err, result) {
                     if (err) {
                         console.error("Error: " + err);
                     }

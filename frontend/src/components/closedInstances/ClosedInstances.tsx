@@ -1,18 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './closedInstances.scss'
 import useFetch from "../../hooks/useFetch"
 import Loading from '../shared/Loading'
-import SummaryFigures from '../instanceList/SummaryFigures'
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@material-ui/core"
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import CloseIcon from '@material-ui/icons/Close'
 import { Link } from 'react-router-dom'
-import RagIndicator from '../shared/RagIndicator'
 import useCommonFunctions from '../../hooks/useCommonFunctions'
-import moment from 'moment'
-
-
+import _ from "lodash"
+import useExcelFunctions from "../../hooks/useExcelFunctions"
 
 const ClosedInstances = () => {
 
@@ -20,10 +16,10 @@ const ClosedInstances = () => {
     const kissflowApi = useFetch("kissflow")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
-    const [closedCases, setClosedCases] = useState<App.ClosedCase[]>([])
-    const [columnToSort, setColumnToSort] = useState("_created_at")
+    const [closedCases, setClosedCases] = useState<App.ActivityDetail[]>([])
+    const [columnToSort, setColumnToSort] = useState("firmName")
     const [sortDirection, setSortDirection] = useState("desc")
-    const commonFunctions = useCommonFunctions()
+    const excelFunctions = useExcelFunctions();
 
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {
@@ -58,8 +54,13 @@ const ClosedInstances = () => {
         setSortDirection(sortDirect)
     }
 
+    useEffect(() => {
+        setClosedCases(_.orderBy(closedCases, columnToSort, sortDirection))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [columnToSort, sortDirection])
 
-    React.useEffect(() => {
+
+    useEffect(() => {
         getClosedCases();
         return () => {
             isCancelled.current = true;
@@ -82,12 +83,6 @@ const ClosedInstances = () => {
     return (
         <div className="closed-instance-list">
 
-
-            {/* <SummaryFigures
-                activeCases={closedCases}
-            /> */}
-
-            <h2>Firms</h2>
             <Paper>
                 <Table className="instances-table">
                     <TableHead>
@@ -106,10 +101,10 @@ const ClosedInstances = () => {
                             </TableCell>
                             <TableCell>
                                 <div className="table-header-wrapper">
-                                    <div onClick={() => handleSort("reEngage")} className="tableHeaderCell">
+                                    <div onClick={() => handleSort("isReEngage")} className="tableHeaderCell">
                                         <span>Re-Engage In Future?</span>
                                         {
-                                            columnToSort === "_current_step" ? (
+                                            columnToSort === "isReEngage" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
                                             ) : null
                                         }
@@ -119,7 +114,7 @@ const ClosedInstances = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {closedCases.map((closedCase: App.ClosedCase) => (
+                        {closedCases.map((closedCase: App.ActivityDetail) => (
                             <TableRow key={closedCase._kissflow_id}>
                                 <TableCell> <Link to={'/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
                                 <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
@@ -128,8 +123,10 @@ const ClosedInstances = () => {
                     </TableBody>
                 </Table>
             </Paper>
-
-        </div >
+            <div className="button-container">
+                <Button className="wh-button" variant="contained" onClick={() => excelFunctions.generateClosedInstances(closedCases)}>Export</Button> 
+            </div>
+        </div>
     )
 }
 

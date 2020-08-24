@@ -2,7 +2,7 @@ import moment from 'moment'
 
 const useCommonFunctions = () => {
 
-    const calculateActivitySummaries = (activeCases: App.ActiveCase[]): App.ActivitySummary[] => {
+    const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): App.ActivitySummary[] => {
 
         let activitySummaries: App.ActivitySummary[] = [
             { name: "Onboard Lead", link: "onboard-lead", redSla: 2, amberSla: 1, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
@@ -43,7 +43,7 @@ const useCommonFunctions = () => {
         return activitySummaries
     }
 
-    const determineRAGStatus = (activeCase: App.ActiveCase): string => {
+    const determineRAGStatus = (activeCase: App.ActivityDetail): string => {
 
         let activitySummaries: App.ActivitySummary[] = [
             { name: "Onboard Lead", link: "onboard-lead", redSla: 2, amberSla: 1, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },

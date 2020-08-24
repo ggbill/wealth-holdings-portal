@@ -1,6 +1,7 @@
 .filters {
     display: flex;
     flex-direction: column;
+    margin-bottom: 24px;
 
     .dropdown-wrapper {
         // flex-direction: row;
@@ -15,13 +16,11 @@
         margin-bottom: 12px;
     }
 
-    margin-bottom: 48px;
-
     .MuiFormControl-root {
         min-width: 200px;
-        margin-right: 48px;
+        margin: 0 48px 24px 0;
 
-        &.assigned-bdm {
+        &.representing {
             margin-right: 0px;
         }
     }
@@ -33,19 +32,17 @@
 }
 
 /* Tablets */
-@media only screen and (max-width: 767px){
-
+@media only screen and (max-width: 767px) {
 }
 
 /* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px)  {
-    .filters{
-        .MuiFormControl-root{
+@media only screen and (max-width: 600px) {
+    .filters {
+        .MuiFormControl-root {
             width: 100%;
         }
-        .MuiFormControl-root:not(:last-child){
+        .MuiFormControl-root:not(:last-child) {
             margin: 0 0 24px 0;
         }
     }
-
 }

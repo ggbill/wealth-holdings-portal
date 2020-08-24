@@ -4,17 +4,20 @@ import { FormControl, InputLabel, Select, MenuItem, Link } from "@material-ui/co
 import useCommonFunctions from '../../hooks/useCommonFunctions';
 
 interface InputProps {
-    activeCases: App.ActiveCase[]
-    setFilteredActiveCases: (filteredActiveCases: App.ActiveCase[]) => void
+    activeCases: App.ActivityDetail[]
+    setFilteredActiveCases: (filteredActiveCases: App.ActivityDetail[]) => void
     setTableFilters: (tableFilters: App.TableFilters) => void
     tableFilters: App.TableFilters
     path: string
+    isFilterApplied: () => boolean
+    clearAllFilters: () => void
 }
 
 const InstanceFilters = (props: InputProps) => {
     const [uniqueActivityNames, setUniqueActivityNames] = useState<string[]>([])
     const [uniqueBdmNames, setUniqueBdmNames] = useState<string[]>([])
     const [uniqueRagStatuses, setUniqueRagStatuses] = useState<string[]>([])
+    const [uniqueRepresentings, setUniqueRepresentings] = useState<string[]>([])
 
     const commonFunctions = useCommonFunctions()
 
@@ -25,8 +28,11 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase))
         setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
 
-        let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase.assignedBdm.Name)
-        setUniqueBdmNames([...new Set(uniqueBdmNames)])
+        // let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
+        // setUniqueBdmNames([...new Set(uniqueBdmNames)])
+        
+        let uniqueRepresentings: string[] = props.activeCases.map(activeCase => activeCase.representing)
+        setUniqueRepresentings([...new Set(uniqueRepresentings)])
 
         let activeCaseFound = false
         uniqueActivityNames.forEach(uniqueActivityName => {
@@ -67,20 +73,13 @@ const InstanceFilters = (props: InputProps) => {
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
                 (props.tableFilters.ragStatus === "All" || commonFunctions.determineRAGStatus(activeCase) === props.tableFilters.ragStatus) &&
-                (props.tableFilters.assignedBdm === "All" || activeCase.assignedBdm.Name === props.tableFilters.assignedBdm)
+                (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm) &&
+                (props.tableFilters.representing === "All" || activeCase.representing === props.tableFilters.representing)
             )
         });
 
         props.setFilteredActiveCases(filteredActiveCases)
 
-    }
-
-    const clearFilters = (): void => {
-        props.setTableFilters({
-            currentActivity: "All",
-            ragStatus: "All",
-            assignedBdm: "All"
-        })
     }
 
     const handleChange = (event) => {
@@ -105,7 +104,7 @@ const InstanceFilters = (props: InputProps) => {
 
     return (
         <div className="filters">
-            <h2>Filters</h2>
+            <h2>Filters {props.isFilterApplied() && <span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span>}</h2>
             <div className="dropdown-wrapper">
                 <FormControl className="current-activity">
                     <InputLabel id="current-activity-select-label">Current Activity</InputLabel>
@@ -119,7 +118,7 @@ const InstanceFilters = (props: InputProps) => {
                         <MenuItem value="All">All</MenuItem>
                         {
                             uniqueActivityNames.map((activityName: string, index: number) => {
-                                return (<MenuItem key={index} value={activityName}>{activityName}</MenuItem>)
+                                return (<MenuItem className="highlighted" key={index} value={activityName}>{activityName}</MenuItem>)
                             })
                         }
                     </Select>
@@ -136,7 +135,7 @@ const InstanceFilters = (props: InputProps) => {
                         <MenuItem value="All">All</MenuItem>
                         {
                             uniqueRagStatuses.map((ragStatus: string, index: number) => {
-                                return (<MenuItem key={index} value={ragStatus}>{ragStatus}</MenuItem>)
+                                return (<MenuItem className="highlighted" key={index} value={ragStatus}>{ragStatus}</MenuItem>)
                             })
                         }
                     </Select>
@@ -153,23 +152,29 @@ const InstanceFilters = (props: InputProps) => {
                         <MenuItem value="All">All</MenuItem>
                         {
                             uniqueBdmNames.map((bdmName: string, index: number) => {
-                                return (<MenuItem key={index} value={bdmName}>{bdmName}</MenuItem>)
+                                return (<MenuItem className="highlighted" key={index} value={bdmName}>{bdmName}</MenuItem>)
+                            })
+                        }
+                    </Select>
+                </FormControl>
+                <FormControl className="representing">
+                    <InputLabel id="representing-select-label">WH Representing</InputLabel>
+                    <Select
+                        labelId="representing-select-label"
+                        id="representing-select"
+                        name="representing"
+                        value={props.tableFilters.representing}
+                        onChange={handleChange}
+                    >
+                        <MenuItem value="All">All</MenuItem>
+                        {
+                            uniqueRepresentings.map((representing: string, index: number) => {
+                                return (<MenuItem className="highlighted" key={index} value={representing}>{representing}</MenuItem>)
                             })
                         }
                     </Select>
                 </FormControl>
             </div>
-            {
-                (props.tableFilters.currentActivity !== "All" ||
-                    props.tableFilters.ragStatus !== "All" ||
-                    props.tableFilters.assignedBdm !== "All") &&
-
-                <Link onClick={clearFilters}>
-                    Clear Filters
-                </Link>
-            }
-
-
         </div>
     )
 }

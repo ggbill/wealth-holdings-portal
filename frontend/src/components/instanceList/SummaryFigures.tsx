@@ -4,7 +4,9 @@ import { Box, Card, CardActionArea, CardContent } from "@material-ui/core";
 import { Link } from "react-router-dom"
 
 interface InputProps {
-    activeCases: App.ActiveCase[]
+    activeCases: App.ActivityDetail[]
+    isFilterApplied: () => boolean
+    clearAllFilters: () => void
 }
 
 interface SummaryFigure {
@@ -59,7 +61,7 @@ const SummaryFigures = (props: InputProps) => {
 
     return (
         <div className="summary-figures">
-            <h2>Summary Figures</h2>
+            <h2>Summary Figures {props.isFilterApplied() && <>(Filtered)<span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span></>}</h2>
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {summaryFigures.map((summaryFigure: SummaryFigure, index: number) => (
                     <Card key={index} style={{ animationDelay: `${index * 0.1}s` }}>

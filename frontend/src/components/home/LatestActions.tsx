@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import "./latestActions.scss"
 import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardActions, CardContent} from "@material-ui/core"
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'

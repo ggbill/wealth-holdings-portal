@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import useFetch from "../../hooks/useFetch"
 import { Link } from 'react-router-dom'
-import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardActions, CardContent, TablePagination } from "@material-ui/core"
+import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardContent, TablePagination } from "@material-ui/core"
 import "./actionLog.scss"
 import moment from 'moment'
-import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import Loading from '../shared/Loading'
+import useExcelFunctions from "../../hooks/useExcelFunctions"
 
 const ActionLog = () => {
 
@@ -16,6 +16,8 @@ const ActionLog = () => {
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    const excelFunctions = useExcelFunctions();
 
     const getActions = (): void => {
         setLoading(true)
@@ -78,7 +80,7 @@ const ActionLog = () => {
                                     <span>Firm Name</span>
                                 </TableCell>
                                 <TableCell>
-                                    <span>Assigned BDM</span>
+                                    <span>Assignee</span>
                                 </TableCell>
                                 <TableCell className="hide-on-mobile">
                                     <span>Completed Date</span>
@@ -107,6 +109,10 @@ const ActionLog = () => {
                     />
                 </CardContent>
             </Card>
+
+            <div className="button-container">
+                <Button className="wh-button" variant="contained" onClick={() => excelFunctions.generateActionLog(actions)}>Export</Button> 
+            </div>
         </div>
 
 

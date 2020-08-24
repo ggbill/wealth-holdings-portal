@@ -1,9 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect } from 'react'
-import { AppBar, Toolbar, Button, Drawer, Menu, MenuItem } from '@material-ui/core'
+import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import "./menuBar.scss"
-import MenuIcon from '@material-ui/icons/Menu'
-import CloseIcon from '@material-ui/icons/Close'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 interface InputProps {

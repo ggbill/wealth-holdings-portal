@@ -15,10 +15,19 @@
 
     main{
         width: 100%;
-        // background-color: #fafafa;
         background-color: #efefef;
-    }
-    
+
+        .MuiButton-root.wh-button{
+            background-color: #57AB6E;
+            color: white
+        }
+
+        .button-container{
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+    }  
 }
 
 /* Extra small devices (phones, 600px and down) */

@@ -33,7 +33,7 @@ const ActivePipeline = ({ match }) => {
             })
     }
 
-    const calculateActivitySummaries = (activeCases: App.ActiveCase[]): void => {
+    const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
 
         let totalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
 

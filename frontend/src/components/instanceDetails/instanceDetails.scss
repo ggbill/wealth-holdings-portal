@@ -63,13 +63,14 @@
         .MuiFormControl-root{
             margin: 0 24px 24px 0;
 
+            &.full-width{
+                width: 100%;
+            }
+
+
             .MuiInputBase-root.Mui-disabled{
                 color: black
             }
-        }
-
-        .MuiPaper-root{
-            max-width: 700px;
         }
     }
 }

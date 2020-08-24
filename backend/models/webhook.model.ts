@@ -31,6 +31,7 @@ export interface IWebhook extends Document {
     firmName: string,
     companyType: string, 
     isSimplyBizMember: string,
+    representing: string,
     isCloseCase: boolean,
     closeCaseReason: string,
     closeCaseDescription: string,
@@ -50,6 +51,7 @@ export interface IWebhook extends Document {
     completionDate: Date,
     purchaseType: string,
     paymentSchedule: Object[],
+    prospectiveOffers: Object[],
     finalTransactionReference: string,
 }
 
@@ -83,6 +85,7 @@ const WebhookSchema: Schema = new Schema({
     firmName: { type: String },
     companyType:{ type: String },
     isSimplyBizMember:{ type: String },
+    representing: { type: String},
     isCloseCase: { type: Boolean },
     closeCaseReason: { type: String },
     closeCaseDescription: { type: String },
@@ -102,6 +105,7 @@ const WebhookSchema: Schema = new Schema({
     completionDate: { type: Date },
     purchaseType: { type: String },
     paymentSchedule: [{ type: Object }],
+    prospectiveOffers: [{ type: Object }],
     finalTransactionReferenceNumber: { type: String },
 });
 

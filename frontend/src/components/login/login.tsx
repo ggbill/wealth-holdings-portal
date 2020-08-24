@@ -21,7 +21,7 @@ const Login = (props) => {
     }
 
     useEffect(() => {
-        if (props.location.search.split('?')[1] == "unauthorised") {
+        if (props.location.search.split('?')[1] === "unauthorised") {
             setIsUnauthorised(true)
         }
         if (isAuthenticated()) {

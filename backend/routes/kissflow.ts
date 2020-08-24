@@ -4,6 +4,7 @@ import { KissFlowController } from '../controllers/kissflow.controller';
 const router = require('express').Router();
 
 router.post("/hook", (request: Request, response: Response) => {
+    console.log("hook")
     try {
         //immediately respond
         response.status(200).end()

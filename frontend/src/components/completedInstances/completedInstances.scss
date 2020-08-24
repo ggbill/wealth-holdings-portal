@@ -1,0 +1,30 @@
+.completed-instance-list {
+    .instances-table {
+        table-layout: fixed;
+
+        .MuiTableRow-root {
+            .MuiTableCell-root {
+                a {
+                    color: inherit;
+                    font-weight: 500;
+                }
+            }
+
+            .table-header-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                &.leftAlign {
+                    align-items: start;
+                }
+
+                .tableHeaderCell {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

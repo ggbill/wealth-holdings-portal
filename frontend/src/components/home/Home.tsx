@@ -20,7 +20,7 @@ const Home = (props: InputProps) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
-    const [activeCases, setActiveCases] = useState<App.ActiveCase[]>([])
+    const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     // const [newActiveCases, setNewActiveCases] = useState<App.ActiveCase[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
@@ -62,7 +62,7 @@ const Home = (props: InputProps) => {
             })
     }
 
-    const calculateActivitySummaries = (activeCases: App.ActiveCase[]): void => {
+    const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
         let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
         let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases)
         setActivitySummaries(tempActivitySummaries)
