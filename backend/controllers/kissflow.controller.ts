@@ -84,6 +84,8 @@ export namespace KissFlowController {
                         clients: { $first: "$clients" },
                         customers: { $first: "$customers" },
                         representing: { $first: "$representing" },
+                        wealthHoldingsFee: { $first: "$wealthHoldingsFee" },
+                        valuation: { $first: "$valuation" },
                     }
                 }], function (err, result) {
                     if (err) {

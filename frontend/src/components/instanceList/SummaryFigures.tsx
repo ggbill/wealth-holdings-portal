@@ -27,7 +27,9 @@ const SummaryFigures = (props: InputProps) => {
             { name: "EBITDA", value: 0, isCurrency: true },
             { name: "Planners", value: 0, isCurrency: false },
             { name: "Clients", value: 0, isCurrency: false },
-            { name: "Customers", value: 0, isCurrency: false }
+            { name: "Customers", value: 0, isCurrency: false },
+            { name: "Wealth Holdings Fee", value: 0, isCurrency: true },
+            { name: "Valuation", value: 0, isCurrency: true },
         ]
         props.activeCases.forEach(activeCase => {
             tempSummaryFigures.forEach(tempSummaryFigure => {
@@ -46,6 +48,10 @@ const SummaryFigures = (props: InputProps) => {
                     tempSummaryFigure.value += activeCase.clients
                 } else if (tempSummaryFigure.name === "Customers") {
                     tempSummaryFigure.value += activeCase.customers
+                } else if (tempSummaryFigure.name === "Wealth Holdings Fee") {
+                    tempSummaryFigure.value += activeCase.wealthHoldingsFee
+                } else if (tempSummaryFigure.name === "Valuation") {
+                    tempSummaryFigure.value += activeCase.valuation
                 }
             });
         });
@@ -62,6 +68,7 @@ const SummaryFigures = (props: InputProps) => {
     return (
         <div className="summary-figures">
             <h2>Summary Figures {props.isFilterApplied() && <>(Filtered)<span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span></>}</h2>
+            <p className="intro-text">N.B. 'Wealth Holdings Fee' and 'Valuation' figures are only entered into the system from the 'Heads of Terms' activity.</p>
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {summaryFigures.map((summaryFigure: SummaryFigure, index: number) => (
                     <Card key={index} style={{ animationDelay: `${index * 0.1}s` }}>

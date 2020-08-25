@@ -26,7 +26,9 @@ const useExcelFunctions = () => {
             { header: 'EBITDA', key: 'ebitda', width: 20 },
             { header: 'Planners', key: 'planners', width: 10 },
             { header: 'Clients', key: 'clients', width: 10 },
-            { header: 'Customers', key: 'customers', width: 10 }
+            { header: 'Customers', key: 'customers', width: 10 },
+            { header: 'Wealth Holdings Fee', key: 'whFee', width: 20 },
+            { header: 'Valuation', key: 'valuation', width: 20 },
         ];
 
         worksheet.getRow(1).font = { bold: true }
@@ -44,7 +46,9 @@ const useExcelFunctions = () => {
                 activeCase.ebitda,
                 activeCase.planners,
                 activeCase.clients,
-                activeCase.customers
+                activeCase.customers,
+                activeCase.wealthHoldingsFee,
+                activeCase.valuation
             ]);
         })
 
@@ -61,6 +65,14 @@ const useExcelFunctions = () => {
         });
 
         worksheet.getColumn('ebitda').eachCell(cell => {
+            cell.numFmt = numFmtStr;
+        });
+
+        worksheet.getColumn('whFee').eachCell(cell => {
+            cell.numFmt = numFmtStr;
+        });
+
+        worksheet.getColumn('valuation').eachCell(cell => {
             cell.numFmt = numFmtStr;
         });
 
