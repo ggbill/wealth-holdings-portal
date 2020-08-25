@@ -32,17 +32,17 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .full-height-content {
-        min-height: calc(100vh - 183px); /* will cover the 100% of viewport minus footer */
-    }
+    // .full-height-content {
+    //     min-height: calc(100vh - 183px); /* will cover the 100% of viewport minus footer */
+    // }
 
     .hide-on-mobile {
         display: none !important;
     }
 }
 @media only screen and (min-width: 1500px) {
-    .full-height-content {
-        padding: 76px 125px 48px 24px;
-    }
+    // .full-height-content {
+    //     padding: 76px 125px 48px 24px;
+    // }
 }
 
