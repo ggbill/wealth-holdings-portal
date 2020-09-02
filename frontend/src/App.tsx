@@ -3,7 +3,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom"
 import Home from './components/home/Home'
 import { createBrowserHistory } from 'history';
 import ClosedInstances from './components/closedInstances/ClosedInstances';
-import ActivePipeline from './components/activePipeline/activePipeline';
+import ActivePipeline from './components/activePipeline/ActivePipeline';
 import InstanceDetails from './components/instanceDetails/InstanceDetails';
 import ActionLog from './components/actionLog/ActionLog';
 import CompletedInstances from './components/completedInstances/CompletedInstances';
