@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from 'react'
+import React, { useState, useLayoutEffect, useEffect, useRef } from 'react'
 import { AppBar, Toolbar, Button, Menu, MenuItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import "./menuBar.scss"
@@ -12,6 +12,7 @@ const MenuBar = (props: InputProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [scrollClass, setScrollClass] = useState("menu-bar no-shadow")
     const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+    const isCancelled = useRef(false)
 
     const { getProfile, isAuthenticated } = props.auth;
 
@@ -46,7 +47,7 @@ const MenuBar = (props: InputProps) => {
     }, []);
 
     useEffect(() => {
-        if (isAuthenticated()) {
+        if (isAuthenticated() && !isCancelled.current) {
             getProfile((err, profile) => {
                 if (err) {
                     console.log(err)
@@ -55,13 +56,18 @@ const MenuBar = (props: InputProps) => {
             });
         }
 
+        return () => {
+            isCancelled.current = true;
+        };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
             <AppBar position="fixed" className={scrollClass}>
                 <Toolbar>
-                    <Link className="clickable-icon" to={'/dashboard'}>
+                    <Link className="clickable-icon" to={'/marriage-bureau/dashboard'}>
                         <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                     </Link>
                     <div className="menu-items">
@@ -69,8 +75,8 @@ const MenuBar = (props: InputProps) => {
                         <Link to='#' onClick={handleClick} className="authorised-email">
                             {authorisedUserProfile && <span className="username">{authorisedUserProfile.name}</span>}
                             <Button className="clickable-icon" aria-controls="logout-menu" aria-haspopup="true">
-                            <AccountCircleIcon />
-                        </Button>
+                                <AccountCircleIcon />
+                            </Button>
                         </Link>
                     </div>
                 </Toolbar>

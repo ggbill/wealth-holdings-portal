@@ -8,56 +8,62 @@ import { Link } from 'react-router-dom'
 
 interface InputProps {
     activitySummaries: App.ActivitySummary[]
+    pathname: string
 }
 
 const ActivityBarChart = (props: InputProps) => {
 
     const getGreenCountDataset = () => {
         if (props.activitySummaries.length) {
-            return ([
-                props.activitySummaries[0].greenCount,
-                props.activitySummaries[1].greenCount,
-                props.activitySummaries[2].greenCount,
-                props.activitySummaries[3].greenCount,
-                props.activitySummaries[4].greenCount,
-                props.activitySummaries[5].greenCount,
-                props.activitySummaries[6].greenCount,
-                props.activitySummaries[7].greenCount
-            ])
+            let greenCountDataset = []
+
+            props.activitySummaries.forEach(element => {
+                greenCountDataset.push(element.greenCount)
+            });
+
+            return (greenCountDataset)
         }
     }
     const getAmberCountDataset = () => {
         if (props.activitySummaries.length) {
-            return ([
-                props.activitySummaries[0].amberCount,
-                props.activitySummaries[1].amberCount,
-                props.activitySummaries[2].amberCount,
-                props.activitySummaries[3].amberCount,
-                props.activitySummaries[4].amberCount,
-                props.activitySummaries[5].amberCount,
-                props.activitySummaries[6].amberCount,
-                props.activitySummaries[7].amberCount
-            ])
+            let greenCountDataset = []
+
+            props.activitySummaries.forEach(element => {
+                greenCountDataset.push(element.amberCount)
+            });
+
+            return (greenCountDataset)
         }
     }
+
     const getRedCountDataset = () => {
         if (props.activitySummaries.length) {
-            return ([
-                props.activitySummaries[0].redCount,
-                props.activitySummaries[1].redCount,
-                props.activitySummaries[2].redCount,
-                props.activitySummaries[3].redCount,
-                props.activitySummaries[4].redCount,
-                props.activitySummaries[5].redCount,
-                props.activitySummaries[6].redCount,
-                props.activitySummaries[7].redCount
-            ])
+            let greenCountDataset = []
+
+            props.activitySummaries.forEach(element => {
+                greenCountDataset.push(element.redCount)
+            });
+
+            return (greenCountDataset)
+        }
+    }
+
+    const getLabels = () => {
+        if (props.activitySummaries.length) {
+            let labels = []
+
+            props.activitySummaries.forEach(element => {
+                labels.push(element.name)
+            });
+
+            return (labels)
         }
     }
 
     const data = {
-        labels: ["Onboard Lead", "Initial Fee Payment", "High Level Due Diligence", "Heads of Terms", "Detailed Due Diligence",
-            "Formal Offer", "Transaction Agreement", "Final Fee Payment"],
+        // labels: ["Onboard Lead", "Initial Fee Payment", "High Level Due Diligence", "Heads of Terms", "Detailed Due Diligence",
+        //     "Formal Offer", "Transaction Agreement", "Final Fee Payment"],
+        labels: getLabels(),
         datasets: [
             {
                 label: 'On Time',
@@ -131,7 +137,11 @@ const ActivityBarChart = (props: InputProps) => {
                     />
                 </CardContent>
                 <CardActions>
-                    <Button component={Link} to="/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>
+                    {props.pathname === "marriage-bureau" ?
+                        <Button component={Link} to="/marriage-bureau/active-pipeline">Active Pipeline <NavigateNextIcon /></Button> :
+                        <Button component={Link} to="/buyer-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>
+                    }
+
                 </CardActions>
             </Card>
 

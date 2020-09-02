@@ -40,6 +40,10 @@
         .MuiTypography-body1{
             font-size: 0.9rem;
         }
+
+        .MuiListItemText-root.bold span{
+            font-weight: bold;
+        }
     }
 }
 

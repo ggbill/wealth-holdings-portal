@@ -1,6 +1,6 @@
 import './instanceFilters.scss';
 import React, { useState } from 'react'
-import { FormControl, InputLabel, Select, MenuItem, Link } from "@material-ui/core";
+import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import useCommonFunctions from '../../hooks/useCommonFunctions';
 
 interface InputProps {
@@ -11,6 +11,7 @@ interface InputProps {
     path: string
     isFilterApplied: () => boolean
     clearAllFilters: () => void
+    pathname: string
 }
 
 const InstanceFilters = (props: InputProps) => {
@@ -25,54 +26,36 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueActivityNames: string[] = props.activeCases.map(activeCase => activeCase._current_step)
         setUniqueActivityNames([...new Set(uniqueActivityNames)])
 
-        let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase))
-        setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+        if (props.pathname === "marriage-bureau") {
+            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase))
+            setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+        } else {
+            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase))
+            setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+        }
 
-        // let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
-        // setUniqueBdmNames([...new Set(uniqueBdmNames)])
-        
+        let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
+        setUniqueBdmNames([...new Set(uniqueBdmNames)])
+
         let uniqueRepresentings: string[] = props.activeCases.map(activeCase => activeCase.representing)
         setUniqueRepresentings([...new Set(uniqueRepresentings)])
-
-        let activeCaseFound = false
-        uniqueActivityNames.forEach(uniqueActivityName => {
-            if (!activeCaseFound) {
-                if (props.path === "/onboard-lead" && uniqueActivityName == "Onboard Lead") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Onboard Lead" })
-                } else if (props.path === "/initial-fee-payment" && uniqueActivityName === "Initial Fee Payment") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Initial Fee Payment" })
-                } else if (props.path === "/high-level-due-diligence" && uniqueActivityName === "High Level Due Diligence") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "High Level Due Diligence" })
-                } else if (props.path === "/heads-of-terms" && uniqueActivityName === "Heads of Terms") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Heads of Terms" })
-                } else if (props.path === "/detailed-due-diligence" && uniqueActivityName === "Detailed Due Diligence") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Detailed Due Diligence" })
-                } else if (props.path === "/formal-offer" && uniqueActivityName === "Formal Offer") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Formal Offer" })
-                } else if (props.path === "/transaction-agreement" && uniqueActivityName === "Transaction Agreement") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Transaction Agreement" })
-                } else if (props.path === "/final-fee-payment" && uniqueActivityName === "Final Fee Payment") {
-                    activeCaseFound = true
-                    props.setTableFilters({ ...props.tableFilters, currentActivity: "Final Fee Payment" })
-                }
-            }
-        });
     }
 
     const filterActiveCases = (): void => {
         let filteredActiveCases = props.activeCases;
 
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
+
+            let currentRAGStatus
+            if (props.pathname === "marriage-bureau") {
+                currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase)
+            } else {
+                currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase)
+            }
+
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
-                (props.tableFilters.ragStatus === "All" || commonFunctions.determineRAGStatus(activeCase) === props.tableFilters.ragStatus) &&
+                (props.tableFilters.ragStatus === "All" || currentRAGStatus === props.tableFilters.ragStatus) &&
                 (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm) &&
                 (props.tableFilters.representing === "All" || activeCase.representing === props.tableFilters.representing)
             )
@@ -141,7 +124,7 @@ const InstanceFilters = (props: InputProps) => {
                     </Select>
                 </FormControl>
                 <FormControl className="assigned-bdm">
-                    <InputLabel id="assigned-bdm-select-label">Assigned BDM</InputLabel>
+                    <InputLabel id="assigned-bdm-select-label">Assignee</InputLabel>
                     <Select
                         labelId="assigned-bdm-select-label"
                         id="assigned-bdm-select"
@@ -157,23 +140,26 @@ const InstanceFilters = (props: InputProps) => {
                         }
                     </Select>
                 </FormControl>
-                <FormControl className="representing">
-                    <InputLabel id="representing-select-label">WH Representing</InputLabel>
-                    <Select
-                        labelId="representing-select-label"
-                        id="representing-select"
-                        name="representing"
-                        value={props.tableFilters.representing}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="All">All</MenuItem>
-                        {
-                            uniqueRepresentings.map((representing: string, index: number) => {
-                                return (<MenuItem className="highlighted" key={index} value={representing}>{representing}</MenuItem>)
-                            })
-                        }
-                    </Select>
-                </FormControl>
+                {props.pathname === "marriage-bureau" &&
+                    <FormControl className="representing">
+                        <InputLabel id="representing-select-label">WH Representing</InputLabel>
+                        <Select
+                            labelId="representing-select-label"
+                            id="representing-select"
+                            name="representing"
+                            value={props.tableFilters.representing}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="All">All</MenuItem>
+                            {
+                                uniqueRepresentings.map((representing: string, index: number) => {
+                                    return (<MenuItem className="highlighted" key={index} value={representing}>{representing}</MenuItem>)
+                                })
+                            }
+                        </Select>
+                    </FormControl>
+                }
+
             </div>
         </div>
     )

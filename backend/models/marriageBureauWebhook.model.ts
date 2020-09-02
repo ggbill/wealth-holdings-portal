@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose'
 import { Schema, Document } from 'mongoose';
 
-export interface IWebhook extends Document {
+export interface IMarriageBureauWebhook extends Document {
     _last_action: string,
     _last_action_performed_by: Object,
     _last_action_performed_at: Date,
@@ -29,6 +29,7 @@ export interface IWebhook extends Document {
     preferredEmail: string,
     preferredPhone: string,
     firmName: string,
+    fcaNumber: string,
     companyType: string, 
     isSimplyBizMember: string,
     representing: string,
@@ -55,7 +56,7 @@ export interface IWebhook extends Document {
     finalTransactionReference: string,
 }
 
-const WebhookSchema: Schema = new Schema({
+const MarriageBureauWebhookSchema: Schema = new Schema({
     _last_action: { type: String, required: true },
     _last_action_performed_by: { type: Object, required: true },
     _last_action_performed_at: { type: Date, required: true },
@@ -83,6 +84,7 @@ const WebhookSchema: Schema = new Schema({
     preferredEmail: { type: String },
     preferredPhone: { type: String },
     firmName: { type: String },
+    fcaNumber: { type: String },
     companyType:{ type: String },
     isSimplyBizMember:{ type: String },
     representing: { type: String},
@@ -109,4 +111,4 @@ const WebhookSchema: Schema = new Schema({
     finalTransactionReferenceNumber: { type: String },
 });
 
-export default mongoose.model<IWebhook>('Webhook', WebhookSchema);
+export default mongoose.model<IMarriageBureauWebhook>('Marriage-Bureau-Webhook', MarriageBureauWebhookSchema);

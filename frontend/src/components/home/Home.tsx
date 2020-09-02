@@ -5,34 +5,29 @@ import useFetch from "../../hooks/useFetch"
 import Loading from '../shared/Loading'
 import TotalInstancesPieChart from './TotalInstancesPieChart'
 import ActivityBarChart from './ActivityBarChart'
-import _ from 'lodash';
 import LatestActions from './LatestActions'
+import { useLocation } from 'react-router-dom'
 
-interface InputProps {
-    auth: any
-}
-
-const Home = (props: InputProps) => {
-
-    const { isAuthenticated } = props.auth;
+const Home = () => {
     const isCancelled = useRef(false)
-    const kissflowApi = useFetch("kissflow")
+    const marriageBureauApi = useFetch("marriage-bureau")
+    const buyerOnboardingApi = useFetch("buyer-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
     const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
-    // const [newActiveCases, setNewActiveCases] = useState<App.ActiveCase[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
     const commonFunctions = useCommonFunctions()
 
+    let location = useLocation();
 
-    const getLatestDataForActiveCases = (): void => {
+    const getLatestDataForActiveMarriageBureauCases = (): void => {
         setLoading(true)
-        kissflowApi.get("getLatestDataForActiveCases")
+        marriageBureauApi.get("getLatestDataForActiveCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    calculateActivitySummaries(data)
+                    calculateMarriageBureauActivitySummaries(data)
                     setActiveCases(data)
                     setLoading(false)
                 }
@@ -45,9 +40,9 @@ const Home = (props: InputProps) => {
             })
     }
 
-    const getActions = (): void => {
+    const getMarriageBureauActions = (): void => {
         setLoading(true)
-        kissflowApi.get("getActions")
+        marriageBureauApi.get("getActions")
             .then(data => {
                 if (!isCancelled.current) {
                     setActions(data)
@@ -62,9 +57,45 @@ const Home = (props: InputProps) => {
             })
     }
 
-    const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases)
+    const getLatestDataForActiveBuyerOnboardingCases = (): void => {
+        setLoading(true)
+        buyerOnboardingApi.get("getLatestDataForActiveCases")
+            .then(data => {
+                if (!isCancelled.current) {
+                    calculateBuyerOnboardingActivitySummaries(data)
+                    setActiveCases(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const getBuyerOnboardingActions = (): void => {
+        setLoading(true)
+        buyerOnboardingApi.get("getActions")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setActions(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const calculateMarriageBureauActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
+        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "marriage-bureau/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+        let tempActivitySummaries = commonFunctions.calculateMarriageBureauActivitySummaries(activeCases)
+
         setActivitySummaries(tempActivitySummaries)
 
         tempActivitySummaries.forEach(tempActivitySummary => {
@@ -77,33 +108,40 @@ const Home = (props: InputProps) => {
         setTotalActivitySummary(tempTotalActivitySummary)
     }
 
+    const calculateBuyerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
+        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "buyer-onboarding/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+        let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases)
+
+        setActivitySummaries(tempActivitySummaries)
+
+        tempActivitySummaries.forEach(tempActivitySummary => {
+            tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+            tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+            tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+            tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+        });
+
+        setTotalActivitySummary(tempTotalActivitySummary)
+    }
+
+
+
     React.useEffect(() => {
-        getLatestDataForActiveCases();
-        getActions();
-        // let pollDb = setInterval(() => getLatestDataForActiveCases(), 10000)
+
+        //location.pathname will give you current route path 
+        if (location.pathname.split("/")[1] === "marriage-bureau") {
+            getLatestDataForActiveMarriageBureauCases();
+            getMarriageBureauActions();
+        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+            getLatestDataForActiveBuyerOnboardingCases();
+            getBuyerOnboardingActions();
+        }
+
         return () => {
             isCancelled.current = true;
-            // clearInterval(pollDb)
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
-
-    // React.useEffect(() => {
-
-    //     console.log("compare")
-    //     console.log(newActiveCases)
-    //     console.log(activeCases)
-
-    //     if (_.isEqual(newActiveCases, activeCases)) {
-    //         console.log("equal")
-    //         console.log("")
-    //     } else {
-    //         console.log("different")
-    //         console.log("")
-    //         calculateActivitySummaries(newActiveCases)
-    //         setActiveCases(newActiveCases)
-    //     }
-    // }, [newActiveCases]);
 
     if (error) {
         return (
@@ -117,7 +155,6 @@ const Home = (props: InputProps) => {
         )
     }
 
-
     return (
         <>
             {activeCases &&
@@ -127,13 +164,18 @@ const Home = (props: InputProps) => {
                             onTimeCount={totalActivitySummary.greenCount}
                             atRiskCount={totalActivitySummary.amberCount}
                             overdueCount={totalActivitySummary.redCount}
+                            pathname={location.pathname.split("/")[1]}
                         />
                         <ActivityBarChart
                             activitySummaries={activitySummaries}
+                            pathname={location.pathname.split("/")[1]}
                         />
                     </div>
                     <div className="row-2">
-                        <LatestActions actions={actions} />
+                        <LatestActions
+                            actions={actions}
+                            pathname={location.pathname.split("/")[1]}
+                        />
                     </div>
 
                 </div>

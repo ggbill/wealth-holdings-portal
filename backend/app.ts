@@ -3,6 +3,8 @@ import * as cors from 'cors';
 import * as bodyparser from 'body-parser';
 import requestLoggerMiddleware from './request.logger.middleware';
 import kissflowRouter from './routes/kissflow';
+import marriageBureauRouter from './routes/marriageBureau';
+import buyerOnboardingRouter from './routes/buyerOnboarding';
 
 const path = require('path');
 const shrinkRay = require('shrink-ray-current');
@@ -17,6 +19,8 @@ app.use(bodyparser.json());
 app.use(requestLoggerMiddleware);
 
 app.use('/kissflow', kissflowRouter);
+app.use('/marriage-bureau', marriageBureauRouter);
+app.use('/buyer-onboarding', buyerOnboardingRouter);
 
 
 if (process.env.NODE_ENV === 'production') {

@@ -12,10 +12,11 @@ const useExcelFunctions = () => {
 
         //Create workbook and worksheet
         let workbook = new Workbook();
-        let worksheet = workbook.addWorksheet('Instance List');
+        let worksheet = workbook.addWorksheet('Active Pipeline');
 
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'startDate', width: 20 },
             { header: 'RAG Status', key: 'ragStatus', width: 20 },
@@ -36,9 +37,10 @@ const useExcelFunctions = () => {
         activeCases.forEach((activeCase: App.ActivityDetail, index: number) => {
             worksheet.addRow([
                 activeCase.firmName,
+                activeCase.fcaNumber,
                 activeCase._current_step,
                 moment(activeCase._created_at).format("HH:mm DD/MM/YYYY"),
-                commonFunctions.determineRAGStatus(activeCase),
+                commonFunctions.determineMarriageBureauRAGStatus(activeCase),
                 activeCase._current_assigned_to.Name,
                 activeCase.aum,
                 activeCase.recurringFees,
@@ -79,7 +81,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Instance_List.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Active Pipeline.xlsx`);
         })
     }
 
@@ -92,6 +94,7 @@ const useExcelFunctions = () => {
 
         instanceOverviewWorksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Company Type', key: 'companyType', width: 30 },
             { header: 'SB Member Firm?', key: 'sbMemberFirm', width: 20 },
             { header: 'WH Representing', key: 'whRepresenting', width: 20 },
@@ -106,6 +109,7 @@ const useExcelFunctions = () => {
 
         instanceOverviewWorksheet.addRow([
             instanceDetails[0].firmName,
+            instanceDetails[0].fcaNumber,
             instanceDetails[0].companyType,
             instanceDetails[0].isSimplyBizMember,
             instanceDetails[0].representing,
@@ -278,7 +282,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `${instanceDetails[0].firmName} Instance Details.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - ${instanceDetails[0].firmName} Instance Details.xlsx`);
         })
     }
 
@@ -291,6 +295,7 @@ const useExcelFunctions = () => {
         worksheet.columns = [
             { header: 'Completed Activity', key: 'completedActivity', width: 30 },
             { header: 'Firm Name', key: 'firmName', width: 30 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Assignee', key: 'startDate', width: 20 },
             { header: 'Completed Date', key: 'completedDate', width: 20 },
         ];
@@ -301,6 +306,7 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 action._current_context[0].Name,
                 action.firmName,
+                action.fcaNumber,
                 action._last_action_performed_by.Name,
                 moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")
             ]);
@@ -309,7 +315,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Action_Log.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Action Log.xlsx`);
         })
     }
 
@@ -321,6 +327,7 @@ const useExcelFunctions = () => {
 
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Completed Date', key: 'completedDate', width: 30 },
         ];
 
@@ -329,6 +336,7 @@ const useExcelFunctions = () => {
         completedInstances.forEach((completedInstance: App.ActivityDetail, index: number) => {
             worksheet.addRow([
                 completedInstance.firmName,
+                completedInstance.fcaNumber,
                 moment(completedInstance._last_action_performed_at).format("HH:mm DD/MM/YYYY")
             ]);
         })
@@ -336,7 +344,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Completed_Cases.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Completed Cases.xlsx`);
         })
     }
 
@@ -348,6 +356,7 @@ const useExcelFunctions = () => {
 
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Reason', key: 'reason', width: 40 },
             { header: 'Description', key: 'description', width: 40 },
             { header: 'Re-Engage In Future', key: 'reEngage', width: 20 },
@@ -359,6 +368,7 @@ const useExcelFunctions = () => {
         closedInstances.forEach((closedInstance: App.ActivityDetail, index: number) => {
             worksheet.addRow([
                 closedInstance.firmName,
+                closedInstance.fcaNumber,
                 closedInstance.closeCaseReason,
                 closedInstance.closeCaseDescription,
                 closedInstance.isReEngage,
@@ -369,7 +379,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Closed_Cases.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Closed Cases.xlsx`);
         })
     }
 

@@ -2,9 +2,8 @@ import React from 'react'
 import { Router, Route, Switch, Redirect } from "react-router-dom"
 import Home from './components/home/Home'
 import { createBrowserHistory } from 'history';
-import ActivePipeline from './components/activePipeline/ActivePipeline';
 import ClosedInstances from './components/closedInstances/ClosedInstances';
-import InstanceList from './components/instanceList/InstanceList';
+import ActivePipeline from './components/activePipeline/activePipeline';
 import InstanceDetails from './components/instanceDetails/InstanceDetails';
 import ActionLog from './components/actionLog/ActionLog';
 import CompletedInstances from './components/completedInstances/CompletedInstances';
@@ -34,95 +33,75 @@ const App = () => {
 
     const routes = [
         {
-            path: "/dashboard",
+            path: "/marriage-bureau/dashboard",
             component: Home,
             exact: true,
-            title: "Dashboard"
+            title: "Marriage Bureau - Dashboard"
         },
         {
-            path: "/active-pipeline",
+            path: "/marriage-bureau/active-pipeline",
             component: ActivePipeline,
             exact: true,
-            title: "Active Pipeline"
+            title: "Marriage Bureau - Active Pipeline"
         },
         {
-            path: "/action-log",
+            path: "/marriage-bureau/action-log",
             component: ActionLog,
             exact: true,
-            title: "Action Log"
+            title: "Marriage Bureau - Action Log"
         },
         {
-            path: "/closed-instances",
+            path: "/marriage-bureau/closed-instances",
             component: ClosedInstances,
             exact: true,
-            title: "Closed Instances"
+            title: "Marriage Bureau - Closed Instances"
         },
         {
-            path: "/completed-instances",
+            path: "/marriage-bureau/completed-instances",
             component: CompletedInstances,
             exact: true,
-            title: "Completed Instances"
+            title: "Marriage Bureau - Completed Instances"
         },
         {
-            path: "/all-instances",
-            component: InstanceList,
-            exact: true,
-            title: "All Instances"
-        },
-        {
-            path: "/onboard-lead",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/initial-fee-payment",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/high-level-due-diligence",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/heads-of-terms",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/detailed-due-diligence",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/formal-offer",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/transaction-agreement",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/final-fee-payment",
-            component: InstanceList,
-            exact: true,
-            title: "Live Instances"
-        },
-        {
-            path: "/instance-details/:id",
+            path: "/marriage-bureau/instance-details/:id",
             component: InstanceDetails,
-            title: "Instance Details"
-        }
-
+            title: "Marriage Bureau - Instance Details"
+        },
+        {
+            path: "/buyer-onboarding/dashboard",
+            component: Home,
+            exact: true,
+            title: "Buyer Onboarding - Dashboard"
+        },
+        {
+            path: "/buyer-onboarding/active-pipeline",
+            component: ActivePipeline,
+            exact: true,
+            title: "Buyer Onboarding - Active Pipeline"
+        },
+        {
+            path: "/buyer-onboarding/action-log",
+            component: ActionLog,
+            exact: true,
+            title: "Buyer Onboarding - Action Log"
+        },
+        {
+            path: "/buyer-onboarding/closed-instances",
+            component: ClosedInstances,
+            exact: true,
+            title: "Buyer Onboarding - Closed Instances"
+        },
+        {
+            path: "/buyer-onboarding/completed-instances",
+            component: CompletedInstances,
+            exact: true,
+            title: "Buyer Onboarding - Completed Instances"
+        },
+        {
+            path: "/buyer-onboarding/instance-details/:id",
+            component: InstanceDetails,
+            title: "Buyer Onboarding - Instance Details"
+        },
     ];
 
     return (

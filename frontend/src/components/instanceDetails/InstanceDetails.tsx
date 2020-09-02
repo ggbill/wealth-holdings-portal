@@ -6,26 +6,47 @@ import moment from 'moment'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import useExcelFunctions from "../../hooks/useExcelFunctions"
+import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
+import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
 import Loading from '../shared/Loading'
+import { useLocation } from 'react-router-dom'
 
 const InstanceDetails = ({ match }) => {
 
     const isCancelled = useRef(false)
-    const kissflowApi = useFetch("kissflow")
+    const marriageBureauApi = useFetch("marriage-bureau")
+    const buyerOnboardingApi = useFetch("buyer-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [instanceDetails, setInstanceDetails] = useState<App.ActivityDetail[]>([])
     const [lastestActivityDetail, setLatestActivityDetail] = useState<App.ActivityDetail>(Object)
 
-    const excelFunctions = useExcelFunctions();
+    const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
+    const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
+    let location = useLocation();
 
-    const getInstanceDetails = (): void => {
+    const getMarriageBureauInstanceDetails = (): void => {
         setLoading(true)
-        kissflowApi.get(`getInstanceDetails/${match.params.id}`)
+        marriageBureauApi.get(`getInstanceDetails/${match.params.id}`)
             .then(data => {
                 if (!isCancelled.current) {
-                    console.log(data)
+                    setInstanceDetails(data)
+                    setLatestActivityDetail(data[data.length - 1])
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                }
+            })
+    }
+
+    const getBuyerOnboardingInstanceDetails = (): void => {
+        setLoading(true)
+        buyerOnboardingApi.get(`getInstanceDetails/${match.params.id}`)
+            .then(data => {
+                if (!isCancelled.current) {
                     setInstanceDetails(data)
                     setLatestActivityDetail(data[data.length - 1])
                     setLoading(false)
@@ -77,7 +98,12 @@ const InstanceDetails = ({ match }) => {
     }
 
     useEffect(() => {
-        getInstanceDetails();
+
+        if (location.pathname.split("/")[1] === "marriage-bureau") {
+            getMarriageBureauInstanceDetails()
+        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+            getBuyerOnboardingInstanceDetails()
+        }
 
         return () => {
             isCancelled.current = true;
@@ -101,10 +127,19 @@ const InstanceDetails = ({ match }) => {
     return (
         <div className="instance-details">
 
-            <Link className="clickable-icon" to={'/all-instances'}>
-                <ArrowBackIosIcon />
-                <span>Back to list</span>
-            </Link>
+            {location.pathname.split("/")[1] === "marriage-bureau" ?
+                <Link className="clickable-icon" to={'/marriage-bureau/active-pipeline'}>
+                    <ArrowBackIosIcon />
+                    <span>Back to list</span>
+                </Link>
+                :
+                <Link className="clickable-icon" to={'/buyer-onboarding/active-pipeline'}>
+                    <ArrowBackIosIcon />
+                    <span>Back to list</span>
+                </Link>
+            }
+
+
             <h2>Overview</h2>
             {lastestActivityDetail &&
                 <div className="summary-details-wrapper">
@@ -113,6 +148,14 @@ const InstanceDetails = ({ match }) => {
                         id="firmName"
                         label="Firm Name"
                         value={lastestActivityDetail.firmName || ''}
+                        InputProps={{
+                            disabled: true
+                        }}
+                    />
+                    <TextField
+                        id="fcaNumber"
+                        label="FCA Number"
+                        value={lastestActivityDetail.fcaNumber || ''}
                         InputProps={{
                             disabled: true
                         }}
@@ -128,19 +171,22 @@ const InstanceDetails = ({ match }) => {
                     <TextField
                         id="SimplyBizMember"
                         label="SimplyBiz Member Firm"
-                        value={lastestActivityDetail.isSimplyBizMember || ''}
+                        value={String(lastestActivityDetail.isSimplyBizMember) || ''}
                         InputProps={{
                             disabled: true
                         }}
                     />
-                    <TextField
-                        id="Representing"
-                        label="WH Representing"
-                        value={lastestActivityDetail.representing || ''}
-                        InputProps={{
-                            disabled: true
-                        }}
-                    />
+                    {location.pathname.split("/")[1] === "marriage-bureau" &&
+                        <TextField
+                            id="Representing"
+                            label="WH Representing"
+                            value={lastestActivityDetail.representing || ''}
+                            InputProps={{
+                                disabled: true
+                            }}
+                        />
+                    }
+
                     <TextField
                         id="processId"
                         label="Process ID"
@@ -204,7 +250,7 @@ const InstanceDetails = ({ match }) => {
                                     <span className="panel-header-completed-date hide-on-mobile">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    {activityDetail._current_context[0].Name != "Close Case" &&
+                                    {activityDetail._current_context[0].Name !== "Close Case" &&
                                         <>
                                             <div className="data-section">
                                                 <h4>Selling Firm Contact Details</h4>
@@ -233,67 +279,70 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                             </div>
-                                            <div className="data-section">
-                                                <h4>Selling Firm Key Metrics</h4>
-                                                <TextField
-                                                    id="aum"
-                                                    label="AUM"
-                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.aum) || ''}
-                                                    InputProps={{
-                                                        disabled: true,
+                                            {location.pathname.split("/")[1] === "marriage-bureau" &&
+                                                <div className="data-section">
+                                                    <h4>Selling Firm Key Metrics</h4>
+                                                    <TextField
+                                                        id="aum"
+                                                        label="AUM"
+                                                        value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.aum) || ''}
+                                                        InputProps={{
+                                                            disabled: true,
 
-                                                    }}
-                                                />
-                                                <TextField
-                                                    id="recurringFees"
-                                                    label="Recurring Fees"
-                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.recurringFees) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                                <TextField
-                                                    id="turnover"
-                                                    label="Turnover"
-                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.turnover) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="recurringFees"
+                                                        label="Recurring Fees"
+                                                        value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.recurringFees) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="turnover"
+                                                        label="Turnover"
+                                                        value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.turnover) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
 
-                                                />
-                                                <TextField
-                                                    id="ebitda"
-                                                    label="EBITDA"
-                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.ebitda) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                                <TextField
-                                                    id="planners"
-                                                    label="Planners"
-                                                    value={new Intl.NumberFormat().format(activityDetail.planners) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                                <TextField
-                                                    id="customers"
-                                                    label="Customers"
-                                                    value={new Intl.NumberFormat().format(activityDetail.customers) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                                <TextField
-                                                    id="clients"
-                                                    label="Clients"
-                                                    value={new Intl.NumberFormat().format(activityDetail.clients) || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                            </div>
+                                                    />
+                                                    <TextField
+                                                        id="ebitda"
+                                                        label="EBITDA"
+                                                        value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.ebitda) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="planners"
+                                                        label="Planners"
+                                                        value={new Intl.NumberFormat().format(activityDetail.planners) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="customers"
+                                                        label="Customers"
+                                                        value={new Intl.NumberFormat().format(activityDetail.customers) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="clients"
+                                                        label="Clients"
+                                                        value={new Intl.NumberFormat().format(activityDetail.clients) || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                </div>
+                                            }
+
                                             {isShowProspectiveOffers(activityDetail) &&
                                                 <div className="data-section">
                                                     <h4>Prospective Offers</h4>
@@ -410,7 +459,7 @@ const InstanceDetails = ({ match }) => {
                                             }
                                         </>
                                     }
-                                    {activityDetail._current_context[0].Name == "Close Case" &&
+                                    {activityDetail._current_context[0].Name === "Close Case" &&
                                         <>
                                             <div className="data-section">
                                                 <TextField
@@ -440,8 +489,8 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="completionDate"
-                                                    label="Completion Date"
+                                                    id="reEngageDate"
+                                                    label="Re-engage Date Date"
                                                     value={moment(activityDetail.reEngageDate).format("DD/MM/YYYY") || ''}
                                                     InputProps={{
                                                         disabled: true
@@ -457,7 +506,11 @@ const InstanceDetails = ({ match }) => {
                 ))}
             </>}
             <div className="button-container">
-                <Button className="wh-button" variant="contained" onClick={() => excelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>
+                
+                {location.pathname.split("/")[1] === "marriage-bureau" ?
+                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button> :
+                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>
+                }
             </div>
         </div>
     )

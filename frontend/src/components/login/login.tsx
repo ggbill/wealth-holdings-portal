@@ -32,7 +32,7 @@ const Login = (props) => {
                 setAuthorisedUserProfile(profile)
             });
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -59,10 +59,10 @@ const Login = (props) => {
                 {isAuthenticated() &&
                     <>
                         <span className="medium-text">You are currently logged in as <b>{authorisedUserProfile && authorisedUserProfile.name}</b></span>
-                        <p className="small-text">Not you? <a onClick={logout} href="#">Click here to log out</a></p>
+                        <p className="small-text">Not you? <a onClick={logout} href="/">Click here to log out</a></p>
                         <span className="small-text">or</span>
                         <div className="button-wrapper">
-                            <Button variant="contained" className="admin-login" component={Link} to={'/dashboard'}>View Dashboard</Button>
+                            <Button variant="contained" className="admin-login" component={Link} to={'/marriage-bureau/dashboard'}>View Dashboard</Button>
                         </div>
 
                     </>

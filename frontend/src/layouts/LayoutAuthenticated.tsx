@@ -19,7 +19,6 @@ interface InputProps {
 
 const LayoutAuthenticated = (props: InputProps) => {
 
-
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -30,29 +29,55 @@ const LayoutAuthenticated = (props: InputProps) => {
         <div className="drawer-container">
             <AppBar position="fixed">
                 <Toolbar>
-                    <Link className="clickable-icon" to={'/dashboard'}>
+                    <Link className="clickable-icon" to={'/marriage-bureau/dashboard'}>
                         <img className="logo" alt="logo" src={require("../images/wealth-holdings-logo-white.svg")} />
                     </Link>
                 </Toolbar>
             </AppBar>
             <List>
-                <ListItem button component={Link} to="/dashboard">
-                    <ListItemIcon><HomeIcon /></ListItemIcon>
-                    <ListItemText primary="Home" />
+                <ListItem button component={Link} to="/marriage-bureau/dashboard">
+                    <ListItemText className="bold" primary="Marriage Bureau" />
                 </ListItem>
-                <ListItem button component={Link} to="/active-pipeline">
+                <ListItem button component={Link} to="/marriage-bureau/dashboard">
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/active-pipeline">
                     <ListItemIcon><LabelImportantIcon /></ListItemIcon>
                     <ListItemText primary="Active Pipeline" />
                 </ListItem>
-                <ListItem button component={Link} to="/action-log">
+                <ListItem button component={Link} to="/marriage-bureau/action-log">
                     <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                     <ListItemText primary="Action Log" />
                 </ListItem>
-                <ListItem button component={Link} to="/completed-instances">
+                <ListItem button component={Link} to="/marriage-bureau/completed-instances">
                     <ListItemIcon><CheckCircleIcon /></ListItemIcon>
                     <ListItemText primary="Completed Instances" />
                 </ListItem>
-                <ListItem button component={Link} to="/closed-instances">
+                <ListItem button component={Link} to="/marriage-bureau/closed-instances">
+                    <ListItemIcon><BlockIcon /></ListItemIcon>
+                    <ListItemText primary="Closed Instances" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/dashboard">
+                    <ListItemText className="bold" primary="Buyer Onboarding" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/dashboard">
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/active-pipeline">
+                    <ListItemIcon><LabelImportantIcon /></ListItemIcon>
+                    <ListItemText primary="Active Pipeline" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/action-log">
+                    <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                    <ListItemText primary="Action Log" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/completed-instances">
+                    <ListItemIcon><CheckCircleIcon /></ListItemIcon>
+                    <ListItemText primary="Completed Instances" />
+                </ListItem>
+                <ListItem button component={Link} to="/buyer-onboarding/closed-instances">
                     <ListItemIcon><BlockIcon /></ListItemIcon>
                     <ListItemText primary="Closed Instances" />
                 </ListItem>

@@ -5,22 +5,27 @@ import Loading from '../shared/Loading'
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import useExcelFunctions from "../../hooks/useExcelFunctions"
-import { Link } from 'react-router-dom'
+import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
+import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
+import { Link, useLocation } from 'react-router-dom'
 import _ from "lodash"
 import moment from 'moment'
 
 const CompletedInstances = () => {
 
     const isCancelled = useRef(false)
-    const kissflowApi = useFetch("kissflow")
+    const marriageBureauApi = useFetch("marriage-bureau")
+    const buyerOnboardingApi = useFetch("buyer-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [closedCases, setClosedCases] = useState<App.ActivityDetail[]>([])
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
 
-    const excelFunctions = useExcelFunctions();
+    const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
+    const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
+
+    let location = useLocation();
 
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {
@@ -30,13 +35,29 @@ const CompletedInstances = () => {
         }
     }
 
-    const getClosedCases = (): void => {
+    const getMarriageBureauClosedCases = (): void => {
         setLoading(true)
-        kissflowApi.get("getClosedCases")
+        marriageBureauApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
                     setClosedCases(data.filter(result => !result.isCloseCase))
-                    console.log(data.filter(result => !result.isCloseCase))
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const getBuyerOnboardingClosedCases = (): void => {
+        setLoading(true)
+        buyerOnboardingApi.get("getClosedCases")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setClosedCases(data.filter(result => !result.isCloseCase))
                     setLoading(false)
                 }
             })
@@ -63,7 +84,11 @@ const CompletedInstances = () => {
 
 
     useEffect(() => {
-        getClosedCases();
+        if (location.pathname.split("/")[1] === "marriage-bureau") {
+            getMarriageBureauClosedCases();
+        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+            getBuyerOnboardingClosedCases();
+        }
         return () => {
             isCancelled.current = true;
         };
@@ -101,7 +126,7 @@ const CompletedInstances = () => {
                                 </div>
                             </TableCell>
                             <TableCell>
-                            <div className="table-header-wrapper">
+                                <div className="table-header-wrapper">
                                     <div onClick={() => handleSort("_last_action_performed_at")} className="tableHeaderCell">
                                         <span>Completed Date</span>
                                         {
@@ -117,7 +142,11 @@ const CompletedInstances = () => {
                     <TableBody>
                         {closedCases.map((closedCase: App.ActivityDetail) => (
                             <TableRow key={closedCase._id}>
-                                <TableCell> <Link to={'/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
+                                {location.pathname.split("/")[1] === "marriage-bureau" ?
+                                    <TableCell> <Link to={'/marriage-bureau/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell> :
+                                    <TableCell> <Link to={'/buyer-onboarding/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
+                                }
+
                                 <TableCell align="center">{moment(closedCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                             </TableRow>
                         ))}
@@ -125,7 +154,10 @@ const CompletedInstances = () => {
                 </Table>
             </Paper>
             <div className="button-container">
-                <Button className="wh-button" variant="contained" onClick={() => excelFunctions.generateCompletedInstances(closedCases)}>Export</Button> 
+                {location.pathname.split("/")[1] === "marriage-bureau" ?
+                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateCompletedInstances(closedCases)}>Export</Button> :
+                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateCompletedInstances(closedCases)}>Export</Button>
+                }
             </div>
         </div>
 

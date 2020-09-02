@@ -91,6 +91,7 @@ declare module App {
         preferredEmail: string,
         preferredPhone: string,
         firmName: string,
+        fcaNumber: string,
         companyType: string, 
         isSimplyBizMember: string,
         representing: string,

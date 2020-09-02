@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import "./totalInstancesPieChart.scss"
 import { Card, Button, CardActions, CardContent } from "@material-ui/core"
 // import { Pie } from "react-chartjs-2"
@@ -8,9 +8,10 @@ import { Link } from 'react-router-dom'
 import Chartjs from 'chart.js'
 
 interface InputProps {
-    onTimeCount: number,
-    atRiskCount: number,
+    onTimeCount: number
+    atRiskCount: number
     overdueCount: number
+    pathname: string
 }
 
 const TotalInstancesPieChart = (props: InputProps) => {
@@ -56,7 +57,7 @@ const TotalInstancesPieChart = (props: InputProps) => {
                         if (value) {
                             return value;
                         }
-    
+
                         return '';
                     },
                     color: '#fff',
@@ -64,27 +65,28 @@ const TotalInstancesPieChart = (props: InputProps) => {
                         weight: 'bold',
                         size: 16,
                     }
-    
+
                 }
             }
         }
     }
 
     const chartContainer = useRef(null);
-    const [chartInstance, setChartInstance] = useState<any>(null);
+    // const [chartInstance, setChartInstance] = useState<any>(null);
 
-    const updateDataset = (datasetIndex, newData) => {
-        chartInstance.data.datasets[datasetIndex].data = newData;
-        chartInstance.update();
-    };
+    // const updateDataset = (datasetIndex, newData) => {
+    //     chartInstance.data.datasets[datasetIndex].data = newData;
+    //     chartInstance.update();
+    // };
 
     useEffect(() => {
         // console.log("set up chart")
         if (chartContainer && chartContainer.current) {
             // console.log("new chart")
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig);
-            setChartInstance(newChartInstance);
+            new Chartjs(chartContainer.current, chartConfig);
+            // setChartInstance(newChartInstance);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chartContainer]);
 
     return (
@@ -99,7 +101,11 @@ const TotalInstancesPieChart = (props: InputProps) => {
                 </CardContent>
 
                 <CardActions>
-                    <Button component={Link} to="/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>
+                    {props.pathname === "marriage-bureau" ?
+                        <Button component={Link} to="/marriage-bureau/active-pipeline">Active Pipeline <NavigateNextIcon /></Button> :
+                        <Button component={Link} to="/buyer-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>
+                    }
+
                 </CardActions>
             </Card>
         </div>
