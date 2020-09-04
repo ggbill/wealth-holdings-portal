@@ -81,7 +81,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Active Pipeline.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Active Pipeline ${moment().format("DDMMYY")}.xlsx`);
         })
     }
 
@@ -282,7 +282,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - ${instanceDetails[0].firmName} Instance Details.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - ${instanceDetails[0].firmName} - Instance Details ${moment().format("DDMMYY")}.xlsx`);
         })
     }
 
@@ -315,7 +315,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Action Log.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Action Log ${moment().format("DDMMYY")}.xlsx`);
         })
     }
 
@@ -344,7 +344,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Completed Cases.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Completed Cases ${moment().format("DDMMYY")}.xlsx`);
         })
     }
 
@@ -379,7 +379,7 @@ const useExcelFunctions = () => {
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Closed Cases.xlsx`);
+            fs.saveAs(blob, `Wealth Holdings - Marriage Bureau - Closed Cases ${moment().format("DDMMYY")}.xlsx`);
         })
     }
 
