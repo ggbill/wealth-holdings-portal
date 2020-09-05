@@ -30,7 +30,7 @@ const useExcelFunctions = () => {
                 activeCase.firmName,
                 activeCase.fcaNumber,
                 activeCase._current_step,
-                moment(activeCase._created_at).format("HH:mm DD/MM/YYYY"),
+                moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
                 commonFunctions.determineBuyerOnboardingRAGStatus(activeCase),
                 activeCase._current_assigned_to.Name
             ]);

@@ -278,7 +278,7 @@ const ActivePipeline = ({ match }) => {
                                     <TableCell> <Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
                                 }
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
-                                <TableCell className="hide-on-mobile" align="center">{moment(activeCase._created_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                                <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">
                                     {location.pathname.split("/")[1] === "marriage-bureau" ?
                                         <RagIndicator ragStatus={commonFunctions.determineMarriageBureauRAGStatus(activeCase)} widthPx={30} /> :
