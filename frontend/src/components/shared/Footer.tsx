@@ -10,7 +10,7 @@ const Footer = () => {
                 {/* Email: <a href="mailto:thanos.gidaropoulos@tta.org.uk">thanos.gidaropoulos@tta.org.uk</a> */}
             </div>
             <div className="middle-content">
-                <Link className="clickable-icon" to={'/'}>
+                <Link className="clickable-icon" to={'/buyer-onboarding/dashboard'}>
                     <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                 </Link>
 

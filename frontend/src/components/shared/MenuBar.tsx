@@ -67,7 +67,7 @@ const MenuBar = (props: InputProps) => {
         <>
             <AppBar position="fixed" className={scrollClass}>
                 <Toolbar>
-                    <Link className="clickable-icon" to={'/marriage-bureau/dashboard'}>
+                    <Link className="clickable-icon" to={'/buyer-onboarding/dashboard'}>
                         <img className="logo" alt="logo" src={require("../../images/wealth-holdings-logo-white.svg")} />
                     </Link>
                     <div className="menu-items">
