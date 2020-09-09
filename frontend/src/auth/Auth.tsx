@@ -22,7 +22,7 @@ class Auth {
         this.auth0.parseHash((err, authResult) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 this.setSession(authResult);
-                window.location.href = '/marriage-bureau/dashboard'
+                window.location.href = '/buyer-onboarding/dashboard'
             } else if (err) {
                 alert(`Error: ${err.error}.`);
                 // window.location.href = '/'

@@ -5,7 +5,6 @@ import moment from 'moment'
 
 const useExcelFunctions = () => {
 
-    const numFmtStr = '_("£"* #,##0.00_);_("£"* (#,##0.00);_("£"* "-"??_);_(@_)';
     const commonFunctions = useCommonFunctions()
 
     const generateInstanceList = (activeCases: App.ActivityDetail[]): void => {
