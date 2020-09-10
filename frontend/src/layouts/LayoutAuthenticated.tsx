@@ -9,6 +9,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
 import "./layoutAuthenticated.scss"
 
 interface InputProps {
@@ -83,6 +84,10 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemText primary="Closed Instances" />
                 </ListItem>
                 <Divider /> 
+                {/* <ListItem button component={Link} to="/settings">
+                    <ListItemIcon><SettingsIcon /></ListItemIcon>
+                    <ListItemText primary="Settings" />
+                </ListItem> */}
             </List>
             
         </div>

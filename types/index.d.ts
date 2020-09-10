@@ -1,48 +1,4 @@
 declare module App {
-
-    // interface ActiveCase {
-    //     _id: string,
-    //     firmName: string,
-    //     maxProgress: number,
-    //     assignedBdm: any,
-    //     _last_action_performed_at: Date,
-    //     previousStep: any,
-    //     _current_step: string,
-    //     _created_at: Date,
-    //     aum: number,
-    //     recurringFees: number,
-    //     turnover: number,
-    //     ebitda: number,
-    //     planners: number,
-    //     clients: number,
-    //     customers: number,
-    //     isCloseCase: boolean,
-    //     representing: string
-    // }
-
-    // interface ClosedCase {
-    //     _id: string,
-    //     _kissflow_id: string,
-    //     firmName: string,
-    //     assignedBdm: any,
-    //     _last_action_performed_at: Date,
-    //     previousStep: any,
-    //     _current_step: string,
-    //     _created_at: Date,
-    //     aum: number,
-    //     recurringFees: number,
-    //     turnover: number,
-    //     ebitda: number,
-    //     planners: number,
-    //     clients: number,
-    //     customers: number,
-    //     isCloseCase: boolean,
-    //     closeCaseReason: string,
-    //     closeCaseDescription: string,
-    //     isReEngage: boolean,
-    //     reEngageDate: Date,
-    // }
-
     interface ActivitySummary {
         name: string,
         link: string,
@@ -117,6 +73,15 @@ declare module App {
         prospectiveOffers: any[],
         finalTransactionReference: string
     }
+
+    interface Setting{
+        _id: string,
+        orderNumber: number,
+        activityName: string,
+        process: string,
+        amberSla: number,
+        redSla: number
+    } 
 
 }
 

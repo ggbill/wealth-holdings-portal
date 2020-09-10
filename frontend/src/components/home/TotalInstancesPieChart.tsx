@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import "./totalInstancesPieChart.scss"
 import { Card, Button, CardActions, CardContent } from "@material-ui/core"
 import { Pie } from "react-chartjs-2"
 import 'chartjs-plugin-datalabels'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { Link } from 'react-router-dom'
-import Chartjs from 'chart.js'
 
 interface InputProps {
     onTimeCount: number

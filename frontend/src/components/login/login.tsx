@@ -62,7 +62,7 @@ const Login = (props) => {
                         <p className="small-text">Not you? <a onClick={logout} href="/">Click here to log out</a></p>
                         <span className="small-text">or</span>
                         <div className="button-wrapper">
-                            <Button variant="contained" className="admin-login" component={Link} to={'/marriage-bureau/dashboard'}>View Dashboard</Button>
+                            <Button variant="contained" className="admin-login" component={Link} to={'/buyer-onboarding/dashboard'}>View Dashboard</Button>
                         </div>
 
                     </>

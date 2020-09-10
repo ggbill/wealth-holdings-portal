@@ -5,6 +5,7 @@ import requestLoggerMiddleware from './request.logger.middleware';
 import kissflowRouter from './routes/kissflow';
 import marriageBureauRouter from './routes/marriageBureau';
 import buyerOnboardingRouter from './routes/buyerOnboarding';
+import settingsRouter from './routes/settings';
 
 const path = require('path');
 const shrinkRay = require('shrink-ray-current');
@@ -21,6 +22,7 @@ app.use(requestLoggerMiddleware);
 app.use('/kissflow', kissflowRouter);
 app.use('/marriage-bureau', marriageBureauRouter);
 app.use('/buyer-onboarding', buyerOnboardingRouter);
+app.use('/settings', settingsRouter);
 
 
 if (process.env.NODE_ENV === 'production') {

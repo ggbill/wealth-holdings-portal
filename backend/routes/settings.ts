@@ -1,15 +1,12 @@
 import { Request, Response } from 'express';
-import { KissFlowController } from '../controllers/kissflow.controller';
+import { SettingsController } from '../controllers/settings.controller';
 
 const router = require('express').Router();
 
-router.post("/marriage-bureau/hook", (request: Request, response: Response) => {
+router.get("/getSettings", (request: Request, response: Response) => {
     try {
-        //immediately respond
-        response.status(200).end()
-
-        KissFlowController.WriteMarriageBureauWebhookToDB(request.body).then(data => {
-            response.status(200).end()
+        SettingsController.GetSettings().then(data => {
+            response.json(data)
         }).catch(err => {
             response.status(500);
             response.end;
@@ -22,13 +19,11 @@ router.post("/marriage-bureau/hook", (request: Request, response: Response) => {
     }
 })
 
-router.post("/buyer-onboarding/hook", (request: Request, response: Response) => {
+router.post("/", (request: Request, response: Response) => {
+    console.log(JSON.stringify(request.body))
     try {
-        //immediately respond
-        response.status(200).end()
-
-        KissFlowController.WriteBuyerOnboardingWebhookToDB(request.body).then(data => {
-            response.status(200).end()
+        SettingsController.UpdateSettings(request.body).then(data => {
+            response.json(data)
         }).catch(err => {
             response.status(500);
             response.end;

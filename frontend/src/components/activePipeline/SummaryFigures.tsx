@@ -36,6 +36,7 @@ const SummaryFigures = (props: InputProps) => {
             { name: "Clients", value: 0, isCurrency: false, isDisplay: isDisplay },
             { name: "Customers", value: 0, isCurrency: false, isDisplay: isDisplay },
             { name: "Wealth Holdings Fee", value: 0, isCurrency: true, isDisplay: isDisplay },
+            { name: "SimplyBiz Fee", value: 0, isCurrency: true, isDisplay: isDisplay },
             { name: "Valuation", value: 0, isCurrency: true, isDisplay: isDisplay },
         ]
         props.activeCases.forEach(activeCase => {
@@ -76,7 +77,7 @@ const SummaryFigures = (props: InputProps) => {
         <div className="summary-figures">
             <h2>Summary Figures {props.isFilterApplied() && <>(Filtered)<span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span></>}</h2>
             {props.pathname === "marriage-bureau" &&
-                <p className="intro-text">N.B. 'Wealth Holdings Fee' and 'Valuation' figures are only entered into the system from the 'Heads of Terms' activity.</p>
+                <p className="intro-text">N.B. 'Wealth Holdings Fee', 'SimplyBiz Fee' and 'Valuation' figures are only entered into the system from the 'Heads of Terms' activity.</p>
             }
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {summaryFigures.map((summaryFigure: SummaryFigure, index: number) => (

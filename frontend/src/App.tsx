@@ -13,6 +13,7 @@ import LayoutAnonymous from './layouts/LayoutAnonymous';
 import Auth from './auth/Auth';
 import Callback from './components/callback';
 import './App.scss';
+import Settings from './components/settings/Settings';
 
 
 const history = createBrowserHistory();
@@ -101,6 +102,11 @@ const App = () => {
             path: "/buyer-onboarding/instance-details/:id",
             component: InstanceDetails,
             title: "Buyer Onboarding - Instance Details"
+        },
+        {
+            path: "/settings",
+            component: Settings,
+            title: "Settings"
         },
     ];
 
