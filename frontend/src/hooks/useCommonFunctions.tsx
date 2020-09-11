@@ -21,12 +21,12 @@ const useCommonFunctions = () => {
                 if (activeCase._current_step === activitySummary.name) {
                     isActivityNameFound = true
                     activitySummary.totalCount++
-                    if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                    if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
                     ) {
                         activitySummary.greenCount++
-                    } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                    } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
                     ) {
                         activitySummary.amberCount++
                     } else {
@@ -58,12 +58,12 @@ const useCommonFunctions = () => {
         let ragStatus = "N/A"
         activitySummaries.forEach(activitySummary => {
             if (activeCase._current_step === activitySummary.name) {
-                if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
                 ) {
                     ragStatus =  "Green"
-                } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
                 ) {
                     ragStatus =  "Amber"
                 } else {
@@ -91,12 +91,12 @@ const useCommonFunctions = () => {
                 if (activeCase._current_step === activitySummary.name) {
                     isActivityNameFound = true
                     activitySummary.totalCount++
-                    if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                    if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
                     ) {
                         activitySummary.greenCount++
-                    } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                    } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
                     ) {
                         activitySummary.amberCount++
                     } else {
@@ -124,12 +124,12 @@ const useCommonFunctions = () => {
         let ragStatus = "N/A"
         activitySummaries.forEach(activitySummary => {
             if (activeCase._current_step === activitySummary.name) {
-                if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isAfter(moment())
+                if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
                 ) {
                     ragStatus =  "Green"
-                } else if (moment(activeCase._created_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                    moment(activeCase._created_at).add(activitySummary.amberSla, "days").isBefore(moment())
+                } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
                 ) {
                     ragStatus =  "Amber"
                 } else {
