@@ -7,7 +7,7 @@ const useExcelFunctions = () => {
 
     const commonFunctions = useCommonFunctions()
 
-    const generateInstanceList = (activeCases: App.ActivityDetail[]): void => {
+    const generateInstanceList = (activeCases: App.ActivityDetail[], activitySummaries): void => {
 
         //Create workbook and worksheet
         let workbook = new Workbook();
@@ -30,7 +30,7 @@ const useExcelFunctions = () => {
                 activeCase.fcaNumber,
                 activeCase._current_step,
                 moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
-                commonFunctions.determineBuyerOnboardingRAGStatus(activeCase),
+                commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, activitySummaries),
                 activeCase._current_assigned_to.Name
             ]);
         })

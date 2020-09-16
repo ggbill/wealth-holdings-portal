@@ -84,10 +84,10 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemText primary="Closed Instances" />
                 </ListItem>
                 <Divider /> 
-                {/* <ListItem button component={Link} to="/settings">
+                <ListItem button component={Link} to="/settings">
                     <ListItemIcon><SettingsIcon /></ListItemIcon>
                     <ListItemText primary="Settings" />
-                </ListItem> */}
+                </ListItem>
             </List>
             
         </div>

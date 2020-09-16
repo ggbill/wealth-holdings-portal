@@ -1,24 +1,55 @@
-.settings{
-    .MuiCard-root{
+.settings {
+    .MuiCard-root {
         margin: 0 0 12px 0;
 
-        .MuiCardContent-root{
+        .MuiCardContent-root {
             display: flex;
-            padding: 6px 12px;
+            padding: 12px 12px;
             align-items: center;
 
-            span.activity-name{
+            span.activity-name {
                 font-weight: bold;
-                width: 200px
+                width: 200px;
             }
-            
-            .sla-wrapper{
+
+            .sla-wrapper {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: row;
-                justify-content: space-evenly ;
+                justify-content: space-evenly;
                 align-items: center;
+
+                .amber-wrapper,
+                .red-wrapper {
+                    display: flex;
+                    flex-direction: row;
+                    & > div {
+                        margin: auto 6px;
+                    }
+                }
             }
         }
-    } 
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .settings {
+        .MuiCard-root {
+            .MuiCardContent-root {
+                flex-direction: column;
+                align-items: flex-start;
+
+                .sla-wrapper {
+                    flex-direction: column;
+                    margin: 12px 0;
+
+                    .amber-wrapper,
+                    .red-wrapper {
+                        margin: 6px 0;
+                    }
+                }
+            }
+        }
+    }
 }

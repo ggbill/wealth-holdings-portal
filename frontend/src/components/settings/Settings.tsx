@@ -1,70 +1,56 @@
-import React, { useState, useRef } from 'react'
-import useFetch from "../../hooks/useFetch"
-import Loading from '../shared/Loading'
+import React, { useState } from 'react'
 import "./settings.scss"
 import { Card, CardContent, TextField, Button } from '@material-ui/core'
+import NotificationDialog from '../shared/NotificationDialog'
+import RagIndicator from '../shared/RagIndicator'
+import useSettings from '../../hooks/useSettings'
 
 const Settings = () => {
 
-    const isCancelled = useRef(false)
-    const settingsApi = useFetch("settings")
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<string>("")
+    const { buyerOnboardingSettings, setBuyerOnboardingSettings, marriageBureauSettings, setMarriageBureauSettings, saveSettings } = useSettings()
+    const [isNotificationDialogOpen, setIsNotificationDialogOpen] = useState<boolean>(false)
+    const [dialogType, setDialogType] = useState<string>("")
+    const [dialogTitle, setDialogTitle] = useState<string>("")
+    const [dialogBody, setDialogBody] = useState<string>("")
 
-    const [buyerOnboardingSettings, setBuyerOnboardingSettings] = useState<App.Setting[]>([])
-    const [marriageBureauSettings, setMarriageBureauSettings] = useState<App.Setting[]>([])
-
-
-    const getSettings = (): void => {
-        setLoading(true)
-        settingsApi.get("getSettings")
-            .then((data: App.Setting[]) => {
-                if (!isCancelled.current) {
-                    console.log(data)
-                    setBuyerOnboardingSettings(data.filter(result => result.process === "buyer-onboarding").sort((a, b) => a.orderNumber - b.orderNumber))
-                    setMarriageBureauSettings(data.filter(result => result.process === "marriage-bureau").sort((a, b) => a.orderNumber - b.orderNumber))
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
-
-    const saveSettings = (): void => {
+    const checkAndSaveSettings = (): void => {
 
         let isAllValuesComplete = true
 
         marriageBureauSettings.concat(buyerOnboardingSettings).forEach(element => {
-            // console.log(`${element.activityName} amberSLA: ${element.amberSla}`)
             if (String(element.amberSla) === "" || String(element.redSla) === "" || String(element.amberSla) === "0" || String(element.redSla) === "0") {
-                // console.log("**************Plese ensure all values are complete")
+                handleErrorDialogOpen("Values Not Complete", "Please ensure all values are complete and greater than 0.")
                 isAllValuesComplete = false
             }
         });
 
         if (isAllValuesComplete) {
-            setLoading(true)
-            settingsApi.post(marriageBureauSettings.concat(buyerOnboardingSettings))
-                .then((data) => {
-                    if (!isCancelled.current) {
-                        console.log(data)
-                        setLoading(false)
-                    }
-                })
-                .catch((err: Error) => {
-                    if (!isCancelled.current) {
-                        setError(err.message)
-                        setLoading(false)
-                    }
-                })
+            saveSettings(marriageBureauSettings.concat(buyerOnboardingSettings)).then((data) => {
+                handleSuccessDialogOpen("Save Complete", "The new settings were saved successfully.")
+            }).catch((err: Error) => {
+                // setError(err.message)
+                handleErrorDialogOpen("Error Saving", err.message)
+            })
         }
     }
 
+    const handleErrorDialogOpen = (title: string, body: string) => {
+        setDialogType("error")
+        setIsNotificationDialogOpen(true)
+        setDialogTitle(title)
+        setDialogBody(body)
+    };
 
+    const handleSuccessDialogOpen = (title: string, body: string) => {
+        setDialogType("success")
+        setIsNotificationDialogOpen(true)
+        setDialogTitle(title)
+        setDialogBody(body)
+    };
+
+    const handleNotificationDialogClose = () => {
+        setIsNotificationDialogOpen(false)
+    };
 
     const handleChange = (process, event, index) => {
         const { name, value } = event.target
@@ -84,32 +70,6 @@ const Settings = () => {
         } else {
             console.log("unknown process")
         }
-
-
-
-
-        // setSeason({ ...season, [name]: value } as ComponentState)
-    }
-
-    React.useEffect(() => {
-        getSettings()
-
-        return () => {
-            isCancelled.current = true;
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps  
-    }, []);
-
-    if (error) {
-        return (
-            <i>{error}</i>
-        )
-    }
-
-    if (loading) {
-        return (
-            <Loading />
-        )
     }
 
     return (
@@ -120,20 +80,30 @@ const Settings = () => {
                     <CardContent>
                         <span className="activity-name">{setting.activityName}</span>
                         <div className="sla-wrapper">
-                            <TextField
-                                id={`${setting._id} - amber`}
-                                name="amberSla"
-                                label="Amber SLA"
-                                value={setting.amberSla}
-                                onChange={event => handleChange("buyer-onboarding", event, index)}
-                            />
-                            <TextField
-                                id={`${setting._id} - red`}
-                                name="redSla"
-                                label="Red SLA"
-                                value={setting.redSla}
-                                onChange={event => handleChange("buyer-onboarding", event, index)}
-                            />
+                            <div className="amber-wrapper">
+                                <RagIndicator ragStatus="Amber" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - amber`}
+                                    name="amberSla"
+                                    type="number"
+                                    label="Amber SLA Threshold"
+                                    value={setting.amberSla}
+                                    onChange={event => handleChange("buyer-onboarding", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
+                            <div className="amber-wrapper">
+                                <RagIndicator ragStatus="Red" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - red`}
+                                    name="redSla"
+                                    type="number"
+                                    label="Red SLA Threshold"
+                                    value={setting.redSla}
+                                    onChange={event => handleChange("buyer-onboarding", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
                         </div>
 
                     </CardContent>
@@ -146,28 +116,47 @@ const Settings = () => {
                     <CardContent>
                         <span className="activity-name">{setting.activityName}</span>
                         <div className="sla-wrapper">
-                            <TextField
-                                id={`${setting._id} - amber`}
-                                name="amberSla"
-                                label="Amber SLA"
-                                value={setting.amberSla}
-                                onChange={event => handleChange("marriage-bureau", event, index)}
-                            />
-                            <TextField
-                                id={`${setting._id} - red`}
-                                name="redSla"
-                                label="Red SLA"
-                                value={setting.redSla}
-                                onChange={event => handleChange("marriage-bureau", event, index)}
-                            />
+                            <div className="amber-wrapper">
+                                <RagIndicator ragStatus="Amber" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - amber`}
+                                    name="amberSla"
+                                    type="number"
+                                    label="Amber SLA Threshold"
+                                    value={setting.amberSla}
+                                    onChange={event => handleChange("marriage-bureau", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
+
+                            <div className="red-wrapper">
+                                <RagIndicator ragStatus="Red" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - red`}
+                                    name="redSla"
+                                    type="number"
+                                    label="Red SLA Threshold"
+                                    value={setting.redSla}
+                                    onChange={event => handleChange("marriage-bureau", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
                         </div>
 
                     </CardContent>
                 </Card>
             ))}
             <div className="button-container">
-                <Button className="wh-button" variant="contained" onClick={() => saveSettings()}>Save</Button>
+                <Button className="wh-button" variant="contained" onClick={() => checkAndSaveSettings()}>Save</Button>
             </div>
+
+            <NotificationDialog
+                isDialogOpen={isNotificationDialogOpen}
+                handleClose={handleNotificationDialogClose}
+                type={dialogType}
+                title={dialogTitle}
+                body={dialogBody}
+            />
         </div>
     )
 }

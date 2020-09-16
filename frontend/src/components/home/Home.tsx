@@ -7,11 +7,14 @@ import TotalInstancesPieChart from './TotalInstancesPieChart'
 import ActivityBarChart from './ActivityBarChart'
 import LatestActions from './LatestActions'
 import { useLocation } from 'react-router-dom'
+import useSettings from '../../hooks/useSettings'
+
 
 const Home = () => {
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
@@ -94,37 +97,90 @@ const Home = () => {
 
     const calculateMarriageBureauActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
         let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "marriage-bureau/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let tempActivitySummaries = commonFunctions.calculateMarriageBureauActivitySummaries(activeCases)
+        let activitySummaries: App.ActivitySummary[] = []
 
-        setActivitySummaries(tempActivitySummaries)
 
-        tempActivitySummaries.forEach(tempActivitySummary => {
-            tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-            tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-            tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-            tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-        });
+        //TODO - work out how to pull this fetch block into common functions
+        settingsApi.get("getSettings")
+            .then((data: App.Setting[]) => {
+                if (!isCancelled.current) {
+                    data.filter(result => result.process === "marriage-bureau").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                        activitySummaries.push({
+                            name: setting.activityName,
+                            link: "",
+                            amberSla: setting.amberSla,
+                            redSla: setting.redSla,
+                            greenCount: 0,
+                            amberCount: 0,
+                            redCount: 0,
+                            totalCount: 0
+                        })
+                    });
 
-        setTotalActivitySummary(tempTotalActivitySummary)
+                    let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases, activitySummaries)
+
+                    setActivitySummaries(tempActivitySummaries)
+
+                    tempActivitySummaries.forEach(tempActivitySummary => {
+                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+                    });
+
+                    setTotalActivitySummary(tempTotalActivitySummary)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    console.log(err)
+                }
+            })
     }
+
 
     const calculateBuyerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
         let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "buyer-onboarding/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases)
+        let activitySummaries: App.ActivitySummary[] = []
 
-        setActivitySummaries(tempActivitySummaries)
 
-        tempActivitySummaries.forEach(tempActivitySummary => {
-            tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-            tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-            tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-            tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-        });
+        //TODO - work out how to pull this fetch block into common functions
+        settingsApi.get("getSettings")
+            .then((data: App.Setting[]) => {
+                if (!isCancelled.current) {
+                    data.filter(result => result.process === "buyer-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                        activitySummaries.push({
+                            name: setting.activityName,
+                            link: "",
+                            amberSla: setting.amberSla,
+                            redSla: setting.redSla,
+                            greenCount: 0,
+                            amberCount: 0,
+                            redCount: 0,
+                            totalCount: 0
+                        })
+                    });
 
-        setTotalActivitySummary(tempTotalActivitySummary)
+                    let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases, activitySummaries)
+
+                    setActivitySummaries(tempActivitySummaries)
+
+                    tempActivitySummaries.forEach(tempActivitySummary => {
+                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+                    });
+
+                    setTotalActivitySummary(tempTotalActivitySummary)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    console.log(err)
+                }
+            })
     }
-
-
 
     React.useEffect(() => {
 
@@ -177,11 +233,9 @@ const Home = () => {
                             pathname={location.pathname.split("/")[1]}
                         />
                     </div>
-
                 </div>
             }
         </>
-
     )
 }
 

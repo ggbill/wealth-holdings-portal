@@ -5,6 +5,7 @@ import useCommonFunctions from '../../hooks/useCommonFunctions';
 
 interface InputProps {
     activeCases: App.ActivityDetail[]
+    activitySummaries: App.ActivitySummary[]
     setFilteredActiveCases: (filteredActiveCases: App.ActivityDetail[]) => void
     setTableFilters: (tableFilters: App.TableFilters) => void
     tableFilters: App.TableFilters
@@ -27,10 +28,10 @@ const InstanceFilters = (props: InputProps) => {
         setUniqueActivityNames([...new Set(uniqueActivityNames)])
 
         if (props.pathname === "marriage-bureau") {
-            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase))
+            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries))
             setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
         } else {
-            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase))
+            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries))
             setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
         }
 
@@ -47,11 +48,11 @@ const InstanceFilters = (props: InputProps) => {
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
 
             let currentRAGStatus
-            if (props.pathname === "marriage-bureau") {
-                currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase)
-            } else {
-                currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase)
-            }
+            // if (props.pathname === "marriage-bureau") {
+            //     currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase)
+            // } else {
+            //     currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase)
+            // }
 
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&

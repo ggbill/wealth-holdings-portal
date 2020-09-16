@@ -8,7 +8,7 @@ const useExcelFunctions = () => {
     const numFmtStr = '_("£"* #,##0.00_);_("£"* (#,##0.00);_("£"* "-"??_);_(@_)';
     const commonFunctions = useCommonFunctions()
 
-    const generateInstanceList = (activeCases: App.ActivityDetail[]): void => {
+    const generateInstanceList = (activeCases: App.ActivityDetail[], activitySummaries): void => {
 
         //Create workbook and worksheet
         let workbook = new Workbook();
@@ -40,7 +40,8 @@ const useExcelFunctions = () => {
                 activeCase.fcaNumber,
                 activeCase._current_step,
                 moment(activeCase._created_at).format("HH:mm DD/MM/YYYY"),
-                commonFunctions.determineMarriageBureauRAGStatus(activeCase),
+                '',
+                commonFunctions.determineMarriageBureauRAGStatus(activeCase, activitySummaries),
                 activeCase._current_assigned_to.Name,
                 activeCase.aum,
                 activeCase.recurringFees,

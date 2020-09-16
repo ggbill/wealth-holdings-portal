@@ -20,6 +20,7 @@ const ActivePipeline = ({ match }) => {
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
@@ -27,12 +28,35 @@ const ActivePipeline = ({ match }) => {
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
     const [tableFilters, setTableFilters] = useState<App.TableFilters>({ currentActivity: "All", assignedBdm: "All", ragStatus: "All", representing: "All" })
+    const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
 
     const commonFunctions = useCommonFunctions()
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
 
     let location = useLocation();
+
+    const getActivitySummaries = (): void => {
+        let tempActivitySummaries = []
+        settingsApi.get("getSettings")
+            .then((data: App.Setting[]) => {
+                if (!isCancelled.current) {
+                    data.filter(result => result.process === "buyer-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                        tempActivitySummaries.push({
+                            name: setting.activityName,
+                            link: "",
+                            amberSla: setting.amberSla,
+                            redSla: setting.redSla,
+                            greenCount: 0,
+                            amberCount: 0,
+                            redCount: 0,
+                            totalCount: 0
+                        })
+                    });
+                }
+                setActivitySummaries(tempActivitySummaries)
+            })
+        }
 
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {
@@ -111,13 +135,13 @@ const ActivePipeline = ({ match }) => {
             if (location.pathname.split("/")[1] === "marriage-bureau") {
                 setFilteredActiveCases(_.orderBy(filteredActiveCases,
                     function (item: App.ActivityDetail) {
-                        return (commonFunctions.determineMarriageBureauRAGStatus(item));
+                        return (commonFunctions.determineMarriageBureauRAGStatus(item, activitySummaries));
                     },
                     sortDirection))
             } else {
                 setFilteredActiveCases(_.orderBy(filteredActiveCases,
                     function (item: App.ActivityDetail) {
-                        return (commonFunctions.determineBuyerOnboardingRAGStatus(item));
+                        return (commonFunctions.determineBuyerOnboardingRAGStatus(item, activitySummaries));
                     },
                     sortDirection))
             }
@@ -142,7 +166,7 @@ const ActivePipeline = ({ match }) => {
     }, [columnToSort, sortDirection])
 
     useEffect(() => {
-
+        getActivitySummaries()
         location.pathname.split("/")[1] === "marriage-bureau" ? getLatestDataForActiveMarriageBureauCases() : getLatestDataForActiveBuyerOnboardingCases()
 
         return () => {
@@ -169,6 +193,7 @@ const ActivePipeline = ({ match }) => {
 
             <InstanceFilters
                 activeCases={activeCases}
+                activitySummaries={activitySummaries}
                 setFilteredActiveCases={setFilteredActiveCases}
                 setTableFilters={setTableFilters}
                 tableFilters={tableFilters}
@@ -281,8 +306,8 @@ const ActivePipeline = ({ match }) => {
                                 <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">
                                     {location.pathname.split("/")[1] === "marriage-bureau" ?
-                                        <RagIndicator ragStatus={commonFunctions.determineMarriageBureauRAGStatus(activeCase)} widthPx={30} /> :
-                                        <RagIndicator ragStatus={commonFunctions.determineBuyerOnboardingRAGStatus(activeCase)} widthPx={30} />
+                                        <RagIndicator ragStatus={commonFunctions.determineMarriageBureauRAGStatus(activeCase, activitySummaries)} widthPx={30} /> :
+                                        <RagIndicator ragStatus={commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, activitySummaries)} widthPx={30} />
                                     }
                                 </TableCell>
                                 <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
@@ -293,10 +318,10 @@ const ActivePipeline = ({ match }) => {
 
             </Paper>
             <div className="button-container">
-                
+
                 {location.pathname.split("/")[1] === "marriage-bureau" ?
-                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases)}>Export</Button> :
-                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases)}>Export</Button>
+                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button> :
+                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>
                 }
             </div>
 
