@@ -7,8 +7,6 @@ import TotalInstancesPieChart from './TotalInstancesPieChart'
 import ActivityBarChart from './ActivityBarChart'
 import LatestActions from './LatestActions'
 import { useLocation } from 'react-router-dom'
-import useSettings from '../../hooks/useSettings'
-
 
 const Home = () => {
     const isCancelled = useRef(false)

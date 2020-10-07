@@ -47,6 +47,7 @@ const InstanceDetails = ({ match }) => {
         buyerOnboardingApi.get(`getInstanceDetails/${match.params.id}`)
             .then(data => {
                 if (!isCancelled.current) {
+                    // console.log(data)
                     setInstanceDetails(data)
                     setLatestActivityDetail(data[data.length - 1])
                     setLoading(false)
@@ -225,6 +226,14 @@ const InstanceDetails = ({ match }) => {
                         id="enquiryMethod"
                         label="Enquiry Method"
                         value={lastestActivityDetail.enquiryMethod || ''}
+                        InputProps={{
+                            disabled: true
+                        }}
+                    />
+                    <TextField
+                        id="officeLocation"
+                        label="Office Location"
+                        value={lastestActivityDetail.officeLocation || ''}
                         InputProps={{
                             disabled: true
                         }}

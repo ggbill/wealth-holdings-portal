@@ -29,7 +29,6 @@ const ActivePipeline = ({ match }) => {
     const [sortDirection, setSortDirection] = useState("desc")
     const [tableFilters, setTableFilters] = useState<App.TableFilters>({ currentActivity: "All", assignedBdm: "All", ragStatus: "All", representing: "All" })
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
-
     const commonFunctions = useCommonFunctions()
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
@@ -41,7 +40,7 @@ const ActivePipeline = ({ match }) => {
         settingsApi.get("getSettings")
             .then((data: App.Setting[]) => {
                 if (!isCancelled.current) {
-                    data.filter(result => result.process === "buyer-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                    data.filter(result => result.process === location.pathname.split("/")[1]).sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
                         tempActivitySummaries.push({
                             name: setting.activityName,
                             link: "",
@@ -56,7 +55,7 @@ const ActivePipeline = ({ match }) => {
                 }
                 setActivitySummaries(tempActivitySummaries)
             })
-        }
+    }
 
     const invertDirection = (currentDirection: string) => {
         if (currentDirection === "asc") {

@@ -35,7 +35,10 @@ export interface IBuyerOnboardingWebhook extends Document {
     closeCaseReason: string,
     closeCaseDescription: string,
     isReEngage: boolean,
-    reEngageDate: Date
+    reEngageDate: Date,
+    officeAddress: string,
+    operatingRegionList: string[],
+    officeLocation: string
 }
 
 const BuyerOnboardingWebhookSchema: Schema = new Schema({
@@ -73,7 +76,10 @@ const BuyerOnboardingWebhookSchema: Schema = new Schema({
     closeCaseReason: { type: String },
     closeCaseDescription: { type: String },
     isReEngage: { type: Boolean },
-    reEngageDate: { type: Date }
+    reEngageDate: { type: Date },
+    officeAddress: { type: String },
+    operatingRegionList: [{ type: String }],
+    officeLocation: { type: String },
 });
 
 export default mongoose.model<IBuyerOnboardingWebhook>('Buyer-Onboarding-Webhook', BuyerOnboardingWebhookSchema);

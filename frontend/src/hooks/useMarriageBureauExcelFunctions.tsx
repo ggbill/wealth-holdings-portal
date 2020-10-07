@@ -17,6 +17,8 @@ const useExcelFunctions = () => {
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
             { header: 'FCA Number', key: 'fcaNumber', width: 20 },
+            { header: 'Firm Location', key: 'firmLocation', width: 20 },
+            { header: 'SB Member Firm?', key: 'isSbFirm', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'startDate', width: 20 },
             { header: 'RAG Status', key: 'ragStatus', width: 20 },
@@ -38,9 +40,10 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 activeCase.firmName,
                 activeCase.fcaNumber,
+                activeCase.officeLocation,
+                activeCase.isSimplyBizMember,
                 activeCase._current_step,
                 moment(activeCase._created_at).format("HH:mm DD/MM/YYYY"),
-                '',
                 commonFunctions.determineMarriageBureauRAGStatus(activeCase, activitySummaries),
                 activeCase._current_assigned_to.Name,
                 activeCase.aum,
@@ -275,7 +278,7 @@ const useExcelFunctions = () => {
             prospectiveOffersWorksheet.getColumn('valuation').eachCell(cell => {
                 cell.numFmt = numFmtStr;
             });
-    
+
             prospectiveOffersWorksheet.getColumn('whFee').eachCell(cell => {
                 cell.numFmt = numFmtStr;
             });
@@ -330,6 +333,7 @@ const useExcelFunctions = () => {
             { header: 'Firm Name', key: 'firmName', width: 30 },
             { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Completed Date', key: 'completedDate', width: 30 },
+            { header: 'Total Duration (Days)', key: 'totalDuration', width: 30 },
         ];
 
         worksheet.getRow(1).font = { bold: true }
@@ -338,7 +342,8 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 completedInstance.firmName,
                 completedInstance.fcaNumber,
-                moment(completedInstance._last_action_performed_at).format("HH:mm DD/MM/YYYY")
+                moment(completedInstance._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
+                moment.duration(moment(completedInstance._last_action_performed_at).diff(moment(completedInstance._created_at))).asDays().toFixed(1)
             ]);
         })
 

@@ -54,6 +54,8 @@ export interface IMarriageBureauWebhook extends Document {
     paymentSchedule: Object[],
     prospectiveOffers: Object[],
     finalTransactionReference: string,
+    officeAddress: string,
+    officeLocation: string
 }
 
 const MarriageBureauWebhookSchema: Schema = new Schema({
@@ -109,6 +111,8 @@ const MarriageBureauWebhookSchema: Schema = new Schema({
     paymentSchedule: [{ type: Object }],
     prospectiveOffers: [{ type: Object }],
     finalTransactionReferenceNumber: { type: String },
+    officeAddress: { type: String },
+    officeLocation: { type: String },
 });
 
 export default mongoose.model<IMarriageBureauWebhook>('Marriage-Bureau-Webhook', MarriageBureauWebhookSchema);

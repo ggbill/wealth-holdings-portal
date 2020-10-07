@@ -108,10 +108,10 @@ const ActionLog = () => {
                                     <span>Firm Name</span>
                                 </TableCell>
                                 <TableCell>
-                                    <span>Assignee</span>
+                                    <span>Actioned By</span>
                                 </TableCell>
                                 <TableCell className="hide-on-mobile">
-                                    <span>Completed Date</span>
+                                    <span>Action Date</span>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -150,8 +150,6 @@ const ActionLog = () => {
                 }
             </div>
         </div>
-
-
     )
 }
 

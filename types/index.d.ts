@@ -71,7 +71,10 @@ declare module App {
         purchaseType: string,
         paymentSchedule: any[],
         prospectiveOffers: any[],
-        finalTransactionReference: string
+        finalTransactionReference: string,
+        officeAddress: string,
+        operatingRegionList: string[],
+        officeLocation: string
     }
 
     interface Setting{

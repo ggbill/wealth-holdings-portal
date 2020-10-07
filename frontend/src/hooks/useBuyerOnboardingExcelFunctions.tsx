@@ -16,6 +16,8 @@ const useExcelFunctions = () => {
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
             { header: 'FCA Number', key: 'fcaNumber', width: 20 },
+            { header: 'Firm Location', key: 'firmLocation', width: 20 },
+            { header: 'SB Member Firm?', key: 'isSbFirm', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'startDate', width: 20 },
             { header: 'RAG Status', key: 'ragStatus', width: 20 },
@@ -28,6 +30,8 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 activeCase.firmName,
                 activeCase.fcaNumber,
+                activeCase.officeLocation,
+                activeCase.isSimplyBizMember,
                 activeCase._current_step,
                 moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
                 commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, activitySummaries),
@@ -58,10 +62,23 @@ const useExcelFunctions = () => {
             { header: 'Assignee', key: 'assignee', width: 20 },
             { header: 'Enquiry Logged', key: 'enquiryLogged', width: 20 },
             { header: 'Enquiry Source', key: 'enquirySource', width: 20 },
-            { header: 'Enquiry Method', key: 'enquiryMethod', width: 20 }
+            { header: 'Enquiry Method', key: 'enquiryMethod', width: 20 },
+            { header: 'Office Address', key: 'officeAddress', width: 40 },
+            { header: 'Office Location', key: 'officeLocation', width: 20 },
+            { header: 'Operating Region(s)', key: 'operatingRegionList', width: 40 },
         ];
 
         instanceOverviewWorksheet.getRow(1).font = { bold: true }
+
+        let operatingRegionListString = ''
+
+        instanceDetails[0].operatingRegionList.forEach((element, index) => {
+            if (index === instanceDetails[0].operatingRegionList.length - 1){
+                operatingRegionListString += `${element}`
+            }else{
+                operatingRegionListString += `${element}, `
+            }
+        });
 
         instanceOverviewWorksheet.addRow([
             instanceDetails[0].firmName,
@@ -72,7 +89,10 @@ const useExcelFunctions = () => {
             instanceDetails[0]._current_assigned_to[0].Name,
             moment(instanceDetails[0]._created_at).format("HH:mm DD/MM/YYYY"),
             instanceDetails[0].enquirySource,
-            instanceDetails[0].enquiryMethod
+            instanceDetails[0].enquiryMethod,
+            instanceDetails[0].officeAddress,
+            instanceDetails[0].officeLocation,
+            operatingRegionListString
         ]);
 
         let instanceHistoryWorksheet = workbook.addWorksheet('Instance History');
@@ -150,8 +170,9 @@ const useExcelFunctions = () => {
 
         worksheet.columns = [
             { header: 'Firm Name', key: 'firmName', width: 30 },
-            { header: 'FCA Number', key: 'fcaNumber', width: 20 },
+            { header: 'FCA Number', key: 'fcaNumber', width: 30 },
             { header: 'Completed Date', key: 'completedDate', width: 30 },
+            { header: 'Total Duration (Days)', key: 'totalDuration', width: 30 },
         ];
 
         worksheet.getRow(1).font = { bold: true }
@@ -160,7 +181,8 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 completedInstance.firmName,
                 completedInstance.fcaNumber,
-                moment(completedInstance._last_action_performed_at).format("HH:mm DD/MM/YYYY")
+                moment(completedInstance._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
+                moment.duration(moment(completedInstance._last_action_performed_at).diff(moment(completedInstance._created_at))).asDays().toFixed(1)
             ]);
         })
 

@@ -5,7 +5,7 @@ export namespace KissFlowController {
 
     export async function WriteMarriageBureauWebhookToDB(webhookBody: any): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-            // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
+            console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
 
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
@@ -52,7 +52,9 @@ export namespace KissFlowController {
                 purchaseType: webhookBody.Purchase_Type,
                 paymentSchedule: webhookBody['Table::Model_GbfCGNWSwGm'],
                 prospectiveOffers: webhookBody['Table::Model_97Pp9ozIxK'],
-                finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1
+                finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
+                officeAddress: webhookBody.Office_Address,
+                officeLocation: webhookBody.Office_Location
             }, function (err, webhook: IMarriageBureauWebhook) {
                 if (err) {
                     console.log(err);
@@ -88,6 +90,10 @@ export namespace KissFlowController {
                 closeCaseDescription: webhookBody.Close_Case_Description,
                 isReEngage: webhookBody.Engage_in_Future,
                 reEngageDate: webhookBody.Reengage_Date,
+                officeAddress: webhookBody.Office_Address,
+                operatingRegionList: webhookBody.Operating_Region,
+                officeLocation: webhookBody.Office_Location
+                
             }, function (err, webhook: IBuyerOnboardingWebhook) {
                 if (err) {
                     console.log(err);

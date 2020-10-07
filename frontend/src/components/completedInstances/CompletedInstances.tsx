@@ -78,8 +78,17 @@ const CompletedInstances = () => {
     }
 
     useEffect(() => {
-        setClosedCases(_.orderBy(closedCases, columnToSort, sortDirection))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        if (columnToSort === "assignedBdm") {
+            setClosedCases(_.orderBy(closedCases,
+                function (closedCase: App.ActivityDetail) {
+                    return (moment.duration(moment(closedCase._last_action_performed_at).diff(moment(closedCase._created_at))).asDays());
+                },
+                sortDirection))
+        } else {
+            setClosedCases(_.orderBy(closedCases, columnToSort, sortDirection))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [columnToSort, sortDirection])
 
 
@@ -137,6 +146,18 @@ const CompletedInstances = () => {
                                     </div>
                                 </div>
                             </TableCell>
+                            <TableCell>
+                                <div className="table-header-wrapper">
+                                    <div onClick={() => handleSort("_last_action_performed_at")} className="tableHeaderCell">
+                                        <span>Instance Duration (days)</span>
+                                        {
+                                            columnToSort === "_last_action_performed_at" ? (
+                                                sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                            ) : null
+                                        }
+                                    </div>
+                                </div>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -148,6 +169,8 @@ const CompletedInstances = () => {
                                 }
 
                                 <TableCell align="center">{moment(closedCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+
+                                <TableCell align="center">{moment.duration(moment(closedCase._last_action_performed_at).diff(moment(closedCase._created_at))).asDays().toFixed(1)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

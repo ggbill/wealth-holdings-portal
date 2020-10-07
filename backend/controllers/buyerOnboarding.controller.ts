@@ -11,6 +11,8 @@ export namespace BuyerOnboardingController {
                         _id: '$_kissflow_id',
                         firmName: { $first: "$firmName" },
                         fcaNumber: { $first: "$fcaNumber" },
+                        officeLocation: { $first: "$officeLocation" },
+                        isSimplyBizMember: { $first: "$isSimplyBizMember" },
                         maxProgress: { $max: "$_progress" },
                         _current_assigned_to: { $first: { $arrayElemAt: ["$_current_assigned_to", 0] } },
                         previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },

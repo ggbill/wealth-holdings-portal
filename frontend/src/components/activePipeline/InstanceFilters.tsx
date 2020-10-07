@@ -48,11 +48,11 @@ const InstanceFilters = (props: InputProps) => {
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
 
             let currentRAGStatus
-            // if (props.pathname === "marriage-bureau") {
-            //     currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase)
-            // } else {
-            //     currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase)
-            // }
+            if (props.pathname === "marriage-bureau") {
+                currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries)
+            } else {
+                currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries)
+            }
 
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
