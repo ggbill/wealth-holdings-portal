@@ -82,6 +82,34 @@ const useExcelFunctions = () => {
             cell.numFmt = numFmtStr;
         });
 
+        // Dynamically colour the RAG stauses
+        worksheet.getColumn('ragStatus').eachCell(function (cell, cellNumber) {
+            if (cellNumber > 1) {
+                if (cell.value === "Green") {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '0057ab6e' }
+                    }
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
+                } else if (cell.value === "Amber") {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '00FF8C42' }
+                    }
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
+                } else if (cell.value === "Red") {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '00EE6055' }
+                    }
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
+                }
+            }
+        })
+
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

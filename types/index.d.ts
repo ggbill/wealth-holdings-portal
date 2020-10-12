@@ -74,7 +74,9 @@ declare module App {
         finalTransactionReference: string,
         officeAddress: string,
         operatingRegionList: string[],
-        officeLocation: string
+        officeLocation: string,
+        currentStatus: string,
+        activityAction: string
     }
 
     interface Setting{

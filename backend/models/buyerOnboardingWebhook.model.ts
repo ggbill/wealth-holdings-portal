@@ -38,7 +38,9 @@ export interface IBuyerOnboardingWebhook extends Document {
     reEngageDate: Date,
     officeAddress: string,
     operatingRegionList: string[],
-    officeLocation: string
+    officeLocation: string,
+    currentStatus: string,
+    activityAction: string,
 }
 
 const BuyerOnboardingWebhookSchema: Schema = new Schema({
@@ -80,6 +82,8 @@ const BuyerOnboardingWebhookSchema: Schema = new Schema({
     officeAddress: { type: String },
     operatingRegionList: [{ type: String }],
     officeLocation: { type: String },
+    currentStatus: {type: String},
+    activityAction: {type: String},
 });
 
 export default mongoose.model<IBuyerOnboardingWebhook>('Buyer-Onboarding-Webhook', BuyerOnboardingWebhookSchema);

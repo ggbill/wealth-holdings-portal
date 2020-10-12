@@ -4,12 +4,13 @@ import useFetch from "../../hooks/useFetch"
 import { TextField, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
 import moment from 'moment'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Link } from 'react-router-dom'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
 import Loading from '../shared/Loading'
 import { useLocation } from 'react-router-dom'
+import SaveAltIcon from '@material-ui/icons/SaveAlt'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 
 const InstanceDetails = ({ match }) => {
 
@@ -128,19 +129,6 @@ const InstanceDetails = ({ match }) => {
     return (
         <div className="instance-details">
 
-            {location.pathname.split("/")[1] === "marriage-bureau" ?
-                <Link className="clickable-icon" to={'/marriage-bureau/active-pipeline'}>
-                    <ArrowBackIosIcon />
-                    <span>Back to list</span>
-                </Link>
-                :
-                <Link className="clickable-icon" to={'/buyer-onboarding/active-pipeline'}>
-                    <ArrowBackIosIcon />
-                    <span>Back to list</span>
-                </Link>
-            }
-
-
             <h2>Overview</h2>
             {lastestActivityDetail &&
                 <div className="summary-details-wrapper">
@@ -196,7 +184,7 @@ const InstanceDetails = ({ match }) => {
                             disabled: true
                         }}
                     />
-                    {lastestActivityDetail._current_assigned_to &&
+                    {/* {lastestActivityDetail._current_assigned_to &&
                         <TextField
                             id="assignedBdm"
                             label="Assigned BDM"
@@ -205,7 +193,7 @@ const InstanceDetails = ({ match }) => {
                                 disabled: true
                             }}
                         />
-                    }
+                    } */}
                     <TextField
                         id="createdAt"
                         label="Enquiry Logged"
@@ -241,6 +229,21 @@ const InstanceDetails = ({ match }) => {
                 </div>
             }
 
+            {lastestActivityDetail.currentStatus && <div className="summary-details-wrapper">
+                <TextField
+                    id="currentStatus"
+                    className="current-status"
+                    label="Current Status"
+                    value={lastestActivityDetail.currentStatus || ''}
+                    multiline
+                    InputProps={{
+                        disabled: true
+                    }}
+                />
+            </div>}
+
+
+
             {/* <p>{JSON.stringify(instanceDetails)}</p> */}
             {(instanceDetails.length > 1) && <>
                 <h2>Instance History</h2>
@@ -253,15 +256,54 @@ const InstanceDetails = ({ match }) => {
                                     aria-controls="panel1bh-content"
                                     id="panel1bh-header"
                                 >
-                                    <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
-                                    {/* <span className="panel-header-activity-name">{activityDetail._current_step}</span> */}
-                                    <span className="panel-header-completed-label hide-on-mobile">Completed:</span>
-                                    <span className="panel-header-completed-date hide-on-mobile">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                                    <div className="activity-name-wrapper">
+                                        {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
+                                        {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
+                                        {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
+                                        <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
+                                    </div>
+
+
+                                    <div className="desktop-action-summary-wrapper">
+                                        <span className="panel-header-completed-label">Action:</span>
+                                        <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
+                                        <span className="panel-header-completed-label">Completed By:</span>
+                                        <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
+                                        <span className="panel-header-completed-label">Completed Date:</span>
+                                        <span className="panel-header-completed-value">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                                    </div>
+
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    {activityDetail._current_context[0].Name !== "Close Case" &&
+                                    {activityDetail.activityAction !== "Close Case" &&
                                         <>
                                             <div className="data-section">
+                                                <div className="completion-details">
+                                                    <TextField
+                                                        id="action"
+                                                        label="Action"
+                                                        value={activityDetail.activityAction || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="completedBy"
+                                                        label="Completed By"
+                                                        value={activityDetail._last_action_performed_by.Name || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                    <TextField
+                                                        id="completedDate"
+                                                        label="Completed Date"
+                                                        value={moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY") || ''}
+                                                        InputProps={{
+                                                            disabled: true
+                                                        }}
+                                                    />
+                                                </div>
                                                 <h4>Selling Firm Contact Details</h4>
                                                 <TextField
                                                     id="primaryContact"
@@ -283,6 +325,18 @@ const InstanceDetails = ({ match }) => {
                                                     id="preferredPhone"
                                                     label="Preferred Phone"
                                                     value={activityDetail.preferredPhone || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="data-section">
+                                                <TextField
+                                                    id="currentStatus"
+                                                    className="current-status"
+                                                    label="Current Status"
+                                                    value={activityDetail.currentStatus || ''}
+                                                    multiline
                                                     InputProps={{
                                                         disabled: true
                                                     }}
@@ -468,7 +522,7 @@ const InstanceDetails = ({ match }) => {
                                             }
                                         </>
                                     }
-                                    {activityDetail._current_context[0].Name === "Close Case" &&
+                                    {activityDetail.activityAction === "Close Case" &&
                                         <>
                                             <div className="data-section">
                                                 <TextField
@@ -515,7 +569,7 @@ const InstanceDetails = ({ match }) => {
                 ))}
             </>}
             <div className="button-container">
-                
+
                 {location.pathname.split("/")[1] === "marriage-bureau" ?
                     <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button> :
                     <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>

@@ -5,7 +5,7 @@ export namespace BuyerOnboardingController {
     export async function GetLatestDataForActiveCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             BuyerOnboardingWebhook.aggregate([
-                { $sort: { "_progress": -1 } },
+                { $sort: { "_modified_at": -1 } },
                 {
                     $group: {
                         _id: '$_kissflow_id',
@@ -19,6 +19,7 @@ export namespace BuyerOnboardingController {
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
+                        currentStatus: { $first: "$currentStatus" },
                     }
                 }], function (err, result) {
                     if (err) {

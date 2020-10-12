@@ -314,16 +314,13 @@ const ActivePipeline = ({ match }) => {
                         ))}
                     </TableBody>
                 </Table>
-
             </Paper>
             <div className="button-container">
-
                 {location.pathname.split("/")[1] === "marriage-bureau" ?
                     <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button> :
                     <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>
                 }
             </div>
-
         </div >
 
     )

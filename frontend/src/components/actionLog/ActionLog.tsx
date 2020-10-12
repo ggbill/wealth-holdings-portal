@@ -102,29 +102,33 @@ const ActionLog = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    <span>Completed Activity</span>
+                                    <span>Activity</span>
+                                </TableCell>
+                                <TableCell>
+                                    <span>Action</span>
                                 </TableCell>
                                 <TableCell>
                                     <span>Firm Name</span>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="hide-on-mobile">
                                     <span>Actioned By</span>
                                 </TableCell>
                                 <TableCell className="hide-on-mobile">
                                     <span>Action Date</span>
                                 </TableCell>
                             </TableRow>
-                        </TableHead>
+                        </TableHead>.
                         <TableBody>
                             {actions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((action: App.ActivityDetail) => (
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
+                                    <TableCell>{action.activityAction}</TableCell>
                                     {location.pathname.split("/")[1] === "marriage-bureau" ?
                                         <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell> :
                                         <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
                                     }
 
-                                    <TableCell>{action._last_action_performed_by.Name}</TableCell>
+                                    <TableCell className="hide-on-mobile">{action._last_action_performed_by.Name}</TableCell>
                                     <TableCell className="hide-on-mobile">{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 </TableRow>
                             ))}

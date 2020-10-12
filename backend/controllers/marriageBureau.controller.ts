@@ -5,7 +5,7 @@ export namespace MarriageBureauController {
     export async function GetLatestDataForActiveCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             MarriageBureauWebhook.aggregate([
-                { $sort: { "_progress": -1 } },
+                { $sort: { "_modified_at": -1 } },
                 {
                     $group: {
                         _id: '$_kissflow_id',
@@ -29,6 +29,7 @@ export namespace MarriageBureauController {
                         representing: { $first: "$representing" },
                         wealthHoldingsFee: { $first: "$wealthHoldingsFee" },
                         valuation: { $first: "$valuation" },
+                        currentStatus: { $first: "$currentStatus" },
                     }
                 }], function (err, result) {
                     if (err) {

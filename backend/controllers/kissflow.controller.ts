@@ -54,7 +54,9 @@ export namespace KissFlowController {
                 prospectiveOffers: webhookBody['Table::Model_97Pp9ozIxK'],
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
                 officeAddress: webhookBody.Office_Address,
-                officeLocation: webhookBody.Office_Location
+                officeLocation: webhookBody.Office_Location, 
+                currentStatus: webhookBody.Current_Status,
+                activityAction: webhookBody.Activity_Action
             }, function (err, webhook: IMarriageBureauWebhook) {
                 if (err) {
                     console.log(err);
@@ -92,8 +94,9 @@ export namespace KissFlowController {
                 reEngageDate: webhookBody.Reengage_Date,
                 officeAddress: webhookBody.Office_Address,
                 operatingRegionList: webhookBody.Operating_Region,
-                officeLocation: webhookBody.Office_Location
-                
+                officeLocation: webhookBody.Office_Location, 
+                currentStatus: webhookBody.Current_Status,
+                activityAction: webhookBody.Activity_Action
             }, function (err, webhook: IBuyerOnboardingWebhook) {
                 if (err) {
                     console.log(err);

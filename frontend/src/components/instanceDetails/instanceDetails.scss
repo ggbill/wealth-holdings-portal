@@ -1,107 +1,146 @@
-.instance-details{
-    .clickable-icon{
+.instance-details {
+    .clickable-icon {
         display: flex;
         flex-direction: row;
         align-items: center;
         color: blue;
         margin-top: 12px;
 
-        .MuiSvgIcon-root{
+        .MuiSvgIcon-root {
             font-size: 0.8em;
         }
 
-        span{
+        span {
             padding-bottom: 3px;
             font-size: 0.7em;
         }
     }
 
-    .summary-details-wrapper{
+    .summary-details-wrapper {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         // justify-content: space-around;
         margin-bottom: 24px;
 
-        .MuiFormControl-root{
+        .MuiFormControl-root {
             margin: 0 24px 24px 0;
 
-            .MuiInputBase-root.Mui-disabled{
-                color: black
+            &.current-status {
+                width: 100%;
+            }
+
+            .MuiInputBase-root.Mui-disabled {
+                color: black;
             }
         }
     }
 
-    .MuiExpansionPanelSummary-content{
-        align-items: flex-end;
+    .MuiExpansionPanelSummary-content {
+        // align-items: flex-end;
 
-        .panel-header-activity-name{
-            font-size: 1.2em;
-            font-weight: 500;
+        .activity-name-wrapper {
             min-width: 235px;
+            display: flex;
+            align-items: center;
+
+            .green{
+                color: green;
+            }
+
+            .blue{
+                color: #00a1ff;
+            }
+
+            .red{
+                color: red;
+            }
+
+            .panel-header-activity-name {
+                font-size: 1.2em;
+                font-weight: 500;
+                padding: 0 0 0 6px;
+            }
         }
-        .panel-header-completed-label{
+
+        .panel-header-completed-label {
             font-size: 0.65em;
             padding: 0 0 1px 0;
         }
-        .panel-header-completed-date{
+        .panel-header-completed-value {
             font-size: 0.8em;
             font-weight: 500;
-            padding: 0 0 0px 12px;
+            padding: 0 12px;
         }
     }
 
-    .MuiExpansionPanelDetails-root{
+    .MuiExpansionPanelDetails-root {
         display: flex;
         flex-direction: column;
 
-        div.data-section{
+        div.data-section {
             margin-bottom: 12px;
             padding-bottom: 12px;
+
+            .current-status {
+                width: 100%;
+            }
         }
 
-        .MuiFormControl-root{
+        .completion-details {
+            display: none;
+            padding-bottom: 24px;
+        }
+
+        .MuiFormControl-root {
             margin: 0 24px 24px 0;
 
-            &.full-width{
+            &.full-width {
                 width: 100%;
             }
 
-
-            .MuiInputBase-root.Mui-disabled{
-                color: black
+            .MuiInputBase-root.Mui-disabled {
+                color: black;
             }
         }
     }
 }
 
-/* Tablets */
-@media only screen and (max-width: 767px){
-    
+@media only screen and (max-width: 1180px) {
+    .desktop-action-summary-wrapper {
+        display: none !important;
+    }
 
+    .completion-details {
+        display: flex !important;
+    }
 }
 
 /* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px)  {
-    .instance-details{
-        .summary-details-wrapper{    
-            .MuiFormControl-root{
+@media only screen and (max-width: 600px) {
+    .instance-details {
+        .summary-details-wrapper {
+            .MuiFormControl-root {
                 width: 100%;
                 margin: 0 0 24px 0;
             }
-            .MuiFormControl-root:last-child{
+            .MuiFormControl-root:last-child {
                 margin: 0;
             }
         }
 
-        .data-section{
-            .MuiFormControl-root{
+        .data-section {
+            .completion-details {
+                flex-direction: column;
+            }
+
+            .MuiFormControl-root {
                 width: 100%;
                 margin: 0 0 24px 0;
             }
-            .MuiFormControl-root:last-child{
+            .MuiFormControl-root:last-child {
                 margin: 0;
             }
         }
-    }   
+    }
 }

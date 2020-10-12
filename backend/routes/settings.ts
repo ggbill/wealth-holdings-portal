@@ -20,7 +20,6 @@ router.get("/getSettings", (request: Request, response: Response) => {
 })
 
 router.post("/", (request: Request, response: Response) => {
-    console.log(JSON.stringify(request.body))
     try {
         SettingsController.UpdateSettings(request.body).then(data => {
             response.json(data)

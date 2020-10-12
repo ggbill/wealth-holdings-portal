@@ -40,7 +40,7 @@ const CompletedInstances = () => {
         marriageBureauApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setClosedCases(data.filter(result => !result.isCloseCase))
+                    setClosedCases(data.filter(result => result.activityAction !== "Close Case"))
                     setLoading(false)
                 }
             })
@@ -57,7 +57,7 @@ const CompletedInstances = () => {
         buyerOnboardingApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setClosedCases(data.filter(result => !result.isCloseCase))
+                    setClosedCases(data.filter(result => result.activityAction !== "Close Case"))
                     setLoading(false)
                 }
             })
