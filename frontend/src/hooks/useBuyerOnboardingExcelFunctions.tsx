@@ -20,7 +20,7 @@ const useExcelFunctions = () => {
             { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Firm Location', key: 'firmLocation', width: 20 },
             { header: 'RAG Status', key: 'ragStatus', width: 20 },
-            { header: 'Current Status', key: 'currentStatus', width: 40 },
+            { header: 'Current Status', key: 'currentStatus', width: 60 },
             { header: 'SB Member Firm?', key: 'isSbFirm', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'startDate', width: 20 },

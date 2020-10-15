@@ -8,9 +8,9 @@ interface InputProps {
 
 const RagIndicator = (props: InputProps) => {
 
-    if (props.ragStatus === "Green"){
+    if (props.ragStatus === "Red"){
         return (
-            <div style={{width: `${props.widthPx}px`, height: `${props.widthPx}px`}} className="rag-circle green"></div>
+            <div style={{width: `${props.widthPx}px`, height: `${props.widthPx}px`}} className="rag-circle red"></div>
         )
     }else if (props.ragStatus === "Amber"){
         return (
@@ -18,7 +18,7 @@ const RagIndicator = (props: InputProps) => {
         )
     }else{
         return (
-            <div style={{width: `${props.widthPx}px`, height: `${props.widthPx}px`}} className="rag-circle red"></div>
+            <div style={{width: `${props.widthPx}px`, height: `${props.widthPx}px`}} className="rag-circle green"></div>
         )
     }
 
