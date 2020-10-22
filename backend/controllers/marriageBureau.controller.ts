@@ -18,6 +18,7 @@ export namespace MarriageBureauController {
                         previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
+                        _submitted_at: { $last: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         aum: { $first: "$aum" },
                         recurringFees: { $first: "$recurringFees" },
