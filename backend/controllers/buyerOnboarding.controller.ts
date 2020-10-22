@@ -24,6 +24,7 @@ export namespace BuyerOnboardingController {
                         previousStep: { $last: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $last: "$_current_step" },
                         _created_at: { $last: "$_created_at" },
+                        _submitted_at: { $last: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         currentStatus: { $last: "$currentStatus" },
                     },
@@ -41,6 +42,7 @@ export namespace BuyerOnboardingController {
                         previousStep: { $first: "$previousStep" },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
+                        _submitted_at: { $last: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         currentStatus: { $first: "$currentStatus" },
                     },
@@ -56,39 +58,6 @@ export namespace BuyerOnboardingController {
             });
     })
 }
-
-// export async function GetLatestDataForActiveCases(): Promise<any> {
-//     return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
-//         BuyerOnboardingWebhook.aggregate([
-//             { $sort: { "_modified_at": -1 } },
-//             {
-//                 $group: {
-//                     _id: '$_kissflow_id',
-//                     firmName: { $first: "$firmName" },
-//                     fcaNumber: { $first: "$fcaNumber" },
-//                     officeLocation: { $first: "$officeLocation" },
-//                     isSimplyBizMember: { $first: "$isSimplyBizMember" },
-//                     maxProgress: { $max: "$_progress" },
-//                     _current_assigned_to: { $first: { $arrayElemAt: ["$_current_assigned_to", 0] } },
-//                     previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
-//                     _current_step: { $first: "$_current_step" },
-//                     _created_at: { $first: "$_created_at" }, //this should be the first time that step was created.
-//                     _last_action_performed_at: { $first: "$_last_action_performed_at" },
-//                     currentStatus: { $first: "$currentStatus" },
-//                 }
-//             }], function (err, result) {
-//                 if (err) {
-//                     console.log(err)
-//                     reject(err)
-//                 }
-
-//                 console.log(result)
-
-//                 let filteredResult = result.filter(result => result._current_step !== null)
-//                 resolve(filteredResult)
-//             });
-//     })
-// }
 
 export async function GetClosedCases(): Promise<any> {
     return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {

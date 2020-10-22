@@ -9,7 +9,9 @@ const useExcelFunctions = () => {
 
     const generateInstanceList = (activeCases: App.ActivityDetail[], activitySummaries): void => {
 
-        // console.log(activeCases)
+        
+
+        console.log(activeCases)
 
         //Create workbook and worksheet
         let workbook = new Workbook();
@@ -23,7 +25,8 @@ const useExcelFunctions = () => {
             { header: 'Current Status', key: 'currentStatus', width: 60 },
             { header: 'SB Member Firm?', key: 'isSbFirm', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
-            { header: 'Activity Start Date', key: 'startDate', width: 20 },
+            { header: 'Activity Start Date', key: 'activityStartDate', width: 20 },
+            { header: 'Process Start Date', key: 'processStartDate', width: 20 },
             { header: 'Assignee', key: 'assignee', width: 20 },
         ];
 
@@ -39,6 +42,7 @@ const useExcelFunctions = () => {
                 activeCase.isSimplyBizMember,
                 activeCase._current_step,
                 moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
+                moment(activeCase._submitted_at).format("HH:mm DD/MM/YYYY"),
                 activeCase._current_assigned_to.Name,
             ]);
         })
