@@ -9,9 +9,7 @@ const useExcelFunctions = () => {
 
     const generateInstanceList = (activeCases: App.ActivityDetail[], activitySummaries): void => {
 
-        
-
-        console.log(activeCases)
+        // console.log(activeCases)
 
         //Create workbook and worksheet
         let workbook = new Workbook();

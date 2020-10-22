@@ -42,7 +42,7 @@ export namespace BuyerOnboardingController {
                         previousStep: { $first: "$previousStep" },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
-                        _submitted_at: { $last: "$_submitted_at" },
+                        _submitted_at: { $first: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         currentStatus: { $first: "$currentStatus" },
                     },
