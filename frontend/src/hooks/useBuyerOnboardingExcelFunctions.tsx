@@ -25,12 +25,23 @@ const useExcelFunctions = () => {
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'activityStartDate', width: 20 },
             { header: 'Process Start Date', key: 'processStartDate', width: 20 },
+            { header: 'Process End Date', key: 'processEndDate', width: 20 },
+            { header: 'Process Duration (Days)', key: 'processDuration', width: 30 },
             { header: 'Assignee', key: 'assignee', width: 20 },
         ];
 
         worksheet.getRow(1).font = { bold: true }
 
         activeCases.forEach((activeCase: App.ActivityDetail, index: number) => {
+
+            let processEndDate, processDuration = null;
+
+
+            if (activeCase._current_step === "Complete") {
+                processEndDate = moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")
+                processDuration = moment.duration(moment(activeCase._last_action_performed_at).diff(moment(activeCase._submitted_at))).asDays().toFixed(1)
+            }
+
             worksheet.addRow([
                 activeCase.firmName,
                 activeCase.fcaNumber,
@@ -41,6 +52,8 @@ const useExcelFunctions = () => {
                 activeCase._current_step,
                 moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
                 moment(activeCase._submitted_at).format("HH:mm DD/MM/YYYY"),
+                processEndDate,
+                processDuration,
                 activeCase._current_assigned_to.Name,
             ]);
         })
@@ -51,28 +64,39 @@ const useExcelFunctions = () => {
                 if (cell.value === "Green") {
                     cell.fill = {
                         type: 'pattern',
-                        pattern:'solid',
-                        fgColor:{argb:'0057ab6e'}
+                        pattern: 'solid',
+                        fgColor: { argb: '0057ab6e' }
                     }
-                    cell.font = {color: {argb: "FFFFFF"}, bold: true}
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
                 } else if (cell.value === "Amber") {
                     cell.fill = {
                         type: 'pattern',
-                        pattern:'solid',
-                        fgColor:{argb:'00FF8C42'}
+                        pattern: 'solid',
+                        fgColor: { argb: '00FF8C42' }
                     }
-                    cell.font = {color: {argb: "FFFFFF"}, bold: true}
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
                 } else if (cell.value === "Red") {
                     cell.fill = {
                         type: 'pattern',
-                        pattern:'solid',
-                        fgColor:{argb:'00EE6055'}
+                        pattern: 'solid',
+                        fgColor: { argb: '00EE6055' }
                     }
-                    cell.font = {color: {argb: "FFFFFF"}, bold: true}
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
                 }
             }
         })
-        
+
+        //***************TODO - Set wrap text on status column *********************************************
+        worksheet.getColumn('currentStatus').eachCell(function (cell, cellNumber) {
+            cell.alignment = {wrapText: true}
+        })
+
+
+
+
+
+
+
         // Generate Excel File with given name
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -133,7 +157,9 @@ const useExcelFunctions = () => {
 
         let columns = [
             { header: 'Activity Name', key: 'activityName', width: 30 },
-            { header: 'Completed', key: 'completed', width: 30 },
+            { header: 'Action', key: 'action', width: 30 },
+            { header: 'Completed By', key: 'completedBy', width: 30 },
+            { header: 'Completed Date', key: 'completed', width: 30 },
             { header: 'Primary Contact', key: 'primaryContact', width: 30 },
             { header: 'Preferred Email', key: 'preferredEmail', width: 30 },
             { header: 'Preferred Phone', key: 'preferredPhone', width: 20 },
@@ -148,6 +174,8 @@ const useExcelFunctions = () => {
 
             let row = [
                 instanceDetail._current_context[0].Name,
+                instanceDetail._current_context[0].Name === "Complete" ? instanceDetail.completeActivityAction : instanceDetail.activityAction,
+                instanceDetail._last_action_performed_by.Name,
                 moment(instanceDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
                 instanceDetail.primaryContact,
                 instanceDetail.preferredEmail,
@@ -218,7 +246,7 @@ const useExcelFunctions = () => {
         completedInstances.forEach((completedInstance: App.ActivityDetail, index: number) => {
 
             let operatingRegionListString = ''
-            
+
             completedInstance.operatingRegionList.forEach((element, index) => {
                 if (index === completedInstance.operatingRegionList.length - 1) {
                     operatingRegionListString += `${element}`

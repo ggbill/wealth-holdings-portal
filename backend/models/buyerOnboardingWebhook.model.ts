@@ -41,6 +41,7 @@ export interface IBuyerOnboardingWebhook extends Document {
     officeLocation: string,
     currentStatus: string,
     activityAction: string,
+    completeActivityAction: string
 }
 
 const BuyerOnboardingWebhookSchema: Schema = new Schema({
@@ -84,6 +85,7 @@ const BuyerOnboardingWebhookSchema: Schema = new Schema({
     officeLocation: { type: String },
     currentStatus: {type: String},
     activityAction: {type: String},
+    completeActivityAction: {type: String},
 });
 
 export default mongoose.model<IBuyerOnboardingWebhook>('Buyer-Onboarding-Webhook', BuyerOnboardingWebhookSchema);

@@ -256,17 +256,30 @@ const InstanceDetails = ({ match }) => {
                                     aria-controls="panel1bh-content"
                                     id="panel1bh-header"
                                 >
-                                    <div className="activity-name-wrapper">
-                                        {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
-                                        {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
-                                        {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
-                                        <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
-                                    </div>
+                                    {/* If showing complete step then look for the completeActivityAction rather than activityAction */}
+                                    {activityDetail._current_context[0].Name === "Complete" ?
+                                        <div className="activity-name-wrapper">
+                                            {activityDetail.completeActivityAction === "Close Case" && <HighlightOffIcon className="red" />}
+                                            {activityDetail.completeActivityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
+                                            <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
+                                        </div>
+                                        :
+                                        <div className="activity-name-wrapper">
+                                            {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
+                                            {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
+                                            {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
+                                            <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
+                                        </div>
+
+                                    }
+
 
 
                                     <div className="desktop-action-summary-wrapper">
                                         <span className="panel-header-completed-label">Action:</span>
-                                        <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
+                                        {activityDetail._current_context[0].Name === "Complete" ?
+                                            <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
+                                        }
                                         <span className="panel-header-completed-label">Completed By:</span>
                                         <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
                                         <span className="panel-header-completed-label">Completed Date:</span>
