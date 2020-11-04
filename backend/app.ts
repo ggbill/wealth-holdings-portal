@@ -5,6 +5,7 @@ import requestLoggerMiddleware from './request.logger.middleware';
 import kissflowRouter from './routes/kissflow';
 import marriageBureauRouter from './routes/marriageBureau';
 import buyerOnboardingRouter from './routes/buyerOnboarding';
+import sellerOnboardingRouter from './routes/sellerOnboarding';
 import settingsRouter from './routes/settings';
 
 const path = require('path');
@@ -22,6 +23,7 @@ app.use(requestLoggerMiddleware);
 app.use('/kissflow', kissflowRouter);
 app.use('/marriage-bureau', marriageBureauRouter);
 app.use('/buyer-onboarding', buyerOnboardingRouter);
+app.use('/seller-onboarding', sellerOnboardingRouter);
 app.use('/settings', settingsRouter);
 
 

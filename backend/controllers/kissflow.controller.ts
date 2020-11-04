@@ -1,5 +1,6 @@
 import MarriageBureauWebhook, { IMarriageBureauWebhook } from '../models/marriageBureauWebhook.model';
 import BuyerOnboardingWebhook, { IBuyerOnboardingWebhook } from '../models/buyerOnboardingWebhook.model';
+import SellerOnboardingWebhook, { ISellerOnboardingWebhook } from '../models/sellerOnboardingWebhook.model';
 
 export namespace KissFlowController {
 
@@ -109,5 +110,44 @@ export namespace KissFlowController {
         });
     }
 
-    
+    export async function WriteSellerOnboardingWebhookToDB(webhookBody: any): Promise<any> {
+        return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
+            // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
+
+            const { _id, ...webhookBodyNoId } = webhookBody
+            // resolve("done")
+            
+            SellerOnboardingWebhook.create({
+                ...webhookBodyNoId,
+                _kissflow_id: webhookBody._id,
+                enquiryMethod: webhookBody.Enquiry_Method,
+                enquirySource: webhookBody.Enquiry_Source,
+                primaryContact: webhookBody.Primary_Contact,
+                preferredEmail: webhookBody.Preferred_Email,
+                preferredPhone: webhookBody.Preferred_Phone,
+                firmName: webhookBody.Firm_Name,
+                fcaNumber: webhookBody.FCA_Number,
+                companyType: webhookBody.Company_Type,
+                isSimplyBizMember: webhookBody.SimplyBiz_Member,
+                isCloseCase: webhookBody.Close_Case,
+                closeCaseReason: webhookBody.Close_Case_Reason,
+                closeCaseDescription: webhookBody.Close_Case_Description,
+                isReEngage: webhookBody.Engage_in_Future,
+                reEngageDate: webhookBody.Reengage_Date,
+                officeAddress: webhookBody.Office_Address,
+                operatingRegionList: webhookBody.Operating_Region,
+                officeLocation: webhookBody.Office_Location, 
+                currentStatus: webhookBody.Current_Status,
+                activityAction: webhookBody.Activity_Action,
+                completeActivityAction: webhookBody.Complete_Activity_Action,
+            }, function (err, webhook: ISellerOnboardingWebhook) {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                // console.log(`created webhook: ${JSON.stringify(webhook)}`)
+                resolve(webhook);
+            });
+        });
+    }
 }

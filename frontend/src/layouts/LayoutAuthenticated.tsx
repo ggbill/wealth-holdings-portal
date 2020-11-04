@@ -51,10 +51,10 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                     <ListItemText primary="Action Log" />
                 </ListItem>
-                <ListItem button component={Link} to="/buyer-onboarding/completed-instances">
+                {/* <ListItem button component={Link} to="/buyer-onboarding/completed-instances">
                     <ListItemIcon><CheckCircleIcon /></ListItemIcon>
                     <ListItemText primary="Completed Instances" />
-                </ListItem>
+                </ListItem> */}
                 <ListItem button component={Link} to="/buyer-onboarding/closed-instances">
                     <ListItemIcon><BlockIcon /></ListItemIcon>
                     <ListItemText primary="Closed Instances" />

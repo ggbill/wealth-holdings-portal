@@ -41,4 +41,23 @@ router.post("/buyer-onboarding/hook", (request: Request, response: Response) => 
     }
 })
 
+router.post("/seller-onboarding/hook", (request: Request, response: Response) => {
+    try {
+        //immediately respond
+        response.status(200).end()
+
+        KissFlowController.WriteSellerOnboardingWebhookToDB(request.body).then(data => {
+            response.status(200).end()
+        }).catch(err => {
+            response.status(500);
+            response.end;
+            console.error("Error: ", err)
+        })
+    } catch (err) {
+        response.status(500);
+        response.end;
+        console.error("Error: ", err)
+    }
+})
+
 export default router;
