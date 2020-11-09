@@ -58,10 +58,9 @@ const LatestActions = (props: InputProps) => {
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     <TableCell>{action.activityAction}</TableCell>
-                                    {props.pathname === "marriage-bureau" ?
-                                        <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell> :
-                                        <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
-                                    }
+                                    {props.pathname === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                    {props.pathname === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                    {props.pathname === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     <TableCell className="hide-on-mobile">{action._last_action_performed_by.Name}</TableCell>
                                     <TableCell className="hide-on-mobile">{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 </TableRow>
