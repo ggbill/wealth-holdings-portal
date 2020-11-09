@@ -6,6 +6,7 @@ import moment from 'moment'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
+import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
 import Loading from '../shared/Loading'
 import { useLocation } from 'react-router-dom'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
@@ -17,6 +18,7 @@ const InstanceDetails = ({ match }) => {
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const sellerOnboardingApi = useFetch("seller-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [instanceDetails, setInstanceDetails] = useState<App.ActivityDetail[]>([])
@@ -24,6 +26,7 @@ const InstanceDetails = ({ match }) => {
 
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
+    const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
     let location = useLocation();
 
     const getMarriageBureauInstanceDetails = (): void => {
@@ -46,6 +49,24 @@ const InstanceDetails = ({ match }) => {
     const getBuyerOnboardingInstanceDetails = (): void => {
         setLoading(true)
         buyerOnboardingApi.get(`getInstanceDetails/${match.params.id}`)
+            .then(data => {
+                if (!isCancelled.current) {
+                    // console.log(data)
+                    setInstanceDetails(data)
+                    setLatestActivityDetail(data[data.length - 1])
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                }
+            })
+    }
+
+    const getSellerOnboardingInstanceDetails = (): void => {
+        setLoading(true)
+        sellerOnboardingApi.get(`getInstanceDetails/${match.params.id}`)
             .then(data => {
                 if (!isCancelled.current) {
                     // console.log(data)
@@ -100,11 +121,14 @@ const InstanceDetails = ({ match }) => {
     }
 
     useEffect(() => {
-
         if (location.pathname.split("/")[1] === "marriage-bureau") {
             getMarriageBureauInstanceDetails()
         } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
             getBuyerOnboardingInstanceDetails()
+        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+            getSellerOnboardingInstanceDetails()
+        } else {
+            setError("Unknown url")
         }
 
         return () => {
@@ -184,16 +208,6 @@ const InstanceDetails = ({ match }) => {
                             disabled: true
                         }}
                     />
-                    {/* {lastestActivityDetail._current_assigned_to &&
-                        <TextField
-                            id="assignedBdm"
-                            label="Assigned BDM"
-                            value={lastestActivityDetail._last_action_performed_by.Name || ''}
-                            InputProps={{
-                                disabled: true
-                            }}
-                        />
-                    } */}
                     <TextField
                         id="createdAt"
                         label="Enquiry Logged"
@@ -272,9 +286,6 @@ const InstanceDetails = ({ match }) => {
                                         </div>
 
                                     }
-
-
-
                                     <div className="desktop-action-summary-wrapper">
                                         <span className="panel-header-completed-label">Action:</span>
                                         {activityDetail._current_context[0].Name === "Complete" ?
@@ -582,11 +593,9 @@ const InstanceDetails = ({ match }) => {
                 ))}
             </>}
             <div className="button-container">
-
-                {location.pathname.split("/")[1] === "marriage-bureau" ?
-                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button> :
-                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>
-                }
+                {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
+                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => sellerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
+                {location.pathname.split("/")[1] === "buyer-onboarding" && <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
             </div>
         </div>
     )
