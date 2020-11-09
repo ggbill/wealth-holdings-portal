@@ -27,13 +27,16 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueActivityNames: string[] = props.activeCases.map(activeCase => activeCase._current_step)
         setUniqueActivityNames([...new Set(uniqueActivityNames)])
 
-        if (props.pathname === "marriage-bureau") {
-            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries))
-            setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
-        } else {
-            let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries))
-            setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
-        }
+        let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase, props.activitySummaries))
+        setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+
+        // if (props.pathname === "marriage-bureau") {
+        //     let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries))
+        //     setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+        // } else {
+        //     let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries))
+        //     setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
+        // }
 
         let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
         setUniqueBdmNames([...new Set(uniqueBdmNames)])
@@ -48,11 +51,13 @@ const InstanceFilters = (props: InputProps) => {
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
 
             let currentRAGStatus
-            if (props.pathname === "marriage-bureau") {
-                currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries)
-            } else {
-                currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries)
-            }
+            currentRAGStatus = commonFunctions.determineRAGStatus(activeCase, props.activitySummaries)
+
+            // if (props.pathname === "marriage-bureau") {
+            //     currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries)
+            // } else {
+            //     currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries)
+            // }
 
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&

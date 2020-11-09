@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import useFetch from "../../hooks/useFetch"
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
+import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
 import Loading from '../shared/Loading'
 import moment from 'moment'
@@ -20,6 +21,7 @@ const ActivePipeline = ({ match }) => {
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const sellerOnboardingApi = useFetch("seller-onboarding")
     const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -32,6 +34,7 @@ const ActivePipeline = ({ match }) => {
     const commonFunctions = useCommonFunctions()
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
+    const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
 
     let location = useLocation();
 
@@ -99,6 +102,23 @@ const ActivePipeline = ({ match }) => {
             })
     }
 
+    const getLatestDataForActiveSellerOnboardingCases = (): void => {
+        setLoading(true)
+        sellerOnboardingApi.get("getLatestDataForActiveCases")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                    setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                }
+            })
+    }
+
     const handleSort = (columnName) => {
         setColumnToSort(columnName)
 
@@ -131,20 +151,11 @@ const ActivePipeline = ({ match }) => {
 
         if (columnToSort === "ragStatus") {
 
-            if (location.pathname.split("/")[1] === "marriage-bureau") {
-                setFilteredActiveCases(_.orderBy(filteredActiveCases,
-                    function (item: App.ActivityDetail) {
-                        return (commonFunctions.determineMarriageBureauRAGStatus(item, activitySummaries));
-                    },
-                    sortDirection))
-            } else {
-                setFilteredActiveCases(_.orderBy(filteredActiveCases,
-                    function (item: App.ActivityDetail) {
-                        return (commonFunctions.determineBuyerOnboardingRAGStatus(item, activitySummaries));
-                    },
-                    sortDirection))
-            }
-
+            setFilteredActiveCases(_.orderBy(filteredActiveCases,
+                function (item: App.ActivityDetail) {
+                    return (commonFunctions.determineRAGStatus(item, activitySummaries));
+                },
+                sortDirection))
         } else if (columnToSort === "assignedBdm") {
             setFilteredActiveCases(_.orderBy(filteredActiveCases,
                 function (item: App.ActivityDetail) {
@@ -166,7 +177,16 @@ const ActivePipeline = ({ match }) => {
 
     useEffect(() => {
         getActivitySummaries()
-        location.pathname.split("/")[1] === "marriage-bureau" ? getLatestDataForActiveMarriageBureauCases() : getLatestDataForActiveBuyerOnboardingCases()
+
+        if (location.pathname.split("/")[1] === "marriage-bureau") {
+            getLatestDataForActiveMarriageBureauCases()
+        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+            getLatestDataForActiveBuyerOnboardingCases()
+        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+            getLatestDataForActiveSellerOnboardingCases()
+        } else {
+            setError("Unknown url")
+        }
 
         return () => {
             isCancelled.current = true;
@@ -238,14 +258,6 @@ const ActivePipeline = ({ match }) => {
                                             ) : null
                                         }
                                     </div>
-                                    {/* {tableFilters.currentActivity !== "All" &&
-                                        <span className="filter-indicator">
-                                            Filter: {tableFilters.currentActivity}
-                                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 1000 }} title="Clear filter">
-                                                <CloseIcon onClick={() => clearFilter("currentActivity")} />
-                                            </Tooltip>
-                                        </span>
-                                    } */}
                                 </div>
                             </TableCell>
                             <TableCell className="hide-on-mobile">
@@ -270,14 +282,6 @@ const ActivePipeline = ({ match }) => {
                                             ) : null
                                         }
                                     </div>
-                                    {/* {tableFilters.ragStatus !== "All" &&
-                                        <span className="filter-indicator">
-                                            Filter: {tableFilters.ragStatus}
-                                            <Tooltip TransitionComponent={Fade} TransitionProps={{ timeout: 1000 }} title="Clear filter">
-                                                <CloseIcon onClick={() => clearFilter("ragStatus")} />
-                                            </Tooltip>
-                                        </span>
-                                    } */}
                                 </div>
                             </TableCell>
                             <TableCell className="hide-on-mobile">
@@ -304,10 +308,7 @@ const ActivePipeline = ({ match }) => {
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">
-                                    {location.pathname.split("/")[1] === "marriage-bureau" ?
-                                        <RagIndicator ragStatus={commonFunctions.determineMarriageBureauRAGStatus(activeCase, activitySummaries)} widthPx={30} /> :
-                                        <RagIndicator ragStatus={commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, activitySummaries)} widthPx={30} />
-                                    }
+                                    <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase, activitySummaries)} widthPx={30} />
                                 </TableCell>
                                 <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
                             </TableRow>
@@ -316,10 +317,9 @@ const ActivePipeline = ({ match }) => {
                 </Table>
             </Paper>
             <div className="button-container">
-                {location.pathname.split("/")[1] === "marriage-bureau" ?
-                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button> :
-                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>
-                }
+                {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
+                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => sellerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
+                {location.pathname.split("/")[1] === "buyer-onboarding" && <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
             </div>
         </div >
 

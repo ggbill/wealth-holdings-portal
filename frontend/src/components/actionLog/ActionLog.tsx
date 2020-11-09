@@ -7,21 +7,23 @@ import moment from 'moment'
 import Loading from '../shared/Loading'
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
-
+import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
 
 const ActionLog = () => {
 
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const sellerOnboardingApi = useFetch("seller-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = React.useState(0)
+    const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
-    const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
-    const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
+    const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions()
+    const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions()
+    const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions()
 
     let location = useLocation();
 
@@ -59,6 +61,23 @@ const ActionLog = () => {
             })
     }
 
+    const getSellerOnboardingActions = (): void => {
+        setLoading(true)
+        sellerOnboardingApi.get("getActions")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -70,9 +89,13 @@ const ActionLog = () => {
 
     React.useEffect(() => {
         if (location.pathname.split("/")[1] === "marriage-bureau") {
-            getMarriageBureauActions();
+            getMarriageBureauActions()
         } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
-            getBuyerOnboardingActions();
+            getBuyerOnboardingActions()
+        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+            getSellerOnboardingActions()
+        } else {
+            setError("Unknown url")
         }
 
         return () => {
@@ -123,11 +146,9 @@ const ActionLog = () => {
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     <TableCell>{action.activityAction}</TableCell>
-                                    {location.pathname.split("/")[1] === "marriage-bureau" ?
-                                        <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell> :
-                                        <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>
-                                    }
-
+                                    {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                    {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                    {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     <TableCell className="hide-on-mobile">{action._last_action_performed_by.Name}</TableCell>
                                     <TableCell className="hide-on-mobile">{moment(action._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 </TableRow>
@@ -147,11 +168,9 @@ const ActionLog = () => {
             </Card>
 
             <div className="button-container">
-
-                {location.pathname.split("/")[1] === "marriage-bureau" ?
-                    <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateActionLog(actions)}>Export</Button> :
-                    <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateActionLog(actions)}>Export</Button>
-                }
+                {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateActionLog(actions)}>Export</Button>}
+                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => sellerOnboardingExcelFunctions.generateActionLog(actions)}>Export</Button>}
+                {location.pathname.split("/")[1] === "buyer-onboarding" && <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateActionLog(actions)}>Export</Button>}
             </div>
         </div>
     )

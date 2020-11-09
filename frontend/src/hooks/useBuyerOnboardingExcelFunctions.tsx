@@ -46,7 +46,7 @@ const useExcelFunctions = () => {
                 activeCase.firmName,
                 activeCase.fcaNumber,
                 activeCase.officeLocation,
-                commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, activitySummaries),
+                commonFunctions.determineRAGStatus(activeCase, activitySummaries),
                 activeCase.currentStatus,
                 activeCase.isSimplyBizMember,
                 activeCase._current_step,

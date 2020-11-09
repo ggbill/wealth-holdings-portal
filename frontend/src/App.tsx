@@ -92,16 +92,45 @@ const App = () => {
             exact: true,
             title: "Buyer Onboarding - Closed Instances"
         },
-        {
-            path: "/buyer-onboarding/completed-instances",
-            component: CompletedInstances,
-            exact: true,
-            title: "Buyer Onboarding - Completed Instances"
-        },
+        // {
+        //     path: "/buyer-onboarding/completed-instances",
+        //     component: CompletedInstances,
+        //     exact: true,
+        //     title: "Buyer Onboarding - Completed Instances"
+        // },
         {
             path: "/buyer-onboarding/instance-details/:id",
             component: InstanceDetails,
             title: "Buyer Onboarding - Instance Details"
+        },
+        {
+            path: "/seller-onboarding/dashboard",
+            component: Home,
+            exact: true,
+            title: "Seller Onboarding - Dashboard"
+        },
+        {
+            path: "/seller-onboarding/active-pipeline",
+            component: ActivePipeline,
+            exact: true,
+            title: "Seller Onboarding - Active Pipeline"
+        },
+        {
+            path: "/seller-onboarding/action-log",
+            component: ActionLog,
+            exact: true,
+            title: "Seller Onboarding - Action Log"
+        },
+        {
+            path: "/seller-onboarding/closed-instances",
+            component: ClosedInstances,
+            exact: true,
+            title: "Seller Onboarding - Closed Instances"
+        },
+        {
+            path: "/seller-onboarding/instance-details/:id",
+            component: InstanceDetails,
+            title: "Seller Onboarding - Instance Details"
         },
         {
             path: "/settings",

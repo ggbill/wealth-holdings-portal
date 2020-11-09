@@ -12,6 +12,7 @@ const Home = () => {
     const isCancelled = useRef(false)
     const marriageBureauApi = useFetch("marriage-bureau")
     const buyerOnboardingApi = useFetch("buyer-onboarding")
+    const sellerOnboardingApi = useFetch("seller-onboarding")
     const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -93,6 +94,41 @@ const Home = () => {
             })
     }
 
+    const getLatestDataForActiveSellerOnboardingCases = (): void => {
+        setLoading(true)
+        sellerOnboardingApi.get("getLatestDataForActiveCases")
+            .then(data => {
+                if (!isCancelled.current) {
+                    calculateSellerOnboardingActivitySummaries(data)
+                    setActiveCases(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const getSellerOnboardingActions = (): void => {
+        setLoading(true)
+        sellerOnboardingApi.get("getActions")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setActions(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
     const calculateMarriageBureauActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
         let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "marriage-bureau/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
         let activitySummaries: App.ActivitySummary[] = []
@@ -115,7 +151,7 @@ const Home = () => {
                         })
                     });
 
-                    let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases, activitySummaries)
+                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
 
                     setActivitySummaries(tempActivitySummaries)
 
@@ -159,7 +195,50 @@ const Home = () => {
                         })
                     });
 
-                    let tempActivitySummaries = commonFunctions.calculateBuyerOnboardingActivitySummaries(activeCases, activitySummaries)
+                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
+
+                    setActivitySummaries(tempActivitySummaries)
+
+                    tempActivitySummaries.forEach(tempActivitySummary => {
+                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+                    });
+
+                    setTotalActivitySummary(tempTotalActivitySummary)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    console.log(err)
+                }
+            })
+    }
+
+    const calculateSellerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
+        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "seller-onboarding/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+        let activitySummaries: App.ActivitySummary[] = []
+
+
+        //TODO - work out how to pull this fetch block into common functions
+        settingsApi.get("getSettings")
+            .then((data: App.Setting[]) => {
+                if (!isCancelled.current) {
+                    data.filter(result => result.process === "seller-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                        activitySummaries.push({
+                            name: setting.activityName,
+                            link: "",
+                            amberSla: setting.amberSla,
+                            redSla: setting.redSla,
+                            greenCount: 0,
+                            amberCount: 0,
+                            redCount: 0,
+                            totalCount: 0
+                        })
+                    });
+
+                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
 
                     setActivitySummaries(tempActivitySummaries)
 
@@ -189,6 +268,9 @@ const Home = () => {
         } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
             getLatestDataForActiveBuyerOnboardingCases();
             getBuyerOnboardingActions();
+        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+            getLatestDataForActiveSellerOnboardingCases();
+            getSellerOnboardingActions();
         }
 
         return () => {

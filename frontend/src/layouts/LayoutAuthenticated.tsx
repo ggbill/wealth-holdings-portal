@@ -60,7 +60,26 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemText primary="Closed Instances" />
                 </ListItem>
                 <Divider /> 
-                <ListItem button component={Link} to="/marriage-bureau/dashboard">
+                <ListItem button component={Link} to="/seller-onboarding/dashboard">
+                    <ListItemText className="bold" primary="Seller Onboarding" />
+                </ListItem>
+                <ListItem button component={Link} to="/seller-onboarding/dashboard">
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} to="/seller-onboarding/active-pipeline">
+                    <ListItemIcon><LabelImportantIcon /></ListItemIcon>
+                    <ListItemText primary="Active Pipeline" />
+                </ListItem>
+                <ListItem button component={Link} to="/seller-onboarding/action-log">
+                    <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                    <ListItemText primary="Action Log" />
+                </ListItem>
+                <ListItem button component={Link} to="/seller-onboarding/closed-instances">
+                    <ListItemIcon><BlockIcon /></ListItemIcon>
+                    <ListItemText primary="Closed Instances" />
+                </ListItem>
+                {/* <ListItem button component={Link} to="/marriage-bureau/dashboard">
                     <ListItemText className="bold" primary="Marriage Bureau" />
                 </ListItem>
                 <ListItem button component={Link} to="/marriage-bureau/dashboard">
@@ -82,7 +101,7 @@ const LayoutAuthenticated = (props: InputProps) => {
                 <ListItem button component={Link} to="/marriage-bureau/closed-instances">
                     <ListItemIcon><BlockIcon /></ListItemIcon>
                     <ListItemText primary="Closed Instances" />
-                </ListItem>
+                </ListItem> */}
                 <Divider /> 
                 <ListItem button component={Link} to="/settings">
                     <ListItemIcon><SettingsIcon /></ListItemIcon>

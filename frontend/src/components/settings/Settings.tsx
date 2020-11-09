@@ -7,7 +7,7 @@ import useSettings from '../../hooks/useSettings'
 
 const Settings = () => {
 
-    const { buyerOnboardingSettings, setBuyerOnboardingSettings, marriageBureauSettings, setMarriageBureauSettings, saveSettings } = useSettings()
+    const { buyerOnboardingSettings, setBuyerOnboardingSettings, sellerOnboardingSettings, setSellerOnboardingSettings, marriageBureauSettings, setMarriageBureauSettings, saveSettings } = useSettings()
     const [isNotificationDialogOpen, setIsNotificationDialogOpen] = useState<boolean>(false)
     const [dialogType, setDialogType] = useState<string>("")
     const [dialogTitle, setDialogTitle] = useState<string>("")
@@ -17,7 +17,7 @@ const Settings = () => {
 
         let isAllValuesComplete = true
 
-        marriageBureauSettings.concat(buyerOnboardingSettings).forEach(element => {
+        marriageBureauSettings.concat(buyerOnboardingSettings).concat(sellerOnboardingSettings).forEach(element => {
             if (String(element.amberSla) === "" || String(element.redSla) === "" || String(element.amberSla) === "0" || String(element.redSla) === "0") {
                 handleErrorDialogOpen("Values Not Complete", "Please ensure all values are complete and greater than 0.")
                 isAllValuesComplete = false
@@ -25,7 +25,7 @@ const Settings = () => {
         });
 
         if (isAllValuesComplete) {
-            saveSettings(marriageBureauSettings.concat(buyerOnboardingSettings)).then((data) => {
+            saveSettings(marriageBureauSettings.concat(buyerOnboardingSettings).concat(sellerOnboardingSettings)).then((data) => {
                 handleSuccessDialogOpen("Save Complete", "The new settings were saved successfully.")
             }).catch((err: Error) => {
                 // setError(err.message)
@@ -67,6 +67,12 @@ const Settings = () => {
             const clone = [...marriageBureauSettings];
             clone[index] = updated;
             setMarriageBureauSettings(clone);
+        } else if (process === "seller-onboarding") {
+            const old = sellerOnboardingSettings[index];
+            const updated = { ...old, [name]: value }
+            const clone = [...sellerOnboardingSettings];
+            clone[index] = updated;
+            setSellerOnboardingSettings(clone);
         } else {
             console.log("unknown process")
         }
@@ -89,6 +95,42 @@ const Settings = () => {
                                     label="Amber SLA Threshold"
                                     value={setting.amberSla}
                                     onChange={event => handleChange("buyer-onboarding", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
+                            <div className="amber-wrapper">
+                                <RagIndicator ragStatus="Red" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - red`}
+                                    name="redSla"
+                                    type="number"
+                                    label="Red SLA Threshold"
+                                    value={setting.redSla}
+                                    onChange={event => handleChange("buyer-onboarding", event, index)}
+                                    helperText="days"
+                                />
+                            </div>
+                        </div>
+
+                    </CardContent>
+                </Card>
+            ))}
+
+            <h2>Seller Onboarding Settings</h2>
+            {sellerOnboardingSettings.map((setting, index) => (
+                <Card key={setting._id}>
+                    <CardContent>
+                        <span className="activity-name">{setting.activityName}</span>
+                        <div className="sla-wrapper">
+                            <div className="amber-wrapper">
+                                <RagIndicator ragStatus="Amber" widthPx={45} />
+                                <TextField
+                                    id={`${setting._id} - amber`}
+                                    name="amberSla"
+                                    type="number"
+                                    label="Amber SLA Threshold"
+                                    value={setting.amberSla}
+                                    onChange={event => handleChange("seller-onboarding", event, index)}
                                     helperText="days"
                                 />
                             </div>
