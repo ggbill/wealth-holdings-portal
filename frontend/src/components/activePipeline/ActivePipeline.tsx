@@ -301,10 +301,13 @@ const ActivePipeline = ({ match }) => {
                     <TableBody>
                         {filteredActiveCases.map((activeCase: App.ActivityDetail) => (
                             <TableRow key={activeCase._id}>
-                                {location.pathname.split("/")[1] === "marriage-bureau" ?
+                                {/* {location.pathname.split("/")[1] === "marriage-bureau" ?
                                     <TableCell> <Link to={'/marriage-bureau/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell> :
                                     <TableCell> <Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
-                                }
+                                } */}
+                                {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
+                                {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
+                                {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">

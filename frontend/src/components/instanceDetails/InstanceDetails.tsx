@@ -280,6 +280,7 @@ const InstanceDetails = ({ match }) => {
                                         :
                                         <div className="activity-name-wrapper">
                                             {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
+                                            {!activityDetail.activityAction && <CheckCircleOutlineIcon className="green" />}
                                             {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
                                             {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
                                             <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
@@ -289,7 +290,8 @@ const InstanceDetails = ({ match }) => {
                                     <div className="desktop-action-summary-wrapper">
                                         <span className="panel-header-completed-label">Action:</span>
                                         {activityDetail._current_context[0].Name === "Complete" ?
-                                            <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
+                                            <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> : 
+                                            !activityDetail.activityAction ? <span className="panel-header-completed-value">Complete Activity</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
                                         }
                                         <span className="panel-header-completed-label">Completed By:</span>
                                         <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
