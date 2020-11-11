@@ -7,9 +7,10 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { Link } from 'react-router-dom'
 
 interface InputProps {
-    onTimeCount: number
-    atRiskCount: number
-    overdueCount: number
+    onTimeCount: number,
+    atRiskCount: number,
+    overdueCount: number,
+    completeCount: number,
     pathname: string
 }
 
@@ -69,13 +70,31 @@ const TotalInstancesPieChart = (props: InputProps) => {
             <h3>Active Instances</h3>
             <Card>
                 <CardContent>
-                    <h2>Total: {props.onTimeCount + props.atRiskCount + props.overdueCount}</h2>
+                    <table className="summary-table">
+                        <tr>
+                            <td className="label-cell">Active:</td>
+                            <td className="value-cell">{props.completeCount}</td>
+                        </tr>
+                        <tr>
+                            <td className="label-cell">Onboarding:</td>
+                            <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount}</td>
+                        </tr>
+                        <tr className="total-row">
+                            <td className="label-cell">Total:</td>
+                            <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount + props.completeCount}</td>
+                        </tr>
+                    </table>
+                    {/* <h2>Total: {props.onTimeCount + props.atRiskCount + props.overdueCount}</h2>
+                    <h2>Complete: {props.completeCount}</h2> */}
+
                     <div className="chart-wrapper">
                         <Pie
                             data={data}
                             options={options}
                         />
                     </div>
+
+                    <span className="pie-chart-label">(Onboarding Instances by RAG status)</span>
 
                 </CardContent>
 

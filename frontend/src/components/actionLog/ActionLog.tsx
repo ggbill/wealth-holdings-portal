@@ -140,12 +140,13 @@ const ActionLog = () => {
                                     <span>Action Date</span>
                                 </TableCell>
                             </TableRow>
-                        </TableHead>.
+                        </TableHead>
                         <TableBody>
                             {actions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((action: App.ActivityDetail) => (
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
-                                    <TableCell>{action.activityAction}</TableCell>
+                                    {action._current_context[0].Name === "Complete" ?
+                                    <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
                                     {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}

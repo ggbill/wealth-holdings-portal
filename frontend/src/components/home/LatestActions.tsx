@@ -57,7 +57,8 @@ const LatestActions = (props: InputProps) => {
                             {latestActions.map((action: App.ActivityDetail) => (
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
-                                    <TableCell>{action.activityAction}</TableCell>
+                                    {action._current_context[0].Name === "Complete" ?
+                                    <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
                                     {props.pathname === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {props.pathname === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {props.pathname === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}

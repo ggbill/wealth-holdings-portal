@@ -300,6 +300,7 @@ const Home = () => {
                             onTimeCount={totalActivitySummary.greenCount}
                             atRiskCount={totalActivitySummary.amberCount}
                             overdueCount={totalActivitySummary.redCount}
+                            completeCount={activeCases.filter(result => result._current_step === "Complete").length}
                             pathname={location.pathname.split("/")[1]}
                         />
                         <ActivityBarChart

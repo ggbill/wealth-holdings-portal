@@ -5,7 +5,6 @@
     margin: 0 12px 0 0;
 
     .MuiCard-root {
-
         display: flex;
         flex-direction: column;
         flex-grow: 1;
@@ -21,7 +20,38 @@
             padding: 12px;
             align-items: center;
 
-            .chart-wrapper{
+            .summary-table {
+                width: 100%;
+                margin-bottom: 12px;
+                font-size: 0.85em;
+
+                td.label-cell {
+                    width: 50%;
+                }
+
+                td.value-cell {
+                    width: 50%;
+                    text-align: center;
+                }
+
+                tr.total-row {
+                    font-weight: bold;
+                }
+            }
+
+            table,
+            th,
+            td {
+                border: 1px solid rgb(216, 216, 216);
+                border-collapse: collapse;
+            }
+
+            .pie-chart-label{
+                font-size: 0.75em;
+                color: grey;
+            }
+
+            .chart-wrapper {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: column;
@@ -45,18 +75,14 @@
     }
 }
 
-@media only screen and (max-width: 1000px){
+@media only screen and (max-width: 1000px) {
     .total-instances-pie-chart {
-
         max-width: unset;
         width: 100%;
         margin: 0;
     }
-
 }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    
-
 }
