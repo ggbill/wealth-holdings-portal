@@ -11,7 +11,7 @@ export namespace KissFlowController {
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
 
-            let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee: number;
+            let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee, introducerFee: number;
 
             if (webhookBody.AUM) { aum = Number(webhookBody.AUM.split(" ")[0]) }
             if (webhookBody.Recurring_Fees) { recurringFees = Number(webhookBody.Recurring_Fees.split(" ")[0]) }
@@ -19,26 +19,18 @@ export namespace KissFlowController {
             if (webhookBody.EBITDA) { ebitda = Number(webhookBody.EBITDA.split(" ")[0]) }
             if (webhookBody.Valuation) { valuation = Number(webhookBody.Valuation.split(" ")[0]) }
             if (webhookBody.Wealth_Holdings_Fee) { wealthHoldingsFee = Number(webhookBody.Wealth_Holdings_Fee.split(" ")[0]) }
+            if (webhookBody.Introducer_Fee) { introducerFee = Number(webhookBody.Introducer_Fee.split(" ")[0]) }
 
             MarriageBureauWebhook.create({
                 ...webhookBodyNoId,
-                _kissflow_id: webhookBody._id,
-                enquiryMethod: webhookBody.Enquiry_Method,
-                enquirySource: webhookBody.Enquiry_Source,
-                primaryContact: webhookBody.Primary_Contact,
-                preferredEmail: webhookBody.Preferred_Email,
-                preferredPhone: webhookBody.Preferred_Phone,
-                firmName: webhookBody.Firm_Name,
-                fcaNumber: webhookBody.FCA_Number,
-                companyType: webhookBody.Company_Type,
-                isSimplyBizMember: webhookBody.Is_SimplyBiz_Member,
-                representing: webhookBody.Representing,
+                _kissflow_id: webhookBody._id,              
+                buyer: webhookBody.Buyer,
+                seller: webhookBody.Seller,
                 isCloseCase: webhookBody.Close_Case,
                 closeCaseReason: webhookBody.Close_Case_Reason,
                 closeCaseDescription: webhookBody.Close_Case_Description,
                 isReEngage: webhookBody.ReEngage_In_Future,
                 reEngageDate: webhookBody.ReEngage_Date,
-                initialTransactionReferenceNumber: webhookBody.Transaction_Reference_Number,
                 aum: aum,
                 recurringFees: recurringFees,
                 turnover: turnover,
@@ -46,16 +38,12 @@ export namespace KissFlowController {
                 planners: webhookBody.Planners,
                 clients: webhookBody.Clients,
                 customers: webhookBody.Customers,
-                purchasingHub: webhookBody.Purchasing_Hub,
                 valuation: valuation,
                 wealthHoldingsFee: wealthHoldingsFee,
+                introducerFee: introducerFee,
                 completionDate: webhookBody.Completion_Date,
                 purchaseType: webhookBody.Purchase_Type,
-                paymentSchedule: webhookBody['Table::Model_GbfCGNWSwGm'],
-                prospectiveOffers: webhookBody['Table::Model_97Pp9ozIxK'],
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
-                officeAddress: webhookBody.Office_Address,
-                officeLocation: webhookBody.Office_Location, 
                 currentStatus: webhookBody.Current_Status,
                 activityAction: webhookBody.Activity_Action
             }, function (err, webhook: IMarriageBureauWebhook) {

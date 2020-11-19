@@ -45,7 +45,7 @@ const LayoutAuthenticated = (props: InputProps) => {
                 </ListItem>
                 <ListItem button component={Link} to="/buyer-onboarding/active-pipeline">
                     <ListItemIcon><LabelImportantIcon /></ListItemIcon>
-                    <ListItemText primary="Active Pipeline" />
+                    <ListItemText primary="Pipeline" />
                 </ListItem>
                 <ListItem button component={Link} to="/buyer-onboarding/action-log">
                     <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
@@ -69,7 +69,7 @@ const LayoutAuthenticated = (props: InputProps) => {
                 </ListItem>
                 <ListItem button component={Link} to="/seller-onboarding/active-pipeline">
                     <ListItemIcon><LabelImportantIcon /></ListItemIcon>
-                    <ListItemText primary="Active Pipeline" />
+                    <ListItemText primary="Pipeline" />
                 </ListItem>
                 <ListItem button component={Link} to="/seller-onboarding/action-log">
                     <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>

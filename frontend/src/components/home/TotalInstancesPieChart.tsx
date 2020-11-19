@@ -67,12 +67,12 @@ const TotalInstancesPieChart = (props: InputProps) => {
 
     return (
         <div className="total-instances-pie-chart">
-            <h3>Active Instances</h3>
+            <h3>Firms</h3>
             <Card>
                 <CardContent>
                     <table className="summary-table">
                         <tr>
-                            <td className="label-cell">Active:</td>
+                            <td className="label-cell">Complete:</td>
                             <td className="value-cell">{props.completeCount}</td>
                         </tr>
                         <tr>
@@ -99,9 +99,9 @@ const TotalInstancesPieChart = (props: InputProps) => {
                 </CardContent>
 
                 <CardActions>
-                    {props.pathname === "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname === "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname === "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
                 </CardActions>
             </Card>
         </div>

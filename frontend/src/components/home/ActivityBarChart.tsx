@@ -137,9 +137,9 @@ const ActivityBarChart = (props: InputProps) => {
                     />
                 </CardContent>
                 <CardActions>
-                    {props.pathname ===  "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname ===  "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname ===  "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Active Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname ===  "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname ===  "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname ===  "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
                 </CardActions>
             </Card>
 
