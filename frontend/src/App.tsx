@@ -55,13 +55,13 @@ const App = () => {
             path: "/marriage-bureau/closed-instances",
             component: ClosedInstances,
             exact: true,
-            title: "Marriage Bureau - Closed Instances"
+            title: "Marriage Bureau - Aborted Deals"
         },
         {
             path: "/marriage-bureau/completed-instances",
             component: CompletedInstances,
             exact: true,
-            title: "Marriage Bureau - Completed Instances"
+            title: "Marriage Bureau - Completed Deals"
         },
         {
             path: "/marriage-bureau/instance-details/:id",
@@ -92,12 +92,6 @@ const App = () => {
             exact: true,
             title: "Buyer Onboarding - Closed Instances"
         },
-        // {
-        //     path: "/buyer-onboarding/completed-instances",
-        //     component: CompletedInstances,
-        //     exact: true,
-        //     title: "Buyer Onboarding - Completed Instances"
-        // },
         {
             path: "/buyer-onboarding/instance-details/:id",
             component: InstanceDetails,

@@ -2,6 +2,7 @@
     .row-1{
         display: flex;
         min-height: 350px;
+        padding-bottom: 48px;
 
         .activity-bar-chart{
             display: flex;
@@ -12,8 +13,14 @@
 
 @media only screen and (max-width: 1000px){
     .home-page{
+        .summary-figures-wrapper{
+            .summary-figures{
+                margin-bottom: 0;
+            }
+        }
         .row-1{
             flex-direction: column;
+            padding-bottom: 0;
         }
     }
 }

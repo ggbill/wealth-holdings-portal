@@ -36,6 +36,30 @@ const LayoutAuthenticated = (props: InputProps) => {
                 </Toolbar>
             </AppBar>
             <List>
+                <ListItem button component={Link} to="/marriage-bureau/dashboard">
+                    <ListItemText className="bold" primary="Marriage Bureau" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/dashboard">
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/active-pipeline">
+                    <ListItemIcon><LabelImportantIcon /></ListItemIcon>
+                    <ListItemText primary="Pipeline" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/action-log">
+                    <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
+                    <ListItemText primary="Action Log" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/completed-instances">
+                    <ListItemIcon><CheckCircleIcon /></ListItemIcon>
+                    <ListItemText primary="Completed Deals" />
+                </ListItem>
+                <ListItem button component={Link} to="/marriage-bureau/closed-instances">
+                    <ListItemIcon><BlockIcon /></ListItemIcon>
+                    <ListItemText primary="Aborted Deals" />
+                </ListItem>
+                <Divider />
                 <ListItem button component={Link} to="/buyer-onboarding/dashboard">
                     <ListItemText className="bold" primary="Buyer Onboarding" />
                 </ListItem>
@@ -51,15 +75,11 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
                     <ListItemText primary="Action Log" />
                 </ListItem>
-                {/* <ListItem button component={Link} to="/buyer-onboarding/completed-instances">
-                    <ListItemIcon><CheckCircleIcon /></ListItemIcon>
-                    <ListItemText primary="Completed Instances" />
-                </ListItem> */}
                 <ListItem button component={Link} to="/buyer-onboarding/closed-instances">
                     <ListItemIcon><BlockIcon /></ListItemIcon>
                     <ListItemText primary="Closed Instances" />
                 </ListItem>
-                <Divider /> 
+                <Divider />
                 <ListItem button component={Link} to="/seller-onboarding/dashboard">
                     <ListItemText className="bold" primary="Seller Onboarding" />
                 </ListItem>
@@ -79,36 +99,13 @@ const LayoutAuthenticated = (props: InputProps) => {
                     <ListItemIcon><BlockIcon /></ListItemIcon>
                     <ListItemText primary="Closed Instances" />
                 </ListItem>
-                {/* <ListItem button component={Link} to="/marriage-bureau/dashboard">
-                    <ListItemText className="bold" primary="Marriage Bureau" />
-                </ListItem>
-                <ListItem button component={Link} to="/marriage-bureau/dashboard">
-                    <ListItemIcon><HomeIcon /></ListItemIcon>
-                    <ListItemText primary="Dashboard" />
-                </ListItem>
-                <ListItem button component={Link} to="/marriage-bureau/active-pipeline">
-                    <ListItemIcon><LabelImportantIcon /></ListItemIcon>
-                    <ListItemText primary="Active Pipeline" />
-                </ListItem>
-                <ListItem button component={Link} to="/marriage-bureau/action-log">
-                    <ListItemIcon><FormatListBulletedIcon /></ListItemIcon>
-                    <ListItemText primary="Action Log" />
-                </ListItem>
-                <ListItem button component={Link} to="/marriage-bureau/completed-instances">
-                    <ListItemIcon><CheckCircleIcon /></ListItemIcon>
-                    <ListItemText primary="Completed Instances" />
-                </ListItem>
-                <ListItem button component={Link} to="/marriage-bureau/closed-instances">
-                    <ListItemIcon><BlockIcon /></ListItemIcon>
-                    <ListItemText primary="Closed Instances" />
-                </ListItem> */}
-                <Divider /> 
+                <Divider />
                 <ListItem button component={Link} to="/settings">
                     <ListItemIcon><SettingsIcon /></ListItemIcon>
                     <ListItemText primary="Settings" />
                 </ListItem>
             </List>
-            
+
         </div>
 
     )

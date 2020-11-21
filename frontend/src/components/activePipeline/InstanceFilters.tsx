@@ -19,7 +19,6 @@ const InstanceFilters = (props: InputProps) => {
     const [uniqueActivityNames, setUniqueActivityNames] = useState<string[]>([])
     const [uniqueBdmNames, setUniqueBdmNames] = useState<string[]>([])
     const [uniqueRagStatuses, setUniqueRagStatuses] = useState<string[]>([])
-    const [uniqueRepresentings, setUniqueRepresentings] = useState<string[]>([])
 
     const commonFunctions = useCommonFunctions()
 
@@ -30,19 +29,8 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase, props.activitySummaries))
         setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
 
-        // if (props.pathname === "marriage-bureau") {
-        //     let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries))
-        //     setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
-        // } else {
-        //     let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries))
-        //     setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
-        // }
-
         let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
         setUniqueBdmNames([...new Set(uniqueBdmNames)])
-
-        let uniqueRepresentings: string[] = props.activeCases.map(activeCase => activeCase.representing)
-        setUniqueRepresentings([...new Set(uniqueRepresentings)])
     }
 
     const filterActiveCases = (): void => {
@@ -53,17 +41,10 @@ const InstanceFilters = (props: InputProps) => {
             let currentRAGStatus
             currentRAGStatus = commonFunctions.determineRAGStatus(activeCase, props.activitySummaries)
 
-            // if (props.pathname === "marriage-bureau") {
-            //     currentRAGStatus = commonFunctions.determineMarriageBureauRAGStatus(activeCase, props.activitySummaries)
-            // } else {
-            //     currentRAGStatus = commonFunctions.determineBuyerOnboardingRAGStatus(activeCase, props.activitySummaries)
-            // }
-
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
                 (props.tableFilters.ragStatus === "All" || currentRAGStatus === props.tableFilters.ragStatus) &&
-                (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm) &&
-                (props.tableFilters.representing === "All" || activeCase.representing === props.tableFilters.representing)
+                (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm)
             )
         });
 
@@ -93,7 +74,7 @@ const InstanceFilters = (props: InputProps) => {
 
     return (
         <div className="filters">
-            <h2>Filters {props.isFilterApplied() && <span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span>}</h2>
+            <h3>Filters {props.isFilterApplied() && <span className="clear-filters" onClick={() => props.clearAllFilters()}>Clear</span>}</h3>
             <div className="dropdown-wrapper">
                 <FormControl className="current-activity">
                     <InputLabel id="current-activity-select-label">Current Activity</InputLabel>
@@ -146,26 +127,6 @@ const InstanceFilters = (props: InputProps) => {
                         }
                     </Select>
                 </FormControl>
-                {props.pathname === "marriage-bureau" &&
-                    <FormControl className="representing">
-                        <InputLabel id="representing-select-label">WH Representing</InputLabel>
-                        <Select
-                            labelId="representing-select-label"
-                            id="representing-select"
-                            name="representing"
-                            value={props.tableFilters.representing}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="All">All</MenuItem>
-                            {
-                                uniqueRepresentings.map((representing: string, index: number) => {
-                                    return (<MenuItem className="highlighted" key={index} value={representing}>{representing}</MenuItem>)
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                }
-
             </div>
         </div>
     )

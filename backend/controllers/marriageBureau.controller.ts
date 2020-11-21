@@ -10,6 +10,8 @@ export namespace MarriageBureauController {
                     $group: {
                         _id: '$_kissflow_id',
                         firmName: { $last: "$firmName" },
+                        buyer: { $last: "$buyer" },
+                        seller: { $last: "$seller" },
                         fcaNumber: { $last: "$fcaNumber" },
                         officeLocation: { $last: "$officeLocation" },
                         isSimplyBizMember: { $last: "$isSimplyBizMember" },
@@ -29,6 +31,8 @@ export namespace MarriageBureauController {
                         customers: { $last: "$customers" },
                         representing: { $last: "$representing" },
                         wealthHoldingsFee: { $last: "$wealthHoldingsFee" },
+                        introducerFee: { $last: "$introducerFee" },
+                        simplyBizFee: { $last: "$simplyBizFee" },
                         valuation: { $last: "$valuation" },
                         currentStatus: { $last: "$currentStatus" },
                     }

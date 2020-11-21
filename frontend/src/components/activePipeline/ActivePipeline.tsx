@@ -228,9 +228,10 @@ const ActivePipeline = ({ match }) => {
                 isFilterApplied={isFilterApplied}
                 clearAllFilters={clearAllFilters}
                 pathname={location.pathname.split("/")[1]}
+                title="Summary Figures"
             />
 
-            <h2>Instances {isFilterApplied() && <>(Filtered)<span className="clear-filters" onClick={() => clearAllFilters()}>Clear</span></>}</h2>
+            <h3>Instances {isFilterApplied() && <>(Filtered)<span className="clear-filters" onClick={() => clearAllFilters()}>Clear</span></>}</h3>
             <Paper>
                 <Table className="instances-table">
                     <TableHead>
@@ -239,7 +240,7 @@ const ActivePipeline = ({ match }) => {
                                 <div className="table-header-wrapper leftAlign">
                                     {/* <div className="table-header-wrapper leftAlign" style={determineHeaderRowStyle()}> */}
                                     <div onClick={() => handleSort("firmName")} className="tableHeaderCell">
-                                        <span>Firm Name</span>
+                                        <span>Name</span>
                                         {
                                             columnToSort === "firmName" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -305,7 +306,7 @@ const ActivePipeline = ({ match }) => {
                                     <TableCell> <Link to={'/marriage-bureau/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell> :
                                     <TableCell> <Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>
                                 } */}
-                                {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
+                                {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + activeCase._id}>{activeCase.buyer} purchasing {activeCase.seller}</Link></TableCell>}
                                 {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
                                 {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
                                 <TableCell align="center">{activeCase._current_step}</TableCell>

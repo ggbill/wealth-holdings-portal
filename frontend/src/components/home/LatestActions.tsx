@@ -43,7 +43,7 @@ const LatestActions = (props: InputProps) => {
                                     <span> Action</span>
                                 </TableCell>
                                 <TableCell>
-                                    <span>Firm Name</span>
+                                    <span>Instance Name</span>
                                 </TableCell>
                                 <TableCell>
                                     <span className="hide-on-mobile">Actioned By</span>
@@ -58,8 +58,8 @@ const LatestActions = (props: InputProps) => {
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     {action._current_context[0].Name === "Complete" ?
-                                    <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
-                                    {props.pathname === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                        <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
+                                    {props.pathname === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.buyer} purchasing {action.seller}</Link></TableCell>}
                                     {props.pathname === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {props.pathname === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     <TableCell className="hide-on-mobile">{action._last_action_performed_by.Name}</TableCell>

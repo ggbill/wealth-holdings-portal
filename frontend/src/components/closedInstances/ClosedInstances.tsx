@@ -10,6 +10,7 @@ import _ from "lodash"
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
 import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
+import SummaryFigures from '../activePipeline/SummaryFigures'
 
 const ClosedInstances = () => {
 
@@ -132,7 +133,17 @@ const ClosedInstances = () => {
 
     return (
         <div className="closed-instance-list">
-
+            {location.pathname.split("/")[1] === "marriage-bureau" &&
+                <div className="summary-figures-wrapper">
+                    <SummaryFigures
+                        activeCases={closedCases}
+                        isFilterApplied={() => false}
+                        clearAllFilters={() => false}
+                        pathname={location.pathname.split("/")[1]}
+                        title="Aborted Deals - Summary Figures"
+                    />
+                </div>
+            }
             <Paper>
                 <Table className="instances-table">
                     <TableHead>
@@ -140,7 +151,7 @@ const ClosedInstances = () => {
                             <TableCell>
                                 <div className="table-header-wrapper leftAlign">
                                     <div onClick={() => handleSort("firmName")} className="tableHeaderCell">
-                                        <span>Firm Name</span>
+                                        <span>Name</span>
                                         {
                                             columnToSort === "firmName" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -149,27 +160,77 @@ const ClosedInstances = () => {
                                     </div>
                                 </div>
                             </TableCell>
-                            <TableCell>
-                                <div className="table-header-wrapper">
-                                    <div onClick={() => handleSort("isReEngage")} className="tableHeaderCell">
-                                        <span>Re-Engage In Future?</span>
-                                        {
-                                            columnToSort === "isReEngage" ? (
-                                                sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
-                                            ) : null
-                                        }
+                            {location.pathname.split("/")[1] !== "marriage-bureau" &&
+                                <TableCell>
+                                    <div className="table-header-wrapper">
+                                        <div onClick={() => handleSort("isReEngage")} className="tableHeaderCell">
+                                            <span>Re-Engage In Future?</span>
+                                            {
+                                                columnToSort === "isReEngage" ? (
+                                                    sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                ) : null
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            </TableCell>
+                                </TableCell>
+                            }
+                            {location.pathname.split("/")[1] === "marriage-bureau" &&
+                                <>
+                                    <TableCell>
+                                        <div className="table-header-wrapper">
+                                            <div onClick={() => handleSort("whFee")} className="tableHeaderCell">
+                                                <span>Wealth Holdings Fee</span>
+                                                {
+                                                    columnToSort === "whFee" ? (
+                                                        sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                    ) : null
+                                                }
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="table-header-wrapper">
+                                            <div onClick={() => handleSort("sbFee")} className="tableHeaderCell">
+                                                <span>SimplyBiz Fee</span>
+                                                {
+                                                    columnToSort === "sbFee" ? (
+                                                        sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                    ) : null
+                                                }
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="table-header-wrapper">
+                                            <div onClick={() => handleSort("introducerFee")} className="tableHeaderCell">
+                                                <span>Introducer Fee</span>
+                                                {
+                                                    columnToSort === "introducerFee" ? (
+                                                        sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                    ) : null
+                                                }
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                </>
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {closedCases.map((closedCase: App.ActivityDetail) => (
                             <TableRow key={closedCase._kissflow_id}>
-                                {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>}
+                                {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + closedCase._kissflow_id}>{closedCase.buyer} purchasing {closedCase.seller}</Link></TableCell>}
                                 {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>}
                                 {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>}
-                                <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>
+                                {location.pathname.split("/")[1] !== "marriage-bureau" && <TableCell align="center">{String(closedCase.isReEngage)}</TableCell>}
+                                {location.pathname.split("/")[1] === "marriage-bureau" &&
+                                    <>
+                                        <TableCell align="center">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(closedCase.wealthHoldingsFee)}</TableCell>
+                                        <TableCell align="center">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(closedCase.simplyBizFee)}</TableCell>
+                                        <TableCell align="center">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(closedCase.introducerFee)}</TableCell>
+                                    </>
+                                }
+
                             </TableRow>
                         ))}
                     </TableBody>

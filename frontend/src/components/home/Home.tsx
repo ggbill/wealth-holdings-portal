@@ -7,6 +7,7 @@ import TotalInstancesPieChart from './TotalInstancesPieChart'
 import ActivityBarChart from './ActivityBarChart'
 import LatestActions from './LatestActions'
 import { useLocation } from 'react-router-dom'
+import SummaryFigures from '../activePipeline/SummaryFigures'
 
 const Home = () => {
     const isCancelled = useRef(false)
@@ -18,6 +19,7 @@ const Home = () => {
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
     const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
+    const [completedCases, setCompletedCases] = useState<App.ActivityDetail[]>([])
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
     const commonFunctions = useCommonFunctions()
@@ -48,6 +50,23 @@ const Home = () => {
             .then(data => {
                 if (!isCancelled.current) {
                     setActions(data)
+                    setLoading(false)
+                }
+            })
+            .catch((err: Error) => {
+                if (!isCancelled.current) {
+                    setError(err.message)
+                    setLoading(false)
+                }
+            })
+    }
+
+    const getMarriageBureauCompletedCases = (): void => {
+        setLoading(true)
+        marriageBureauApi.get("getClosedCases")
+            .then(data => {
+                if (!isCancelled.current) {
+                    setCompletedCases(data.filter(result => result.activityAction !== "Close Case"))
                     setLoading(false)
                 }
             })
@@ -265,6 +284,7 @@ const Home = () => {
         if (location.pathname.split("/")[1] === "marriage-bureau") {
             getLatestDataForActiveMarriageBureauCases();
             getMarriageBureauActions();
+            getMarriageBureauCompletedCases();
         } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
             getLatestDataForActiveBuyerOnboardingCases();
             getBuyerOnboardingActions();
@@ -295,20 +315,46 @@ const Home = () => {
         <>
             {activeCases &&
                 <div className="content home-page">
+                    {location.pathname.split("/")[1] === "marriage-bureau" &&
+                        <div className="summary-figures-wrapper">
+                            <SummaryFigures
+                                activeCases={activeCases}
+                                isFilterApplied={() => false}
+                                clearAllFilters={() => false}
+                                pathname={location.pathname.split("/")[1]}
+                                title="Pipeline - Summary Figures"
+                            />
+                        </div>
+                    }
                     <div className="row-1">
-                        <TotalInstancesPieChart
-                            onTimeCount={totalActivitySummary.greenCount}
-                            atRiskCount={totalActivitySummary.amberCount}
-                            overdueCount={totalActivitySummary.redCount}
-                            completeCount={activeCases.filter(result => result._current_step === "Complete").length}
-                            pathname={location.pathname.split("/")[1]}
-                        />
+                        {location.pathname.split("/")[1] === "marriage-bureau" &&
+                            <TotalInstancesPieChart
+                                onTimeCount={totalActivitySummary.greenCount}
+                                atRiskCount={totalActivitySummary.amberCount}
+                                overdueCount={totalActivitySummary.redCount}
+                                completeCount={completedCases.length}
+                                pathname={location.pathname.split("/")[1]}
+                                title="All Deals"
+                            />
+                        }
+                        {location.pathname.split("/")[1] !== "marriage-bureau" &&
+                            <TotalInstancesPieChart
+                                onTimeCount={totalActivitySummary.greenCount}
+                                atRiskCount={totalActivitySummary.amberCount}
+                                overdueCount={totalActivitySummary.redCount}
+                                completeCount={activeCases.filter(result => result._current_step === "Complete").length}
+                                pathname={location.pathname.split("/")[1]}
+                                title="Firms"
+
+                            />
+                        }
                         <ActivityBarChart
                             activitySummaries={activitySummaries}
                             pathname={location.pathname.split("/")[1]}
+                            title="Pipeline - Activity Breakdown"
                         />
                     </div>
-                    <div className="row-2">
+                    <div className="latest-actions-wrapper">
                         <LatestActions
                             actions={actions}
                             pathname={location.pathname.split("/")[1]}

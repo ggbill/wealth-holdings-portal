@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 interface InputProps {
     activitySummaries: App.ActivitySummary[]
     pathname: string
+    title: string
 }
 
 const ActivityBarChart = (props: InputProps) => {
@@ -128,7 +129,7 @@ const ActivityBarChart = (props: InputProps) => {
 
     return (
         <div className="activity-bar-chart">
-            <h3>Activity Breakdown</h3>
+            <h3>{props.title}</h3>
             <Card>
                 <CardContent>
                     <Bar

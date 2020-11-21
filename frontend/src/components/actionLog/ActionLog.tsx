@@ -131,7 +131,7 @@ const ActionLog = () => {
                                     <span>Action</span>
                                 </TableCell>
                                 <TableCell>
-                                    <span>Firm Name</span>
+                                    <span>Instance Name</span>
                                 </TableCell>
                                 <TableCell className="hide-on-mobile">
                                     <span>Actioned By</span>
@@ -147,7 +147,7 @@ const ActionLog = () => {
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     {action._current_context[0].Name === "Complete" ?
                                     <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
-                                    {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
+                                    {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.buyer} purchasing {action.seller}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     <TableCell className="hide-on-mobile">{action._last_action_performed_by.Name}</TableCell>

@@ -12,6 +12,7 @@ interface InputProps {
     overdueCount: number,
     completeCount: number,
     pathname: string
+    title: string
 }
 
 const TotalInstancesPieChart = (props: InputProps) => {
@@ -67,22 +68,25 @@ const TotalInstancesPieChart = (props: InputProps) => {
 
     return (
         <div className="total-instances-pie-chart">
-            <h3>Firms</h3>
+            <h3>{props.title}</h3>
             <Card>
                 <CardContent>
                     <table className="summary-table">
-                        <tr>
-                            <td className="label-cell">Complete:</td>
-                            <td className="value-cell">{props.completeCount}</td>
-                        </tr>
-                        <tr>
-                            <td className="label-cell">Onboarding:</td>
-                            <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount}</td>
-                        </tr>
-                        <tr className="total-row">
-                            <td className="label-cell">Total:</td>
-                            <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount + props.completeCount}</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td className="label-cell">Complete:</td>
+                                <td className="value-cell">{props.completeCount}</td>
+                            </tr>
+                            <tr>
+                                {props.pathname !== "marriage-bureau" && <td className="label-cell">Onboarding:</td>}
+                                {props.pathname === "marriage-bureau" && <td className="label-cell">In Progress:</td>}
+                                <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount}</td>
+                            </tr>
+                            <tr className="total-row">
+                                <td className="label-cell">Total:</td>
+                                <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount + props.completeCount}</td>
+                            </tr>
+                        </tbody>
                     </table>
                     {/* <h2>Total: {props.onTimeCount + props.atRiskCount + props.overdueCount}</h2>
                     <h2>Complete: {props.completeCount}</h2> */}
@@ -94,7 +98,8 @@ const TotalInstancesPieChart = (props: InputProps) => {
                         />
                     </div>
 
-                    <span className="pie-chart-label">(Onboarding Instances by RAG status)</span>
+                    {props.pathname !== "marriage-bureau" && <span className="pie-chart-label">(Onboarding Firms by RAG status)</span>}
+                    {props.pathname === "marriage-bureau" && <span className="pie-chart-label">(In Progress Deals by RAG status)</span>}
 
                 </CardContent>
 

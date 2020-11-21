@@ -11,7 +11,7 @@ export namespace KissFlowController {
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
 
-            let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee, introducerFee: number;
+            let aum, recurringFees, turnover, ebitda, valuation, wealthHoldingsFee, introducerFee, simplyBizFee: number;
 
             if (webhookBody.AUM) { aum = Number(webhookBody.AUM.split(" ")[0]) }
             if (webhookBody.Recurring_Fees) { recurringFees = Number(webhookBody.Recurring_Fees.split(" ")[0]) }
@@ -20,6 +20,7 @@ export namespace KissFlowController {
             if (webhookBody.Valuation) { valuation = Number(webhookBody.Valuation.split(" ")[0]) }
             if (webhookBody.Wealth_Holdings_Fee) { wealthHoldingsFee = Number(webhookBody.Wealth_Holdings_Fee.split(" ")[0]) }
             if (webhookBody.Introducer_Fee) { introducerFee = Number(webhookBody.Introducer_Fee.split(" ")[0]) }
+            if (webhookBody.SimplyBiz_Fee) { simplyBizFee = Number(webhookBody.SimplyBiz_Fee.split(" ")[0]) }
 
             MarriageBureauWebhook.create({
                 ...webhookBodyNoId,
@@ -41,6 +42,7 @@ export namespace KissFlowController {
                 valuation: valuation,
                 wealthHoldingsFee: wealthHoldingsFee,
                 introducerFee: introducerFee,
+                simplyBizFee: simplyBizFee,
                 completionDate: webhookBody.Completion_Date,
                 purchaseType: webhookBody.Purchase_Type,
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,

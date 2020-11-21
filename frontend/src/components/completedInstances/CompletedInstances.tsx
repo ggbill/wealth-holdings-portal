@@ -10,6 +10,7 @@ import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExce
 import { Link, useLocation } from 'react-router-dom'
 import _ from "lodash"
 import moment from 'moment'
+import SummaryFigures from '../activePipeline/SummaryFigures'
 
 const CompletedInstances = () => {
 
@@ -40,6 +41,7 @@ const CompletedInstances = () => {
         marriageBureauApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
+                    console.log(data.filter(result => result.activityAction !== "Close Case"))
                     setClosedCases(data.filter(result => result.activityAction !== "Close Case"))
                     setLoading(false)
                 }
@@ -118,6 +120,16 @@ const CompletedInstances = () => {
 
     return (
         <div className="closed-instance-list">
+            <div className="summary-figures-wrapper">
+                <SummaryFigures
+                    activeCases={closedCases}
+                    isFilterApplied={() => false}
+                    clearAllFilters={() => false}
+                    pathname={location.pathname.split("/")[1]}
+                    title="Completed Deals - Summary Figures"
+                />
+            </div>
+
             <Paper>
                 <Table className="instances-table">
                     <TableHead>
@@ -125,7 +137,7 @@ const CompletedInstances = () => {
                             <TableCell>
                                 <div className="table-header-wrapper leftAlign">
                                     <div onClick={() => handleSort("firmName")} className="tableHeaderCell">
-                                        <span>Firm Name</span>
+                                        <span>Name</span>
                                         {
                                             columnToSort === "firmName" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -164,7 +176,7 @@ const CompletedInstances = () => {
                         {closedCases.map((closedCase: App.ActivityDetail) => (
                             <TableRow key={closedCase._id}>
                                 {location.pathname.split("/")[1] === "marriage-bureau" ?
-                                    <TableCell> <Link to={'/marriage-bureau/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell> :
+                                    <TableCell> <Link to={'/marriage-bureau/instance-details/' + closedCase._kissflow_id}>{closedCase.buyer} purchasing {closedCase.seller}</Link></TableCell> :
                                     <TableCell> <Link to={'/buyer-onboarding/instance-details/' + closedCase._kissflow_id}>{closedCase.firmName}</Link></TableCell>
                                 }
 
