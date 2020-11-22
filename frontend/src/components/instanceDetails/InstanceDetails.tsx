@@ -245,7 +245,7 @@ const InstanceDetails = ({ match }) => {
 
 
             {/* <p>{JSON.stringify(instanceDetails)}</p> */}
-            {(instanceDetails.length > 1) && <>
+            {/* {(instanceDetails.length > 1) && <> */}
                 <h2>Instance History</h2>
                 {instanceDetails.map((activityDetail: App.ActivityDetail) => (
                     <>
@@ -528,7 +528,7 @@ const InstanceDetails = ({ match }) => {
                         {/* } */}
                     </>
                 ))}
-            </>}
+            {/* </>} */}
             <div className="button-container">
                 {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
                 {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => sellerOnboardingExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
