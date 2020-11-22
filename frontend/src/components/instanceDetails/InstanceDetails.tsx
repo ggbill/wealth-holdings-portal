@@ -249,7 +249,7 @@ const InstanceDetails = ({ match }) => {
                 <h2>Instance History</h2>
                 {instanceDetails.map((activityDetail: App.ActivityDetail) => (
                     <>
-                        {activityDetail._current_context[0].Name !== "Start" &&
+                        {/* {activityDetail._current_context[0].Name !== "Start" && */}
                             <ExpansionPanel>
                                 <ExpansionPanelSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -525,7 +525,7 @@ const InstanceDetails = ({ match }) => {
                                     }
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                        }
+                        {/* } */}
                     </>
                 ))}
             </>}
