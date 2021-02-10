@@ -288,7 +288,7 @@ const ActivePipeline = ({ match }) => {
                             {location.pathname.split("/")[1] === "buyer-onboarding" ?
                                 <TableCell className="hide-on-mobile">
                                     <div className="table-header-wrapper">
-                                        <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
+                                        <div onClick={() => handleSort("fundsAvailable")} className="tableHeaderCell">
                                             <span>Funds Available</span>
                                             {
                                                 columnToSort === "fundsAvailable" ? (
