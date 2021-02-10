@@ -14,14 +14,10 @@ server.on('error', (err) => {
 
 server.on('listening', async () => {
     console.info(`Listening on a port ${PORT}`);
-    mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://dbadmin:W3althH0ld1ng5!@wealth-holdings.2l15e.mongodb.net/heroku_gl9n4dmp?retryWrites=true&w=majority", {
+    mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/wealth_holdings_portal_local", {
         useNewUrlParser: true,
         useFindAndModify: false
     });
-    // mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/wealth_holdings_portal_local", {
-    //     useNewUrlParser: true,
-    //     useFindAndModify: false
-    // });
     mongoose.connection.once('open', () => {
         console.info('Connected to Mongo via Mongoose');
     });
