@@ -315,7 +315,7 @@ const Home = () => {
         <>
             {activeCases &&
                 <div className="content home-page">
-                    {location.pathname.split("/")[1] === "marriage-bureau" &&
+                    {(location.pathname.split("/")[1] === "marriage-bureau" || location.pathname.split("/")[1] === "buyer-onboarding") &&
                         <div className="summary-figures-wrapper">
                             <SummaryFigures
                                 activeCases={activeCases}
@@ -326,6 +326,7 @@ const Home = () => {
                             />
                         </div>
                     }
+                    
                     <div className="row-1">
                         {location.pathname.split("/")[1] === "marriage-bureau" &&
                             <TotalInstancesPieChart

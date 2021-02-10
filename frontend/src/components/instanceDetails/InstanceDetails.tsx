@@ -242,280 +242,268 @@ const InstanceDetails = ({ match }) => {
                 />
             </div>}
 
+            {lastestActivityDetail && location.pathname.split("/")[1] === "buyer-onboarding" &&
+                <div className="summary-details-wrapper">
+                    <TextField
+                        id="fundsAvailable"
+                        label="Funds Available"
+                        value={lastestActivityDetail.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(lastestActivityDetail.fundsAvailable) : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(0)}
+                        InputProps={{
+                            disabled: true,
+                        }}
+                    />
+                </div>
+            }
+
 
 
             {/* <p>{JSON.stringify(instanceDetails)}</p> */}
             {/* {(instanceDetails.length > 1) && <> */}
-                <h2>Instance History</h2>
-                {instanceDetails.map((activityDetail: App.ActivityDetail) => (
-                    <>
-                        {/* {activityDetail._current_context[0].Name !== "Start" && */}
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1bh-content"
-                                    id="panel1bh-header"
-                                >
-                                    {/* If showing complete step then look for the completeActivityAction rather than activityAction */}
-                                    {activityDetail._current_context[0].Name === "Complete" ?
-                                        <div className="activity-name-wrapper">
-                                            {activityDetail.completeActivityAction === "Close Case" && <HighlightOffIcon className="red" />}
-                                            {activityDetail.completeActivityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
-                                            <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
-                                        </div>
-                                        :
-                                        <div className="activity-name-wrapper">
-                                            {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
-                                            {!activityDetail.activityAction && <CheckCircleOutlineIcon className="green" />}
-                                            {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
-                                            {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
-                                            <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
-                                        </div>
+            <h2>Instance History</h2>
+            {instanceDetails.map((activityDetail: App.ActivityDetail) => (
+                <>
+                    {/* {activityDetail._current_context[0].Name !== "Start" && */}
+                    <ExpansionPanel>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            {/* If showing complete step then look for the completeActivityAction rather than activityAction */}
+                            {activityDetail._current_context[0].Name === "Complete" ?
+                                <div className="activity-name-wrapper">
+                                    {activityDetail.completeActivityAction === "Close Case" && <HighlightOffIcon className="red" />}
+                                    {activityDetail.completeActivityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
+                                    <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
+                                </div>
+                                :
+                                <div className="activity-name-wrapper">
+                                    {activityDetail.activityAction === "Complete Activity" && <CheckCircleOutlineIcon className="green" />}
+                                    {!activityDetail.activityAction && <CheckCircleOutlineIcon className="green" />}
+                                    {activityDetail.activityAction === "Close Case" && <HighlightOffIcon className="red" />}
+                                    {activityDetail.activityAction === "Save & Publish" && <SaveAltIcon className="blue" />}
+                                    <span className="panel-header-activity-name">{activityDetail._current_context[0].Name}</span>
+                                </div>
 
-                                    }
-                                    <div className="desktop-action-summary-wrapper">
-                                        <span className="panel-header-completed-label">Action:</span>
-                                        {activityDetail._current_context[0].Name === "Complete" ?
-                                            <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> :
-                                            !activityDetail.activityAction ? <span className="panel-header-completed-value">Complete Activity</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
-                                        }
-                                        <span className="panel-header-completed-label">Completed By:</span>
-                                        <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
-                                        <span className="panel-header-completed-label">Completed Date:</span>
-                                        <span className="panel-header-completed-value">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                            }
+                            <div className="desktop-action-summary-wrapper">
+                                <span className="panel-header-completed-label">Action:</span>
+                                {activityDetail._current_context[0].Name === "Complete" ?
+                                    <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> :
+                                    !activityDetail.activityAction ? <span className="panel-header-completed-value">Complete Activity</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
+                                }
+                                <span className="panel-header-completed-label">Completed By:</span>
+                                <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
+                                <span className="panel-header-completed-label">Completed Date:</span>
+                                <span className="panel-header-completed-value">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                            </div>
+
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            {activityDetail.activityAction !== "Close Case" &&
+                                <>
+                                    <div className="completion-details">
+                                        <div className="data-section">
+                                            <TextField
+                                                id="action"
+                                                label="Action"
+                                                value={activityDetail.activityAction || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                            <TextField
+                                                id="completedBy"
+                                                label="Completed By"
+                                                value={activityDetail._last_action_performed_by.Name || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                            <TextField
+                                                id="completedDate"
+                                                label="Completed Date"
+                                                value={moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY") || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                        </div>
                                     </div>
 
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    {activityDetail.activityAction !== "Close Case" &&
-                                        <>
-                                            <div className="completion-details">
-                                                <div className="data-section">
-                                                    <TextField
-                                                        id="action"
-                                                        label="Action"
-                                                        value={activityDetail.activityAction || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                    <TextField
-                                                        id="completedBy"
-                                                        label="Completed By"
-                                                        value={activityDetail._last_action_performed_by.Name || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                    <TextField
-                                                        id="completedDate"
-                                                        label="Completed Date"
-                                                        value={moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY") || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
 
 
 
 
-
-                                            {location.pathname.split("/")[1] !== "marriage-bureau" &&
-                                                <div className="data-section">
-                                                    <h4>Selling Firm Contact Details</h4>
-                                                    <TextField
-                                                        id="primaryContact"
-                                                        label="Primary Contact"
-                                                        value={activityDetail.primaryContact || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                    <TextField
-                                                        id="preferredEmail"
-                                                        label="Preferred Email"
-                                                        value={activityDetail.preferredEmail || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                    <TextField
-                                                        id="preferredPhone"
-                                                        label="Preferred Phone"
-                                                        value={activityDetail.preferredPhone || ''}
-                                                        InputProps={{
-                                                            disabled: true
-                                                        }}
-                                                    />
-                                                </div>
-                                            }
-
-                                            <div className="data-section">
-                                                <TextField
-                                                    id="currentStatus"
-                                                    className="current-status"
-                                                    label="Current Status"
-                                                    value={activityDetail.currentStatus || ''}
-                                                    multiline
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                />
-                                            </div>
-
-                                            {location.pathname.split("/")[1] === "marriage-bureau" &&
-                                                <>
-                                                    <div className="data-section">
-                                                        <h4>Selling Firm Key Metrics</h4>
-                                                        <TextField
-                                                            id="aum"
-                                                            label="AUM"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.aum) || ''}
-                                                            InputProps={{
-                                                                disabled: true,
-
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="recurringFees"
-                                                            label="Recurring Fees"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.recurringFees) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="turnover"
-                                                            label="Turnover"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.turnover) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-
-                                                        />
-                                                        <TextField
-                                                            id="ebitda"
-                                                            label="EBITDA"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.ebitda) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="planners"
-                                                            label="Planners"
-                                                            value={new Intl.NumberFormat().format(activityDetail.planners) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="customers"
-                                                            label="Customers"
-                                                            value={new Intl.NumberFormat().format(activityDetail.customers) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="clients"
-                                                            label="Clients"
-                                                            value={new Intl.NumberFormat().format(activityDetail.clients) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className="data-section">
-                                                        <h4>Offer Details</h4>
-                                                        <TextField
-                                                            id="valuation"
-                                                            label="Valuation"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.valuation) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="whFee"
-                                                            label="Wealth Holdings Fee"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.wealthHoldingsFee) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="sbFee"
-                                                            label="SimplyBiz Fee"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.simplyBizFee) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="introducerFee"
-                                                            label="Introducer Fee"
-                                                            value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.introducerFee) || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="completionDate"
-                                                            label="Completion Date"
-                                                            value={moment(lastestActivityDetail.completionDate).format("DD/MM/YYYY") || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            id="purchaseType"
-                                                            label="Purchase Type"
-                                                            value={activityDetail.purchaseType || ''}
-                                                            InputProps={{
-                                                                disabled: true
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </>
-                                            }
-                                        </>
+                                    {location.pathname.split("/")[1] !== "marriage-bureau" &&
+                                        <div className="data-section">
+                                            <h4>Firm Contact Details</h4>
+                                            <TextField
+                                                id="primaryContact"
+                                                label="Primary Contact"
+                                                value={activityDetail.primaryContact || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                            <TextField
+                                                id="preferredEmail"
+                                                label="Preferred Email"
+                                                value={activityDetail.preferredEmail || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                            <TextField
+                                                id="preferredPhone"
+                                                label="Preferred Phone"
+                                                value={activityDetail.preferredPhone || ''}
+                                                InputProps={{
+                                                    disabled: true
+                                                }}
+                                            />
+                                        </div>
                                     }
-                                    {activityDetail.activityAction === "Close Case" &&
+
+                                    <div className="data-section">
+                                        <TextField
+                                            id="currentStatus"
+                                            className="current-status"
+                                            label="Current Status"
+                                            value={activityDetail.currentStatus || ''}
+                                            multiline
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                        />
+                                    </div>
+
+                                    {location.pathname.split("/")[1] === "buyer-onboarding" &&
+
+                                        <div className="data-section">
+                                            {/* <h4>Firm Key Metrics</h4> */}
+                                            <TextField
+                                                id="fundsAvailable"
+                                                label="Funds Available"
+                                                value={activityDetail.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.fundsAvailable) : 0}
+                                                InputProps={{
+                                                    disabled: true,
+
+                                                }}
+                                            />
+                                        </div>
+
+                                    }
+
+                                    {location.pathname.split("/")[1] === "marriage-bureau" &&
                                         <>
                                             <div className="data-section">
+                                                <h4>Firm Key Metrics</h4>
                                                 <TextField
-                                                    id="reason"
-                                                    label="Reason"
-                                                    value={activityDetail.closeCaseReason || ''}
+                                                    id="aum"
+                                                    label="AUM"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.aum) || ''}
                                                     InputProps={{
-                                                        disabled: true
+                                                        disabled: true,
+
                                                     }}
-                                                    className="full-width"
                                                 />
                                                 <TextField
-                                                    id="description"
-                                                    label="Description"
-                                                    value={activityDetail.closeCaseDescription || ''}
-                                                    InputProps={{
-                                                        disabled: true
-                                                    }}
-                                                    className="full-width"
-                                                />
-                                                <TextField
-                                                    id="isReEngage"
-                                                    label="Re-Engage in Future?"
-                                                    value={String(activityDetail.isReEngage) || ''}
+                                                    id="recurringFees"
+                                                    label="Recurring Fees"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.recurringFees) || ''}
                                                     InputProps={{
                                                         disabled: true
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="reEngageDate"
-                                                    label="Re-engage Date Date"
-                                                    value={moment(activityDetail.reEngageDate).format("DD/MM/YYYY") || ''}
+                                                    id="turnover"
+                                                    label="Turnover"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.turnover) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+
+                                                />
+                                                <TextField
+                                                    id="ebitda"
+                                                    label="EBITDA"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.ebitda) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="planners"
+                                                    label="Planners"
+                                                    value={new Intl.NumberFormat().format(activityDetail.planners) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="customers"
+                                                    label="Customers"
+                                                    value={new Intl.NumberFormat().format(activityDetail.customers) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="clients"
+                                                    label="Clients"
+                                                    value={new Intl.NumberFormat().format(activityDetail.clients) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="data-section">
+                                                <h4>Offer Details</h4>
+                                                <TextField
+                                                    id="valuation"
+                                                    label="Valuation"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.valuation) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="whFee"
+                                                    label="Wealth Holdings Fee"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.wealthHoldingsFee) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="sbFee"
+                                                    label="SimplyBiz Fee"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.simplyBizFee) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="introducerFee"
+                                                    label="Introducer Fee"
+                                                    value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.introducerFee) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="completionDate"
+                                                    label="Completion Date"
+                                                    value={moment(lastestActivityDetail.completionDate).format("DD/MM/YYYY") || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    id="purchaseType"
+                                                    label="Purchase Type"
+                                                    value={activityDetail.purchaseType || ''}
                                                     InputProps={{
                                                         disabled: true
                                                     }}
@@ -523,11 +511,53 @@ const InstanceDetails = ({ match }) => {
                                             </div>
                                         </>
                                     }
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                        {/* } */}
-                    </>
-                ))}
+                                </>
+                            }
+                            {activityDetail.activityAction === "Close Case" &&
+                                <>
+                                    <div className="data-section">
+                                        <TextField
+                                            id="reason"
+                                            label="Reason"
+                                            value={activityDetail.closeCaseReason || ''}
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                            className="full-width"
+                                        />
+                                        <TextField
+                                            id="description"
+                                            label="Description"
+                                            value={activityDetail.closeCaseDescription || ''}
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                            className="full-width"
+                                        />
+                                        <TextField
+                                            id="isReEngage"
+                                            label="Re-Engage in Future?"
+                                            value={String(activityDetail.isReEngage) || ''}
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                        />
+                                        <TextField
+                                            id="reEngageDate"
+                                            label="Re-engage Date Date"
+                                            value={moment(activityDetail.reEngageDate).format("DD/MM/YYYY") || ''}
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                        />
+                                    </div>
+                                </>
+                            }
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    {/* } */}
+                </>
+            ))}
             {/* </>} */}
             <div className="button-container">
                 {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceDetails(instanceDetails)}>Export</Button>}
