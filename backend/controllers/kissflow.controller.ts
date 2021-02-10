@@ -65,6 +65,10 @@ export namespace KissFlowController {
 
             const { _id, ...webhookBodyNoId } = webhookBody
             // resolve("done")
+
+            let fundsAvailable: number;
+
+            if (webhookBody.Funds_Available) { fundsAvailable = Number(webhookBody.AUM.split(" ")[0]) }
             
             BuyerOnboardingWebhook.create({
                 ...webhookBodyNoId,
@@ -89,7 +93,7 @@ export namespace KissFlowController {
                 currentStatus: webhookBody.Current_Status,
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
-                fundsAvailable: webhookBody.Funds_Available
+                fundsAvailable: fundsAvailable
             }, function (err, webhook: IBuyerOnboardingWebhook) {
                 if (err) {
                     console.log(err);
