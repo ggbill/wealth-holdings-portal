@@ -89,6 +89,7 @@ export namespace KissFlowController {
                 currentStatus: webhookBody.Current_Status,
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
+                fundsAvailable: webhookBody.Funds_Available
             }, function (err, webhook: IBuyerOnboardingWebhook) {
                 if (err) {
                     console.log(err);

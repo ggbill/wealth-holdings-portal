@@ -81,7 +81,8 @@ declare module App {
         officeLocation: string,
         currentStatus: string,
         activityAction: string,
-        completeActivityAction: string
+        completeActivityAction: string,
+        fundsAvailable: number
     }
 
     interface Setting{

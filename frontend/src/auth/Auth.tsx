@@ -26,7 +26,7 @@ class Auth {
             } else if (err) {
                 alert(`Error: ${err.error}.`);
                 // window.location.href = '/'
-                window.location.href = `https://${AUTH_CONFIG.domain}/v2/logout?returnTo=${AUTH_CONFIG.redirect_url}/&client_id=${AUTH_CONFIG.clientId}`;
+                window.location.href = `https://${AUTH_CONFIG.domain}/v2/logout?returnTo=${AUTH_CONFIG.redirect_url}/admin&client_id=${AUTH_CONFIG.clientId}`;
             }
         });
     }

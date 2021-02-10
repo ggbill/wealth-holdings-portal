@@ -17,6 +17,7 @@ export namespace BuyerOnboardingController {
                         fcaNumber: { $last: "$fcaNumber" },
                         officeLocation: { $last: "$officeLocation" },
                         isSimplyBizMember: { $last: "$isSimplyBizMember" },
+                        fundsAvailable: { $last: "$fundsAvailable" },
                         maxProgress: { $max: "$_progress" },
                         _current_assigned_to: {
                             $last: { $arrayElemAt: ["$_current_assigned_to", 0] },
@@ -37,6 +38,7 @@ export namespace BuyerOnboardingController {
                         fcaNumber: { $first: "$fcaNumber" },
                         officeLocation: { $first: "$officeLocation" },
                         isSimplyBizMember: { $first: "$isSimplyBizMember" },
+                        fundsAvailable: { $first: "$fundsAvailable" },
                         maxProgress: { $first: "$_progress" },
                         _current_assigned_to: { $first: "$_current_assigned_to" },
                         previousStep: { $first: "$previousStep" },
