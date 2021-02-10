@@ -68,7 +68,7 @@ export namespace KissFlowController {
 
             let fundsAvailable: number;
 
-            if (webhookBody.Funds_Available) { fundsAvailable = Number(webhookBody.AUM.split(" ")[0]) }
+            if (webhookBody.Funds_Available) { fundsAvailable = Number(webhookBody.Funds_Available.split(" ")[0]) }
             
             BuyerOnboardingWebhook.create({
                 ...webhookBodyNoId,
