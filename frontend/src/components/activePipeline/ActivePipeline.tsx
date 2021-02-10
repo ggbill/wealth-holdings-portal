@@ -285,18 +285,33 @@ const ActivePipeline = ({ match }) => {
                                     </div>
                                 </div>
                             </TableCell>
-                            <TableCell className="hide-on-mobile">
-                                <div className="table-header-wrapper">
-                                    <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
-                                        <span>Assignee</span>
-                                        {
-                                            columnToSort === "assignedBdm" ? (
-                                                sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
-                                            ) : null
-                                        }
+                            {location.pathname.split("/")[1] === "buyer-onboarding" ?
+                                <TableCell className="hide-on-mobile">
+                                    <div className="table-header-wrapper">
+                                        <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
+                                            <span>Funds Available</span>
+                                            {
+                                                columnToSort === "fundsAvailable" ? (
+                                                    sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                ) : null
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            </TableCell>
+                                </TableCell>
+                                :
+                                <TableCell className="hide-on-mobile">
+                                    <div className="table-header-wrapper">
+                                        <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
+                                            <span>Assignee</span>
+                                            {
+                                                columnToSort === "assignedBdm" ? (
+                                                    sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                                ) : null
+                                            }
+                                        </div>
+                                    </div>
+                                </TableCell>
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -314,7 +329,12 @@ const ActivePipeline = ({ match }) => {
                                 <TableCell className="hide-on-mobile" align="center">
                                     <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase, activitySummaries)} widthPx={30} />
                                 </TableCell>
-                                <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
+                                {location.pathname.split("/")[1] === "buyer-onboarding" ?
+                                    <TableCell className="hide-on-mobile" align="center">{activeCase.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activeCase.fundsAvailable) : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(0)}</TableCell>
+                                    :
+                                    <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
+                                }
+
                             </TableRow>
                         ))}
                     </TableBody>
