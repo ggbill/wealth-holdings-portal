@@ -18,6 +18,9 @@ interface SummaryFigure {
 }
 const SummaryFigures = (props: InputProps) => {
 
+    const [summaryFigures, setSummaryFigures] = useState<SummaryFigure[]>([])
+
+
     let isDisplayWHFee, isDisplaySBFee, isDisplayIntroducerFee, isDisplayTotalFee, isDisplayAum,
         isDisplayRecurringFees, isDisplayTurnover, isDisplayEbitda, isDisplayPlanners, isDisplayClients, isDisplayCustomers, isDisplayValution,
         isDisplayFundsAvailable = false
@@ -39,25 +42,44 @@ const SummaryFigures = (props: InputProps) => {
         isDisplayFundsAvailable = true
     }
 
-    const [summaryFigures, setSummaryFigures] = useState<SummaryFigure[]>([])
 
     const populateSummaryFigures = (): void => {
+
+        let totalLabel = "Total Firms"
+        let turnoverLabel = "Turnover"
+        let ebitdaLabel = "EBITDA"
+        let recurringLabel = "Recurring Fees"
+        let aumLabel = "AUM"
+        let clientsLabel = "Clients"
+        let customersLabel = "Customers"
+        let plannersLabel = "Planners"
+
+        if (props.pathname === "marriage-bureau") {
+            totalLabel = "Total Deals"
+            turnoverLabel = "Total Seller Turnover"
+            ebitdaLabel = "Total Seller EBITDA"
+            recurringLabel = "Total Seller Recurring Fees"
+            aumLabel = "Total Seller AUM"
+            clientsLabel = "Total Seller Clients"
+            customersLabel = "Total Seller Customers"
+            plannersLabel = "Total Seller Planners"
+        }
+
         let tempSummaryFigures = [
-            { name: "Total Firms", value: props.activeCases.length, isCurrency: false, isDisplay: true },
+            { name: totalLabel, value: props.activeCases.length, isCurrency: false, isDisplay: true },
+            { name: "Total Fees", value: 0, isCurrency: true, isDisplay: isDisplayTotalFee },
             { name: "Funds Available", value: 0, isCurrency: true, isDisplay: isDisplayFundsAvailable },
             { name: "Wealth Holdings Fees", value: 0, isCurrency: true, isDisplay: isDisplayWHFee },
             { name: "SimplyBiz Fees", value: 0, isCurrency: true, isDisplay: isDisplaySBFee },
             { name: "Introducer Fees", value: 0, isCurrency: true, isDisplay: isDisplayIntroducerFee },
-            { name: "Total Fees", value: 0, isCurrency: true, isDisplay: isDisplayTotalFee },
-            { name: "AUM", value: 0, isCurrency: true, isDisplay: isDisplayAum },
-            { name: "Recurring Fees", value: 0, isCurrency: true, isDisplay: isDisplayRecurringFees },
-            { name: "Turnover", value: 0, isCurrency: true, isDisplay: isDisplayTurnover },
-            { name: "EBITDA", value: 0, isCurrency: true, isDisplay: isDisplayEbitda },
-            { name: "Planners", value: 0, isCurrency: false, isDisplay: isDisplayPlanners },
-            { name: "Clients", value: 0, isCurrency: false, isDisplay: isDisplayClients },
-            { name: "Customers", value: 0, isCurrency: false, isDisplay: isDisplayCustomers },
-            { name: "Valuation", value: 0, isCurrency: true, isDisplay: isDisplayValution },
-
+            { name: "Total Deal Value", value: 0, isCurrency: true, isDisplay: isDisplayValution },
+            { name: turnoverLabel, value: 0, isCurrency: true, isDisplay: isDisplayTurnover },
+            { name: ebitdaLabel, value: 0, isCurrency: true, isDisplay: isDisplayEbitda },
+            { name: recurringLabel, value: 0, isCurrency: true, isDisplay: isDisplayRecurringFees },
+            { name: aumLabel, value: 0, isCurrency: true, isDisplay: isDisplayAum },
+            { name: clientsLabel, value: 0, isCurrency: false, isDisplay: isDisplayClients },
+            { name: customersLabel, value: 0, isCurrency: false, isDisplay: isDisplayCustomers },
+            { name: plannersLabel, value: 0, isCurrency: false, isDisplay: isDisplayPlanners },
         ]
         props.activeCases.forEach(activeCase => {
             tempSummaryFigures.forEach(tempSummaryFigure => {
@@ -65,29 +87,29 @@ const SummaryFigures = (props: InputProps) => {
                     tempSummaryFigure.value += activeCase.wealthHoldingsFee
                 } else if (tempSummaryFigure.name === "Funds Available") {
                     tempSummaryFigure.value += activeCase.fundsAvailable
-                }else if (tempSummaryFigure.name === "Introducer Fees") {
+                } else if (tempSummaryFigure.name === "Introducer Fees") {
                     tempSummaryFigure.value += activeCase.introducerFee
                 } else if (tempSummaryFigure.name === "SimplyBiz Fees") {
                     tempSummaryFigure.value += activeCase.simplyBizFee
                 } else if (tempSummaryFigure.name === "Total Fees") {
                     tempSummaryFigure.value += (activeCase.simplyBizFee + activeCase.introducerFee + activeCase.wealthHoldingsFee)
-                } else if (tempSummaryFigure.name === "AUM") {
+                } else if (tempSummaryFigure.name === aumLabel) {
                     tempSummaryFigure.value += activeCase.aum
-                } else if (tempSummaryFigure.name === "Recurring Fees") {
+                } else if (tempSummaryFigure.name === recurringLabel) {
                     tempSummaryFigure.value += activeCase.recurringFees
-                } else if (tempSummaryFigure.name === "Turnover") {
+                } else if (tempSummaryFigure.name === turnoverLabel) {
                     tempSummaryFigure.value += activeCase.turnover
-                } else if (tempSummaryFigure.name === "EBITDA") {
+                } else if (tempSummaryFigure.name === ebitdaLabel) {
                     tempSummaryFigure.value += activeCase.ebitda
-                } else if (tempSummaryFigure.name === "Planners") {
+                } else if (tempSummaryFigure.name === plannersLabel) {
                     tempSummaryFigure.value += activeCase.planners
-                } else if (tempSummaryFigure.name === "Clients") {
+                } else if (tempSummaryFigure.name === clientsLabel) {
                     tempSummaryFigure.value += activeCase.clients
-                } else if (tempSummaryFigure.name === "Customers") {
+                } else if (tempSummaryFigure.name === customersLabel) {
                     tempSummaryFigure.value += activeCase.customers
-                } else if (tempSummaryFigure.name === "Valuation") {
+                } else if (tempSummaryFigure.name === "Total Deal Value") {
                     tempSummaryFigure.value += activeCase.valuation
-                } 
+                }
             });
         });
         setSummaryFigures(tempSummaryFigures)

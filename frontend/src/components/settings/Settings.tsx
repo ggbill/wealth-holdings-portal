@@ -142,7 +142,7 @@ const Settings = () => {
                                     type="number"
                                     label="Red SLA Threshold"
                                     value={setting.redSla}
-                                    onChange={event => handleChange("buyer-onboarding", event, index)}
+                                    onChange={event => handleChange("seller-onboarding", event, index)}
                                     helperText="days"
                                 />
                             </div>
