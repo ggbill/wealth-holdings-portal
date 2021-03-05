@@ -23,6 +23,7 @@ const Home = () => {
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
     const commonFunctions = useCommonFunctions()
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
 
     let location = useLocation();
 
@@ -30,6 +31,7 @@ const Home = () => {
         setLoading(true)
         marriageBureauApi.get("getLatestDataForActiveCases")
             .then(data => {
+                console.log(data)
                 if (!isCancelled.current) {
                     calculateMarriageBureauActivitySummaries(data)
                     setActiveCases(data)

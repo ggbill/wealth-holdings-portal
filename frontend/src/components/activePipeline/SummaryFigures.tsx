@@ -33,7 +33,7 @@ const SummaryFigures = (props: InputProps) => {
         isDisplayAum = true
         isDisplayRecurringFees = true
         isDisplayTurnover = true
-        isDisplayEbitda = true
+        isDisplayEbitda = false
         isDisplayPlanners = true
         isDisplayClients = true
         isDisplayCustomers = true
