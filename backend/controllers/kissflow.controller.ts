@@ -27,6 +27,7 @@ export namespace KissFlowController {
                 _kissflow_id: webhookBody._id,              
                 buyer: webhookBody.Buyer,
                 seller: webhookBody.Seller,
+                isSimplyBizDeal: webhookBody.Is_Simply_Biz_Deal,
                 isCloseCase: webhookBody.Close_Case,
                 closeCaseReason: webhookBody.Close_Case_Reason,
                 closeCaseDescription: webhookBody.Close_Case_Description,

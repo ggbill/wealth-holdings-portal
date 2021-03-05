@@ -49,6 +49,7 @@ declare module App {
         firmName: string,
         buyer: string,
         seller: string,
+        isSimplyBizDeal: boolean,
         fcaNumber: string,
         companyType: string, 
         isSimplyBizMember: string,
