@@ -4,7 +4,7 @@ import useFetch from "../../hooks/useFetch"
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
 import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, FormControlLabel, Switch } from "@material-ui/core"
 import Loading from '../shared/Loading'
 import moment from 'moment'
 import useCommonFunctions from '../../hooks/useCommonFunctions'
@@ -19,9 +19,9 @@ import { useLocation } from 'react-router-dom'
 
 const ActivePipeline = ({ match }) => {
     const isCancelled = useRef(false)
-    const marriageBureauApi = useFetch("marriage-bureau")
-    const buyerOnboardingApi = useFetch("buyer-onboarding")
-    const sellerOnboardingApi = useFetch("seller-onboarding")
+    // const marriageBureauApi = useFetch("marriage-bureau")
+    // const buyerOnboardingApi = useFetch("buyer-onboarding")
+    // const sellerOnboardingApi = useFetch("seller-onboarding")
     const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -35,8 +35,21 @@ const ActivePipeline = ({ match }) => {
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
 
     let location = useLocation();
+
+    let process = ""
+
+    if (location.pathname.split("/")[1] === "marriage-bureau") {
+        process = "marriage-bureau"
+    } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+        process = "buyer-onboarding"
+    } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+        process = "seller-onboarding"
+    }
+
+    const processApi = useFetch(process)
 
     const getActivitySummaries = (): void => {
         let tempActivitySummaries = []
@@ -68,47 +81,36 @@ const ActivePipeline = ({ match }) => {
         }
     }
 
-    const getLatestDataForActiveMarriageBureauCases = (): void => {
+    const getLatestDataForActiveCases = (): void => {
         setLoading(true)
-        marriageBureauApi.get("getLatestDataForActiveCases")
+        processApi.get("getLatestDataForActiveCases")
             .then(data => {
                 if (!isCancelled.current) {
-                    setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                    setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                }
-            })
-    }
 
-    const getLatestDataForActiveBuyerOnboardingCases = (): void => {
-        setLoading(true)
-        buyerOnboardingApi.get("getLatestDataForActiveCases")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                    setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                }
-            })
-    }
+                    if (isSimplyBizFilter) {
+                        if (location.pathname.split("/")[1] === "marriage-bureau") {
+                            setActiveCases(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
 
-    const getLatestDataForActiveSellerOnboardingCases = (): void => {
-        setLoading(true)
-        sellerOnboardingApi.get("getLatestDataForActiveCases")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                    setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                            setFilteredActiveCases(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+
+                        } else {
+                            setActiveCases(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+
+                            setFilteredActiveCases(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                        }
+                    } else {
+                        setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                        setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                    }
+
                     setLoading(false)
                 }
             })
@@ -177,23 +179,14 @@ const ActivePipeline = ({ match }) => {
 
     useEffect(() => {
         getActivitySummaries()
+        getLatestDataForActiveCases()
 
-        if (location.pathname.split("/")[1] === "marriage-bureau") {
-            getLatestDataForActiveMarriageBureauCases()
-        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
-            getLatestDataForActiveBuyerOnboardingCases()
-        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
-            getLatestDataForActiveSellerOnboardingCases()
-        } else {
-            setError("Unknown url")
-        }
-
-        return () => {
-            isCancelled.current = true;
-        };
+        // return () => {
+        //     isCancelled.current = true;
+        // };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps  
-    }, []);
+    }, [isSimplyBizFilter]);
 
     if (error) {
         return (
@@ -209,6 +202,17 @@ const ActivePipeline = ({ match }) => {
 
     return (
         <div className="instance-list">
+
+            <FormControlLabel
+                control={
+                    <Switch
+                        checked={isSimplyBizFilter}
+                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                        name="isSimplyBizFilter"
+                    />
+                }
+                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
+            />
 
             <InstanceFilters
                 activeCases={activeCases}

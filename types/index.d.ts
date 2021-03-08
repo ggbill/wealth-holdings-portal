@@ -52,7 +52,7 @@ declare module App {
         isSimplyBizDeal: boolean,
         fcaNumber: string,
         companyType: string, 
-        isSimplyBizMember: string,
+        isSimplyBizMember: boolean,
         representing: string,
         isCloseCase: boolean,
         closeCaseReason: string,

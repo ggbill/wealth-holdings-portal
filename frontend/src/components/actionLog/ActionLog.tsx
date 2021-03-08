@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import useFetch from "../../hooks/useFetch"
 import { Link, useLocation } from 'react-router-dom'
-import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardContent, TablePagination } from "@material-ui/core"
+import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardContent, TablePagination, FormControlLabel, Switch } from "@material-ui/core"
 import "./actionLog.scss"
 import moment from 'moment'
 import Loading from '../shared/Loading'
@@ -12,9 +12,6 @@ import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingEx
 const ActionLog = () => {
 
     const isCancelled = useRef(false)
-    const marriageBureauApi = useFetch("marriage-bureau")
-    const buyerOnboardingApi = useFetch("buyer-onboarding")
-    const sellerOnboardingApi = useFetch("seller-onboarding")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
@@ -24,49 +21,40 @@ const ActionLog = () => {
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions()
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions()
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions()
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
 
     let location = useLocation();
 
-    const getMarriageBureauActions = (): void => {
-        setLoading(true)
-        marriageBureauApi.get("getActions")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
+    let process = ""
+
+    if (location.pathname.split("/")[1] === "marriage-bureau") {
+        process = "marriage-bureau"
+    } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+        process = "buyer-onboarding"
+    } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+        process = "seller-onboarding"
     }
 
-    const getBuyerOnboardingActions = (): void => {
-        setLoading(true)
-        buyerOnboardingApi.get("getActions")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
+    const processApi = useFetch(process)
 
-    const getSellerOnboardingActions = (): void => {
+    const getActions = (): void => {
         setLoading(true)
-        sellerOnboardingApi.get("getActions")
+        processApi.get("getActions")
             .then(data => {
                 if (!isCancelled.current) {
-                    setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                    if (isSimplyBizFilter) {
+                        if (location.pathname.split("/")[1] === "marriage-bureau") {
+                            setActions(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                        } else {
+                            setActions(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                        }
+                    } else {
+                        setActions(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                    }
                     setLoading(false)
                 }
             })
@@ -88,21 +76,15 @@ const ActionLog = () => {
     };
 
     React.useEffect(() => {
-        if (location.pathname.split("/")[1] === "marriage-bureau") {
-            getMarriageBureauActions()
-        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
-            getBuyerOnboardingActions()
-        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
-            getSellerOnboardingActions()
-        } else {
-            setError("Unknown url")
-        }
-
         return () => {
             isCancelled.current = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
+
+    React.useEffect(() => {
+        getActions()
+    }, [isSimplyBizFilter]);
 
     if (error) {
         return (
@@ -118,6 +100,17 @@ const ActionLog = () => {
 
     return (
         <div className="action-log">
+
+            <FormControlLabel
+                control={
+                    <Switch
+                        checked={isSimplyBizFilter}
+                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                        name="isSimplyBizFilter"
+                    />
+                }
+                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
+            />
 
             <Card>
                 <CardContent>
@@ -146,7 +139,7 @@ const ActionLog = () => {
                                 <TableRow key={action._id}>
                                     <TableCell>{action._current_context[0].Name}</TableCell>
                                     {action._current_context[0].Name === "Complete" ?
-                                    <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
+                                        <TableCell>{action.completeActivityAction}</TableCell> : <TableCell>{action.activityAction}</TableCell>}
                                     {location.pathname.split("/")[1] === "marriage-bureau" && <TableCell><Link to={'/marriage-bureau/instance-details/' + action._kissflow_id}>{action.buyer} purchasing {action.seller}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}
                                     {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + action._kissflow_id}>{action.firmName}</Link></TableCell>}

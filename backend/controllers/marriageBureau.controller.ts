@@ -5,24 +5,24 @@ export namespace MarriageBureauController {
     export async function GetLatestDataForActiveCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             MarriageBureauWebhook.aggregate([
-                { $sort: { "_modified_at": 1 } },
+
+
+                    { $sort: { _last_action_performed_at: 1 } },
                 {
                     $group: {
-                        _id: '$_kissflow_id',
-                        // firmName: { $last: "$firmName" },
+                        _id: {
+                            _kissflow_id: "$_kissflow_id",
+                            _current_step: "$_current_step"
+                        },
                         buyer: { $last: "$buyer" },
                         seller: { $last: "$seller" },
                         isSimplyBizDeal: { $last: "$isSimplyBizDeal" },
-                        // fcaNumber: { $last: "$fcaNumber" },
-                        // officeLocation: { $last: "$officeLocation" },
-                        // isSimplyBizMember: { $last: "$isSimplyBizMember" },
                         maxProgress: { $max: "$_progress" },
                         _current_assigned_to: { $last: { $arrayElemAt: ["$_current_assigned_to", 0] } },
                         previousStep: { $last: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $last: "$_current_step" },
                         _created_at: { $last: "$_created_at" },
-                        // _submitted_at: { $last: "$_submitted_at" },
-                        _last_action_performed_at: { $last: "$_last_action_performed_at" },
+                        _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         aum: { $last: "$aum" },
                         recurringFees: { $last: "$recurringFees" },
                         turnover: { $last: "$turnover" },
@@ -30,12 +30,38 @@ export namespace MarriageBureauController {
                         planners: { $last: "$planners" },
                         clients: { $last: "$clients" },
                         customers: { $last: "$customers" },
-                        // representing: { $last: "$representing" },
                         wealthHoldingsFee: { $last: "$wealthHoldingsFee" },
                         introducerFee: { $last: "$introducerFee" },
                         simplyBizFee: { $last: "$simplyBizFee" },
                         valuation: { $last: "$valuation" },
                         currentStatus: { $last: "$currentStatus" },
+                    },
+                },
+                { $sort: { _last_action_performed_at: -1 } },
+                {
+                    $group: {
+                        _id: '$_id._kissflow_id',
+                        buyer: { $first: "$buyer" },
+                        seller: { $first: "$seller" },
+                        isSimplyBizDeal: { $first: "$isSimplyBizDeal" },
+                        maxProgress: { $first: "$_progress" },
+                        _current_assigned_to: { $first: "$_current_assigned_to" },
+                        previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
+                        _current_step: { $first: "$_current_step" },
+                        _created_at: { $first: "$_created_at" },
+                        _last_action_performed_at: { $first: "$_last_action_performed_at" },
+                        aum: { $first: "$aum" },
+                        recurringFees: { $first: "$recurringFees" },
+                        turnover: { $first: "$turnover" },
+                        ebitda: { $first: "$ebitda" },
+                        planners: { $first: "$planners" },
+                        clients: { $first: "$clients" },
+                        customers: { $first: "$customers" },
+                        wealthHoldingsFee: { $first: "$wealthHoldingsFee" },
+                        introducerFee: { $first: "$introducerFee" },
+                        simplyBizFee: { $first: "$simplyBizFee" },
+                        valuation: { $first: "$valuation" },
+                        currentStatus: { $first: "$currentStatus" },
                     }
                 }], function (err, result) {
                     if (err) {

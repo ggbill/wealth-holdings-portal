@@ -39,7 +39,7 @@ export namespace SellerOnboardingController {
                         isSimplyBizMember: { $first: "$isSimplyBizMember" },
                         maxProgress: { $first: "$_progress" },
                         _current_assigned_to: { $first: "$_current_assigned_to" },
-                        previousStep: { $first: "$previousStep" },
+                        previousStep: { $first: { $arrayElemAt: ["$_current_context", 0] } },
                         _current_step: { $first: "$_current_step" },
                         _created_at: { $first: "$_created_at" },
                         _submitted_at: { $first: "$_submitted_at" },

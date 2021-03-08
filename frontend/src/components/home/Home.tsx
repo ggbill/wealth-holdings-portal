@@ -8,12 +8,10 @@ import ActivityBarChart from './ActivityBarChart'
 import LatestActions from './LatestActions'
 import { useLocation } from 'react-router-dom'
 import SummaryFigures from '../activePipeline/SummaryFigures'
+import { FormControlLabel, Switch } from '@material-ui/core'
 
 const Home = () => {
     const isCancelled = useRef(false)
-    const marriageBureauApi = useFetch("marriage-bureau")
-    const buyerOnboardingApi = useFetch("buyer-onboarding")
-    const sellerOnboardingApi = useFetch("seller-onboarding")
     const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -27,14 +25,48 @@ const Home = () => {
 
     let location = useLocation();
 
-    const getLatestDataForActiveMarriageBureauCases = (): void => {
+    let process = ""
+
+    if (location.pathname.split("/")[1] === "marriage-bureau") {
+        process = "marriage-bureau"
+    } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+        process = "buyer-onboarding"
+    } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+        process = "seller-onboarding"
+    }
+
+    const processApi = useFetch(process)
+
+    const getLatestDataForActiveCases = (): void => {
         setLoading(true)
-        marriageBureauApi.get("getLatestDataForActiveCases")
+        processApi.get("getLatestDataForActiveCases")
             .then(data => {
-                console.log(data)
                 if (!isCancelled.current) {
-                    calculateMarriageBureauActivitySummaries(data)
-                    setActiveCases(data)
+                    if (isSimplyBizFilter) {
+                        if (location.pathname.split("/")[1] === "marriage-bureau") {
+                            setActiveCases(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ))
+
+                            calculateActivitySummaries(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ))
+
+                        } else {
+                            setActiveCases(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ))
+
+                            calculateActivitySummaries(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ))
+
+                        }
+                    } else {
+                        calculateActivitySummaries(data)
+                        setActiveCases(data)
+                    }
+
                     setLoading(false)
                 }
             })
@@ -46,12 +78,24 @@ const Home = () => {
             })
     }
 
-    const getMarriageBureauActions = (): void => {
+    const getActions = (): void => {
         setLoading(true)
-        marriageBureauApi.get("getActions")
+        processApi.get("getActions")
             .then(data => {
                 if (!isCancelled.current) {
-                    setActions(data)
+                    if (isSimplyBizFilter) {
+                        if (location.pathname.split("/")[1] === "marriage-bureau") {
+                            setActions(data.filter((activeCase) =>
+                                activeCase.isSimplyBizDeal === true
+                            ))
+                        } else {
+                            setActions(data.filter((activeCase) =>
+                                (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
+                            ))
+                        }
+                    } else {
+                        setActions(data)
+                    }
                     setLoading(false)
                 }
             })
@@ -63,9 +107,9 @@ const Home = () => {
             })
     }
 
-    const getMarriageBureauCompletedCases = (): void => {
+    const getCompletedCases = (): void => {
         setLoading(true)
-        marriageBureauApi.get("getClosedCases")
+        processApi.get("getClosedCases")
             .then(data => {
                 if (!isCancelled.current) {
                     setCompletedCases(data.filter(result => result.activityAction !== "Close Case"))
@@ -80,86 +124,14 @@ const Home = () => {
             })
     }
 
-    const getLatestDataForActiveBuyerOnboardingCases = (): void => {
-        setLoading(true)
-        buyerOnboardingApi.get("getLatestDataForActiveCases")
-            .then(data => {
-                if (!isCancelled.current) {
-                    calculateBuyerOnboardingActivitySummaries(data)
-                    setActiveCases(data)
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
-
-    const getBuyerOnboardingActions = (): void => {
-        setLoading(true)
-        buyerOnboardingApi.get("getActions")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActions(data)
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
-
-    const getLatestDataForActiveSellerOnboardingCases = (): void => {
-        setLoading(true)
-        sellerOnboardingApi.get("getLatestDataForActiveCases")
-            .then(data => {
-                if (!isCancelled.current) {
-                    calculateSellerOnboardingActivitySummaries(data)
-                    setActiveCases(data)
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
-
-    const getSellerOnboardingActions = (): void => {
-        setLoading(true)
-        sellerOnboardingApi.get("getActions")
-            .then(data => {
-                if (!isCancelled.current) {
-                    setActions(data)
-                    setLoading(false)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
-    }
-
-    const calculateMarriageBureauActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "marriage-bureau/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+    const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
+        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: `${location.pathname.split("/")[1]}/all-instances`, redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
         let activitySummaries: App.ActivitySummary[] = []
 
-
-        //TODO - work out how to pull this fetch block into common functions
         settingsApi.get("getSettings")
             .then((data: App.Setting[]) => {
                 if (!isCancelled.current) {
-                    data.filter(result => result.process === "marriage-bureau").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+                    data.filter(result => result.process === location.pathname.split("/")[1]).sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
                         activitySummaries.push({
                             name: setting.activityName,
                             link: "",
@@ -173,94 +145,6 @@ const Home = () => {
                     });
 
                     let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
-
-                    setActivitySummaries(tempActivitySummaries)
-
-                    tempActivitySummaries.forEach(tempActivitySummary => {
-                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-                    });
-
-                    setTotalActivitySummary(tempTotalActivitySummary)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    console.log(err)
-                }
-            })
-    }
-
-
-    const calculateBuyerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "buyer-onboarding/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let activitySummaries: App.ActivitySummary[] = []
-
-
-        //TODO - work out how to pull this fetch block into common functions
-        settingsApi.get("getSettings")
-            .then((data: App.Setting[]) => {
-                if (!isCancelled.current) {
-                    data.filter(result => result.process === "buyer-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
-                        activitySummaries.push({
-                            name: setting.activityName,
-                            link: "",
-                            amberSla: setting.amberSla,
-                            redSla: setting.redSla,
-                            greenCount: 0,
-                            amberCount: 0,
-                            redCount: 0,
-                            totalCount: 0
-                        })
-                    });
-
-                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
-
-                    setActivitySummaries(tempActivitySummaries)
-
-                    tempActivitySummaries.forEach(tempActivitySummary => {
-                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-                    });
-
-                    setTotalActivitySummary(tempTotalActivitySummary)
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    console.log(err)
-                }
-            })
-    }
-
-    const calculateSellerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "seller-onboarding/all-instances", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let activitySummaries: App.ActivitySummary[] = []
-
-
-        //TODO - work out how to pull this fetch block into common functions
-        settingsApi.get("getSettings")
-            .then((data: App.Setting[]) => {
-                if (!isCancelled.current) {
-                    data.filter(result => result.process === "seller-onboarding").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
-                        activitySummaries.push({
-                            name: setting.activityName,
-                            link: "",
-                            amberSla: setting.amberSla,
-                            redSla: setting.redSla,
-                            greenCount: 0,
-                            amberCount: 0,
-                            redCount: 0,
-                            totalCount: 0
-                        })
-                    });
-
-                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
-
                     setActivitySummaries(tempActivitySummaries)
 
                     tempActivitySummaries.forEach(tempActivitySummary => {
@@ -281,25 +165,20 @@ const Home = () => {
     }
 
     React.useEffect(() => {
-
-        //location.pathname will give you current route path 
-        if (location.pathname.split("/")[1] === "marriage-bureau") {
-            getLatestDataForActiveMarriageBureauCases();
-            getMarriageBureauActions();
-            getMarriageBureauCompletedCases();
-        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
-            getLatestDataForActiveBuyerOnboardingCases();
-            getBuyerOnboardingActions();
-        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
-            getLatestDataForActiveSellerOnboardingCases();
-            getSellerOnboardingActions();
-        }
-
-        return () => {
-            isCancelled.current = true;
-        };
+            return () => {
+                // console.log("return")
+                isCancelled.current = true;
+            };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
+
+    React.useEffect(() => {
+        getCompletedCases()
+        getLatestDataForActiveCases()
+        getActions()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
+    }, [isSimplyBizFilter]);
 
     if (error) {
         return (
@@ -317,6 +196,16 @@ const Home = () => {
         <>
             {activeCases &&
                 <div className="content home-page">
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isSimplyBizFilter}
+                                onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                                name="isSimplyBizFilter"
+                            />
+                        }
+                        label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
+                    />
                     {(location.pathname.split("/")[1] === "marriage-bureau" || location.pathname.split("/")[1] === "buyer-onboarding") &&
                         <div className="summary-figures-wrapper">
                             <SummaryFigures
@@ -328,7 +217,7 @@ const Home = () => {
                             />
                         </div>
                     }
-                    
+
                     <div className="row-1">
                         {location.pathname.split("/")[1] === "marriage-bureau" &&
                             <TotalInstancesPieChart
