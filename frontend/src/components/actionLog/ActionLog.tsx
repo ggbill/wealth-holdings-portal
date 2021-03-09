@@ -101,7 +101,8 @@ const ActionLog = () => {
     return (
         <div className="action-log">
 
-            <FormControlLabel
+            <div className="sb-filter-wrapper">
+                <FormControlLabel
                 control={
                     <Switch
                         checked={isSimplyBizFilter}
@@ -111,6 +112,9 @@ const ActionLog = () => {
                 }
                 label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
             />
+            </div>
+
+            
 
             <Card>
                 <CardContent>
