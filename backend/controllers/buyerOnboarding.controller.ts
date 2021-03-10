@@ -1,8 +1,6 @@
 import BuyerOnboardingWebhook, { IBuyerOnboardingWebhook } from '../models/buyerOnboardingWebhook.model';
 
 export namespace BuyerOnboardingController {
-
-
     export async function GetLatestDataForActiveCases(): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             BuyerOnboardingWebhook.aggregate([
@@ -28,6 +26,7 @@ export namespace BuyerOnboardingController {
                         _submitted_at: { $last: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         currentStatus: { $last: "$currentStatus" },
+                        confidence: { $last: "$confidence" },
                     },
                 },
                 { $sort: { _last_action_performed_at: -1 } },
@@ -47,6 +46,7 @@ export namespace BuyerOnboardingController {
                         _submitted_at: { $first: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
                         currentStatus: { $first: "$currentStatus" },
+                        confidence: { $first: "$confidence" },
                     },
                 }
             ], function (err, result) {

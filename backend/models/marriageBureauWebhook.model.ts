@@ -48,6 +48,7 @@ export interface IMarriageBureauWebhook extends Document {
     paymentSchedule: Object[],
     finalTransactionReference: string,
     currentStatus: string,
+    confidence: string,
     activityAction: string,
 }
 
@@ -97,6 +98,7 @@ const MarriageBureauWebhookSchema: Schema = new Schema({
     paymentSchedule: [{ type: Object }],
     finalTransactionReferenceNumber: { type: String },
     currentStatus: { type: String },
+    confidence: { type: String },
     activityAction: { type: String },
 });
 

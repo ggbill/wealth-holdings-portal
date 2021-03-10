@@ -81,6 +81,7 @@ declare module App {
         operatingRegionList: string[],
         officeLocation: string,
         currentStatus: string,
+        confidence: string,
         activityAction: string,
         completeActivityAction: string,
         fundsAvailable: number

@@ -40,6 +40,7 @@ export interface ISellerOnboardingWebhook extends Document {
     operatingRegionList: string[],
     officeLocation: string,
     currentStatus: string,
+    confidence: string,
     activityAction: string,
     completeActivityAction: string
 }
@@ -84,6 +85,7 @@ const SellerOnboardingWebhookSchema: Schema = new Schema({
     operatingRegionList: [{ type: String }],
     officeLocation: { type: String },
     currentStatus: {type: String},
+    confidence: {type: String},
     activityAction: {type: String},
     completeActivityAction: {type: String},
 });

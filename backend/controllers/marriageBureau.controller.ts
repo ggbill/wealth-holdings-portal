@@ -35,6 +35,7 @@ export namespace MarriageBureauController {
                         simplyBizFee: { $last: "$simplyBizFee" },
                         valuation: { $last: "$valuation" },
                         currentStatus: { $last: "$currentStatus" },
+                        confidence: { $last: "$confidence" },
                     },
                 },
                 { $sort: { _last_action_performed_at: -1 } },
@@ -62,6 +63,7 @@ export namespace MarriageBureauController {
                         simplyBizFee: { $first: "$simplyBizFee" },
                         valuation: { $first: "$valuation" },
                         currentStatus: { $first: "$currentStatus" },
+                        confidence: { $first: "$confidence" },
                     }
                 }], function (err, result) {
                     if (err) {

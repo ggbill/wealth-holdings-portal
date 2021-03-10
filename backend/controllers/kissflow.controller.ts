@@ -48,6 +48,7 @@ export namespace KissFlowController {
                 purchaseType: webhookBody.Purchase_Type,
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
                 currentStatus: webhookBody.Current_Status,
+                confidence: webhookBody.Confidence,
                 activityAction: webhookBody.Activity_Action
             }, function (err, webhook: IMarriageBureauWebhook) {
                 if (err) {
@@ -92,6 +93,7 @@ export namespace KissFlowController {
                 operatingRegionList: webhookBody.Operating_Region,
                 officeLocation: webhookBody.Office_Location, 
                 currentStatus: webhookBody.Current_Status,
+                confidence: webhookBody.Confidence,
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
                 fundsAvailable: fundsAvailable
@@ -134,6 +136,7 @@ export namespace KissFlowController {
                 operatingRegionList: webhookBody.Operating_Region,
                 officeLocation: webhookBody.Office_Location, 
                 currentStatus: webhookBody.Current_Status,
+                confidence: webhookBody.Confidence,
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
             }, function (err, webhook: ISellerOnboardingWebhook) {
