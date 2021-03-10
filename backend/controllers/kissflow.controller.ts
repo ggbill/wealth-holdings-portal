@@ -4,6 +4,20 @@ import SellerOnboardingWebhook, { ISellerOnboardingWebhook } from '../models/sel
 
 export namespace KissFlowController {
 
+    function determineConfidence(webhookConfidenceValue): string {
+        if (webhookConfidenceValue){
+            if (webhookConfidenceValue === "High Confidence"){
+                return "HIGH"
+            }else if (webhookConfidenceValue === "Medium Confidence"){
+                return "MEDIUM"
+            }else if (webhookConfidenceValue === "Low Confidence"){
+                return "LOW"
+            }else{
+                return "HOLD"
+            }
+        }
+    }
+
     export async function WriteMarriageBureauWebhookToDB(webhookBody: any): Promise<any> {
         return new Promise((resolve: (result: any) => void, reject: (error: Error) => void) => {
             // console.log(`webhook body: ${JSON.stringify(webhookBody)}`)
@@ -48,7 +62,7 @@ export namespace KissFlowController {
                 purchaseType: webhookBody.Purchase_Type,
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
                 currentStatus: webhookBody.Current_Status,
-                confidence: webhookBody.Confidence,
+                confidence: determineConfidence(webhookBody.Confidence),
                 activityAction: webhookBody.Activity_Action
             }, function (err, webhook: IMarriageBureauWebhook) {
                 if (err) {
@@ -93,7 +107,7 @@ export namespace KissFlowController {
                 operatingRegionList: webhookBody.Operating_Region,
                 officeLocation: webhookBody.Office_Location, 
                 currentStatus: webhookBody.Current_Status,
-                confidence: webhookBody.Confidence,
+                confidence: determineConfidence(webhookBody.Confidence),
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
                 fundsAvailable: fundsAvailable
@@ -136,7 +150,7 @@ export namespace KissFlowController {
                 operatingRegionList: webhookBody.Operating_Region,
                 officeLocation: webhookBody.Office_Location, 
                 currentStatus: webhookBody.Current_Status,
-                confidence: webhookBody.Confidence,
+                confidence: determineConfidence(webhookBody.Confidence),
                 activityAction: webhookBody.Activity_Action,
                 completeActivityAction: webhookBody.Complete_Activity_Action,
             }, function (err, webhook: ISellerOnboardingWebhook) {
