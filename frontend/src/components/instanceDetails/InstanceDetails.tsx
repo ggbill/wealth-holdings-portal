@@ -12,6 +12,7 @@ import { useLocation } from 'react-router-dom'
 import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import useCommonFunctions from '../../hooks/useCommonFunctions'
 
 const InstanceDetails = ({ match }) => {
 
@@ -28,6 +29,7 @@ const InstanceDetails = ({ match }) => {
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
     let location = useLocation();
+    const commonFunctions = useCommonFunctions()
 
     const getMarriageBureauInstanceDetails = (): void => {
         setLoading(true)
@@ -134,6 +136,14 @@ const InstanceDetails = ({ match }) => {
                         }}
                     />
                     <TextField
+                        id="confidence"
+                        label="Status"
+                        value={ commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
+                        InputProps={{
+                            disabled: true
+                        }}
+                    />
+                    <TextField
                         id="companyType"
                         label="Company Type"
                         value={lastestActivityDetail.companyType || ''}
@@ -226,6 +236,14 @@ const InstanceDetails = ({ match }) => {
                             disabled: true
                         }}
                     />
+                    <TextField
+                        id="confidence"
+                        label="Status"
+                        value={ commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
+                        InputProps={{
+                            disabled: true
+                        }}
+                    />
                 </div>
             }
 
@@ -233,7 +251,7 @@ const InstanceDetails = ({ match }) => {
                 <TextField
                     id="currentStatus"
                     className="current-status"
-                    label="Current Status"
+                    label="Status Summary"
                     value={lastestActivityDetail.currentStatus || ''}
                     multiline
                     InputProps={{
@@ -369,9 +387,18 @@ const InstanceDetails = ({ match }) => {
                                         <TextField
                                             id="currentStatus"
                                             className="current-status"
-                                            label="Current Status"
+                                            label="Status Section"
                                             value={activityDetail.currentStatus || ''}
                                             multiline
+                                            InputProps={{
+                                                disabled: true
+                                            }}
+                                        />
+                                        <TextField
+                                            id="confidence"
+                                            className="current-status"
+                                            label="Status"
+                                            value={commonFunctions.formatConfidenceStatus( activityDetail.confidence) || ''}
                                             InputProps={{
                                                 disabled: true
                                             }}

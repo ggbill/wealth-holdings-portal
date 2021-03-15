@@ -46,150 +46,153 @@ const useSettings = () => {
 
     const calculateMarriageBureauActivitySummaries = async (activeCases: App.ActivityDetail[]) => {
 
-        let activitySummaries: App.ActivitySummary[] = []
+        // let activitySummaries: App.ActivitySummary[] = []
 
-        console.log("go")
+        // console.log("go")
 
-        settingsApi.get("getSettings")
-            .then((data: App.Setting[]) => {
-                if (!isCancelled.current) {
-                    console.log("should be showing data")
-                    console.log(data)
+        // settingsApi.get("getSettings")
+        //     .then((data: App.Setting[]) => {
+        //         if (!isCancelled.current) {
+        //             console.log("should be showing data")
+        //             console.log(data)
 
-                    data.filter(result => result.process === "marriage-bureau").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
-                        // console.log({setting})
-                        activitySummaries.push({
-                            name: setting.activityName,
-                            link: "",
-                            amberSla: setting.amberSla,
-                            redSla: setting.redSla,
-                            greenCount: 0,
-                            amberCount: 0,
-                            redCount: 0,
-                            totalCount: 0
-                        })
-                    });
+        //             data.filter(result => result.process === "marriage-bureau").sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+        //                 // console.log({setting})
+        //                 activitySummaries.push({
+        //                     name: setting.activityName,
+        //                     link: "",
+        //                     amberSla: setting.amberSla,
+        //                     redSla: setting.redSla,
+        //                     greenCount: 0,
+        //                     amberCount: 0,
+        //                     redCount: 0,
+        //                     totalCount: 0
+        //                 })
+        //             });
 
-                    console.log(activitySummaries)
+        //             console.log(activitySummaries)
 
-                    activeCases.forEach(activeCase => {
-                        let isActivityNameFound = false
-                        activitySummaries.forEach(activitySummary => {
-                            if (activeCase._current_step === activitySummary.name) {
-                                isActivityNameFound = true
-                                activitySummary.totalCount++
-                                if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
-                                ) {
-                                    activitySummary.greenCount++
-                                } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                                    moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
-                                ) {
-                                    activitySummary.amberCount++
-                                } else {
-                                    activitySummary.redCount++
-                                }
-                            }
-                        });
+        //             activeCases.forEach(activeCase => {
+        //                 let isActivityNameFound = false
+        //                 activitySummaries.forEach(activitySummary => {
+        //                     if (activeCase._current_step === activitySummary.name) {
+        //                         isActivityNameFound = true
+        //                         activitySummary.totalCount++
+        //                         if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                             moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
+        //                         ) {
+        //                             activitySummary.greenCount++
+        //                         } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                             moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
+        //                         ) {
+        //                             activitySummary.amberCount++
+        //                         } else {
+        //                             activitySummary.redCount++
+        //                         }
+        //                     }
+        //                 });
 
-                        if (!isActivityNameFound) {
-                            console.log(`Activity name not found: ${activeCase._current_step}`)
-                        }
-                    });
+        //                 if (!isActivityNameFound) {
+        //                     console.log(`Activity name not found: ${activeCase._current_step}`)
+        //                 }
+        //             });
 
 
-                    return activitySummaries
-                }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    console.log(err)
-                }
-            })
+        //             return activitySummaries
+        //         }
+        //     })
+        //     .catch((err: Error) => {
+        //         if (!isCancelled.current) {
+        //             console.log(err)
+        //         }
+        //     })
+
     }
 
     const calculateBuyerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): App.ActivitySummary[] => {
 
-        getSettings().then((data) => {
-            console.log(data)
-            console.log(buyerOnboardingSettings)
-        })
+        // getSettings().then((data) => {
+        //     console.log(data)
+        //     console.log(buyerOnboardingSettings)
+        // })
 
-        let activitySummaries: App.ActivitySummary[] = [
-            { name: "Introductory Call", link: "buyer-onboarding/introductory-call", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Director Follow Up", link: "buyer-onboarding/director-follow-up", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Buyer Due Diligence", link: "buyer-onboarding/buyer-due-diligence", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Buyer's Pack", link: "buyer-onboarding/buyers-pack", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        ]
+        // let activitySummaries: App.ActivitySummary[] = [
+        //     { name: "Introductory Call", link: "buyer-onboarding/introductory-call", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Director Follow Up", link: "buyer-onboarding/director-follow-up", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Buyer Due Diligence", link: "buyer-onboarding/buyer-due-diligence", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Buyer's Pack", link: "buyer-onboarding/buyers-pack", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+        // ]
 
-        activeCases.forEach(activeCase => {
-            let isActivityNameFound = false
-            activitySummaries.forEach(activitySummary => {
-                if (activeCase._current_step === activitySummary.name) {
-                    isActivityNameFound = true
-                    activitySummary.totalCount++
-                    if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
-                    ) {
-                        activitySummary.greenCount++
-                    } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
-                    ) {
-                        activitySummary.amberCount++
-                    } else {
-                        activitySummary.redCount++
-                    }
-                }
-            });
+        // activeCases.forEach(activeCase => {
+        //     let isActivityNameFound = false
+        //     activitySummaries.forEach(activitySummary => {
+        //         if (activeCase._current_step === activitySummary.name) {
+        //             isActivityNameFound = true
+        //             activitySummary.totalCount++
+        //             if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                 moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
+        //             ) {
+        //                 activitySummary.greenCount++
+        //             } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                 moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
+        //             ) {
+        //                 activitySummary.amberCount++
+        //             } else {
+        //                 activitySummary.redCount++
+        //             }
+        //         }
+        //     });
 
-            if (!isActivityNameFound) {
-                console.log(`Activity name not found: ${activeCase._current_step}`)
-            }
-        });
+        //     if (!isActivityNameFound) {
+        //         console.log(`Activity name not found: ${activeCase._current_step}`)
+        //     }
+        // });
 
-        return activitySummaries
+        // return activitySummaries
+        return null
     }
 
     const calculateSellerOnboardingActivitySummaries = (activeCases: App.ActivityDetail[]): App.ActivitySummary[] => {
 
-        getSettings().then((data) => {
-            console.log(data)
-            console.log(buyerOnboardingSettings)
-        })
+        // getSettings().then((data) => {
+        //     console.log(data)
+        //     console.log(buyerOnboardingSettings)
+        // })
 
-        let activitySummaries: App.ActivitySummary[] = [
-            { name: "Introductory Call", link: "seller-onboarding/introductory-call", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Director Follow Up", link: "seller-onboarding/director-follow-up", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Seller Due Diligence", link: "seller-onboarding/seller-due-diligence", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
-            { name: "Seller's Pack", link: "seller-onboarding/sellers-pack", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        ]
+        // let activitySummaries: App.ActivitySummary[] = [
+        //     { name: "Introductory Call", link: "seller-onboarding/introductory-call", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Director Follow Up", link: "seller-onboarding/director-follow-up", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Seller Due Diligence", link: "seller-onboarding/seller-due-diligence", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 },
+        //     { name: "Seller's Pack", link: "seller-onboarding/sellers-pack", redSla: 14, amberSla: 7, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+        // ]
 
-        activeCases.forEach(activeCase => {
-            let isActivityNameFound = false
-            activitySummaries.forEach(activitySummary => {
-                if (activeCase._current_step === activitySummary.name) {
-                    isActivityNameFound = true
-                    activitySummary.totalCount++
-                    if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
-                    ) {
-                        activitySummary.greenCount++
-                    } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
-                        moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
-                    ) {
-                        activitySummary.amberCount++
-                    } else {
-                        activitySummary.redCount++
-                    }
-                }
-            });
+        // activeCases.forEach(activeCase => {
+        //     let isActivityNameFound = false
+        //     activitySummaries.forEach(activitySummary => {
+        //         if (activeCase._current_step === activitySummary.name) {
+        //             isActivityNameFound = true
+        //             activitySummary.totalCount++
+        //             if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                 moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isAfter(moment())
+        //             ) {
+        //                 activitySummary.greenCount++
+        //             } else if (moment(activeCase._last_action_performed_at).add(activitySummary.redSla, "days").isAfter(moment()) &&
+        //                 moment(activeCase._last_action_performed_at).add(activitySummary.amberSla, "days").isBefore(moment())
+        //             ) {
+        //                 activitySummary.amberCount++
+        //             } else {
+        //                 activitySummary.redCount++
+        //             }
+        //         }
+        //     });
 
-            if (!isActivityNameFound) {
-                console.log(`Activity name not found: ${activeCase._current_step}`)
-            }
-        });
+        //     if (!isActivityNameFound) {
+        //         console.log(`Activity name not found: ${activeCase._current_step}`)
+        //     }
+        // });
 
-        return activitySummaries
+        // return activitySummaries
+        return null
     }
 
     useEffect(() => {

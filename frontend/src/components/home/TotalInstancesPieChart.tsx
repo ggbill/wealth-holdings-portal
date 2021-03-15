@@ -7,33 +7,38 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { Link } from 'react-router-dom'
 
 interface InputProps {
-    onTimeCount: number,
-    atRiskCount: number,
-    overdueCount: number,
+    activeCount: number,
+    onHoldCount: number,
     completeCount: number,
+    closedCount: number,
     pathname: string
     title: string
 }
+
+const activeColor = '#F61067'
+const onHoldColor = '#a7a7a7'
+const completedColor = '#011936'
 
 const TotalInstancesPieChart = (props: InputProps) => {
 
     const data = {
         labels: [
-            'On Time',
-            'At Risk',
-            'Overdue'
+            'Active',
+            'On Hold',
+            'Completed',
         ],
         datasets: [{
-            data: [props.onTimeCount, props.atRiskCount, props.overdueCount],
+            // data: [7, 3, 15],
+            data: [props.activeCount, props.onHoldCount, props.completeCount],
             backgroundColor: [
-                '#57ab6e',
-                '#FF8C42',
-                '#EE6055'
+                activeColor,
+                onHoldColor,
+                completedColor
             ],
             hoverBackgroundColor: [
-                '#57ab6e',
-                '#FF8C42',
-                '#EE6055'
+                activeColor,
+                onHoldColor,
+                completedColor
             ]
         }]
 
@@ -74,17 +79,39 @@ const TotalInstancesPieChart = (props: InputProps) => {
                     <table className="summary-table">
                         <tbody>
                             <tr>
-                                <td className="label-cell">Complete:</td>
-                                <td className="value-cell">{props.completeCount}</td>
+                                <td className="label-cell">
+                                    <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: activeColor }}></div>
+                                        Active:
+                                    </div>
+                                </td>
+                                <td className="value-cell">{props.activeCount}</td>
                             </tr>
                             <tr>
-                                {props.pathname !== "marriage-bureau" && <td className="label-cell">Onboarding:</td>}
-                                {props.pathname === "marriage-bureau" && <td className="label-cell">In Progress:</td>}
-                                <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount}</td>
+                                <td className="label-cell">
+                                <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: onHoldColor }}></div>
+                                        On Hold:
+                                    </div>
+                                </td>
+                                <td className="value-cell">{props.onHoldCount}</td>
+                            </tr>
+                            <tr>
+                                <td className="label-cell">
+                                <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: completedColor }}></div>
+                                        Complete:
+                                    </div>
+                                </td>
+                                <td className="value-cell">{props.completeCount}</td>
                             </tr>
                             <tr className="total-row">
                                 <td className="label-cell">Total:</td>
-                                <td className="value-cell">{props.onTimeCount + props.atRiskCount + props.overdueCount + props.completeCount}</td>
+                                <td className="value-cell">{props.activeCount + props.onHoldCount + props.completeCount}</td>
+                            </tr>
+                            <tr className="aborted-row">
+                                <td className="label-cell">(Aborted):</td>
+                                <td className="value-cell">{props.closedCount}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -98,8 +125,8 @@ const TotalInstancesPieChart = (props: InputProps) => {
                         />
                     </div>
 
-                    {props.pathname !== "marriage-bureau" && <span className="pie-chart-label">(Onboarding Firms by RAG status)</span>}
-                    {props.pathname === "marriage-bureau" && <span className="pie-chart-label">(In Progress Deals by RAG status)</span>}
+                    {/* {props.pathname !== "marriage-bureau" && <span className="pie-chart-label">(Onboarding Firms by RAG status)</span>}
+                    {props.pathname === "marriage-bureau" && <span className="pie-chart-label">(In Progress Deals by RAG status)</span>} */}
 
                 </CardContent>
 

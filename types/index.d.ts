@@ -2,14 +2,22 @@ declare module App {
     interface ActivitySummary {
         name: string,
         link: string,
-        redSla: number,
-        amberSla: number,
         totalCount: number,
         greenCount: number,
         amberCount: number,
-        redCount: number
-
+        redCount: number,
+        greyCount: number   
     }
+    // interface ActivitySummary {
+    //     name: string,
+    //     link: string,
+    //     redSla: number,
+    //     amberSla: number,
+    //     totalCount: number,
+    //     greenCount: number,
+    //     amberCount: number,
+    //     redCount: number
+    // }
 
     interface TableFilters {
         currentActivity: string,

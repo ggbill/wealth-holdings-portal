@@ -14,8 +14,53 @@
             flex-direction: column;
             flex-grow: 1;
             padding: 12px;
-            align-items: center;
+            // align-items: center;
             justify-content: space-between;
+            height: 350px;
+
+            .key-title{
+                font-weight: bold;
+                margin-bottom: 4px;
+            }
+
+            .summary-table {
+                width: 100%;
+                margin-bottom: 12px;
+                font-size: 0.85em;
+
+                td{
+                    padding: 4px;
+                }
+
+                td.label-cell {
+                    width: 25%;
+
+                    .key-wrapper{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+    
+                        .key{
+                            height: 18px;
+                            width: 18px;
+                            // border-radius: 50%;
+                            margin-right: 6px;
+                        }
+                    }
+                    
+                }
+            }
+
+            table,
+            th,
+            td {
+                border: 1px solid rgb(216, 216, 216);
+                border-collapse: collapse;
+            }
+
+            .chart-container{
+                height: 350px;
+            }
         }
 
         .MuiCardActions-root {

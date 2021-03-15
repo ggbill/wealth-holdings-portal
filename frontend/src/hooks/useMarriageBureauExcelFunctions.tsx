@@ -18,8 +18,8 @@ const useExcelFunctions = () => {
             { header: 'Buyer', key: 'buyer', width: 30 },
             { header: 'Seller', key: 'seller', width: 30 },
             { header: 'Process Start Date', key: 'processStartDate', width: 20 },
-            { header: 'RAG Status', key: 'ragStatus', width: 20 },
-            { header: 'Current Status', key: 'currentStatus', width: 60 },
+            { header: 'Status', key: 'ragStatus', width: 20 },
+            { header: 'Status Description', key: 'currentStatus', width: 60 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'activityStartDate', width: 20 },
             { header: 'Assignee', key: 'assignee', width: 20 },
@@ -44,7 +44,8 @@ const useExcelFunctions = () => {
                 activeCase.buyer,
                 activeCase.seller,
                 moment(activeCase._submitted_at).format("HH:mm DD/MM/YYYY"),
-                commonFunctions.determineRAGStatus(activeCase, activitySummaries),
+                commonFunctions.formatConfidenceStatus(activeCase.confidence),
+                // commonFunctions.determineRAGStatus(activeCase, activitySummaries),
                 activeCase.currentStatus,
                 activeCase._current_step,
                 moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY"),
@@ -99,25 +100,32 @@ const useExcelFunctions = () => {
         // Dynamically colour the RAG stauses
         worksheet.getColumn('ragStatus').eachCell(function (cell, cellNumber) {
             if (cellNumber > 1) {
-                if (cell.value === "Green") {
+                if (cell.value === "High Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '0057ab6e' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
-                } else if (cell.value === "Amber") {
+                } else if (cell.value === "Medium Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '00FF8C42' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
-                } else if (cell.value === "Red") {
+                } else if (cell.value === "Low Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '00EE6055' }
+                    }
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
+                } else if (cell.value === "On Hold") {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'a7a7a7' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
                 }

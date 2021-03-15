@@ -126,7 +126,7 @@ const SummaryFigures = (props: InputProps) => {
             <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {summaryFigures.map((summaryFigure: SummaryFigure, index: number) => (
                     summaryFigure.isDisplay &&
-                    <Card key={index} style={{ animationDelay: `${index * 0.1}s` }}>
+                    <Card key={index} style={{ animationDelay: `${index * 0.03}s` }}>
                         <CardContent>
                             <span>{summaryFigure.name}</span>
                             {

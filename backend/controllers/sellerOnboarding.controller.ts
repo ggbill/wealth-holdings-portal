@@ -45,6 +45,7 @@ export namespace SellerOnboardingController {
                         _created_at: { $first: "$_created_at" },
                         _submitted_at: { $first: "$_submitted_at" },
                         _last_action_performed_at: { $first: "$_last_action_performed_at" },
+                        currentStatus: { $first: "$currentStatus" },
                         confidence: { $first: "$confidence" },
                     },
                 }

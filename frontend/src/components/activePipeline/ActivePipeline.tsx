@@ -155,7 +155,8 @@ const ActivePipeline = ({ match }) => {
 
             setFilteredActiveCases(_.orderBy(filteredActiveCases,
                 function (item: App.ActivityDetail) {
-                    return (commonFunctions.determineRAGStatus(item, activitySummaries));
+                    return (item.confidence);
+                    // return (commonFunctions.determineRAGStatus(item, activitySummaries));
                 },
                 sortDirection))
         } else if (columnToSort === "assignedBdm") {
@@ -280,7 +281,7 @@ const ActivePipeline = ({ match }) => {
                             <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" >
                                     <div onClick={() => handleSort("ragStatus")} className="tableHeaderCell">
-                                        <span>RAG Status</span>
+                                        <span>Status</span>
                                         {
                                             columnToSort === "ragStatus" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -289,7 +290,7 @@ const ActivePipeline = ({ match }) => {
                                     </div>
                                 </div>
                             </TableCell>
-                            {location.pathname.split("/")[1] === "buyer-onboarding" ?
+                            {location.pathname.split("/")[1] === "buyer-onboarding" &&
                                 <TableCell className="hide-on-mobile">
                                     <div className="table-header-wrapper">
                                         <div onClick={() => handleSort("fundsAvailable")} className="tableHeaderCell">
@@ -302,19 +303,19 @@ const ActivePipeline = ({ match }) => {
                                         </div>
                                     </div>
                                 </TableCell>
-                                :
-                                <TableCell className="hide-on-mobile">
-                                    <div className="table-header-wrapper">
-                                        <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
-                                            <span>Assignee</span>
-                                            {
-                                                columnToSort === "assignedBdm" ? (
-                                                    sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
-                                                ) : null
-                                            }
-                                        </div>
-                                    </div>
-                                </TableCell>
+                                
+                                // <TableCell className="hide-on-mobile">
+                                //     <div className="table-header-wrapper">
+                                //         <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
+                                //             <span>Assignee</span>
+                                //             {
+                                //                 columnToSort === "assignedBdm" ? (
+                                //                     sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                //                 ) : null
+                                //             }
+                                //         </div>
+                                //     </div>
+                                // </TableCell>
                             }
                         </TableRow>
                     </TableHead>
@@ -331,12 +332,13 @@ const ActivePipeline = ({ match }) => {
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
                                 <TableCell className="hide-on-mobile" align="center">
-                                    <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase, activitySummaries)} widthPx={30} />
+                                    <RagIndicator ragStatus={activeCase.confidence} widthPx={30} />
+                                    {/* <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase, activitySummaries)} widthPx={30} /> */}
                                 </TableCell>
-                                {location.pathname.split("/")[1] === "buyer-onboarding" ?
+                                {location.pathname.split("/")[1] === "buyer-onboarding" &&
                                     <TableCell className="hide-on-mobile" align="center">{activeCase.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activeCase.fundsAvailable) : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(0)}</TableCell>
-                                    :
-                                    <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
+                                    
+                                    // <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
                                 }
 
                             </TableRow>
@@ -346,11 +348,10 @@ const ActivePipeline = ({ match }) => {
             </Paper>
             <div className="button-container">
                 {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
-                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => sellerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
+                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => {sellerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries); console.log(filteredActiveCases)}}>Export</Button>}
                 {location.pathname.split("/")[1] === "buyer-onboarding" && <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
             </div>
         </div >
-
     )
 }
 

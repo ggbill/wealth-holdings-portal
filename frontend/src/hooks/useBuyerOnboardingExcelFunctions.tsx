@@ -19,8 +19,8 @@ const useExcelFunctions = () => {
             { header: 'Firm Name', key: 'firmName', width: 30 },
             { header: 'FCA Number', key: 'fcaNumber', width: 20 },
             { header: 'Firm Location', key: 'firmLocation', width: 20 },
-            { header: 'RAG Status', key: 'ragStatus', width: 20 },
-            { header: 'Current Status', key: 'currentStatus', width: 60 },
+            { header: 'Status', key: 'ragStatus', width: 20 },
+            { header: 'Status Description', key: 'currentStatus', width: 60 },
             { header: 'SB Member Firm?', key: 'isSbFirm', width: 20 },
             { header: 'Current Activity', key: 'currentActivity', width: 30 },
             { header: 'Activity Start Date', key: 'activityStartDate', width: 20 },
@@ -46,7 +46,7 @@ const useExcelFunctions = () => {
                 activeCase.firmName,
                 activeCase.fcaNumber,
                 activeCase.officeLocation,
-                commonFunctions.determineRAGStatus(activeCase, activitySummaries),
+                commonFunctions.formatConfidenceStatus(activeCase.confidence),
                 activeCase.currentStatus,
                 activeCase.isSimplyBizMember,
                 activeCase._current_step,
@@ -61,25 +61,32 @@ const useExcelFunctions = () => {
         // Dynamically colour the RAG stauses
         worksheet.getColumn('ragStatus').eachCell(function (cell, cellNumber) {
             if (cellNumber > 1) {
-                if (cell.value === "Green") {
+                if (cell.value === "High Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '0057ab6e' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
-                } else if (cell.value === "Amber") {
+                } else if (cell.value === "Medium Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '00FF8C42' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
-                } else if (cell.value === "Red") {
+                } else if (cell.value === "Low Confidence") {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
                         fgColor: { argb: '00EE6055' }
+                    }
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true }
+                } else if (cell.value === "On Hold") {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'a7a7a7' }
                     }
                     cell.font = { color: { argb: "FFFFFF" }, bold: true }
                 }

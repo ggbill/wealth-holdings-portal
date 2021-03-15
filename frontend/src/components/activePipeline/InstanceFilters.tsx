@@ -26,7 +26,8 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueActivityNames: string[] = props.activeCases.map(activeCase => activeCase._current_step)
         setUniqueActivityNames([...new Set(uniqueActivityNames)])
 
-        let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase, props.activitySummaries))
+        // let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => commonFunctions.determineRAGStatus(activeCase, props.activitySummaries))
+        let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => activeCase.confidence)
         setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
 
         let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
@@ -37,19 +38,14 @@ const InstanceFilters = (props: InputProps) => {
         let filteredActiveCases = props.activeCases;
 
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
-
-            let currentRAGStatus
-            currentRAGStatus = commonFunctions.determineRAGStatus(activeCase, props.activitySummaries)
-
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
-                (props.tableFilters.ragStatus === "All" || currentRAGStatus === props.tableFilters.ragStatus) &&
+                (props.tableFilters.ragStatus === "All" || activeCase.confidence === props.tableFilters.ragStatus) &&
                 (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm)
             )
         });
 
         props.setFilteredActiveCases(filteredActiveCases)
-
     }
 
     const handleChange = (event) => {
@@ -94,7 +90,7 @@ const InstanceFilters = (props: InputProps) => {
                     </Select>
                 </FormControl>
                 <FormControl className="rag-status">
-                    <InputLabel id="rag-status-select-label">RAG Status</InputLabel>
+                    <InputLabel id="rag-status-select-label">Status</InputLabel>
                     <Select
                         labelId="rag-status-select-label"
                         id="rag-status-select"
@@ -105,12 +101,12 @@ const InstanceFilters = (props: InputProps) => {
                         <MenuItem value="All">All</MenuItem>
                         {
                             uniqueRagStatuses.map((ragStatus: string, index: number) => {
-                                return (<MenuItem className="highlighted" key={index} value={ragStatus}>{ragStatus}</MenuItem>)
+                                return (<MenuItem className="highlighted" key={index} value={ragStatus}>{commonFunctions.formatConfidenceStatus(ragStatus)}</MenuItem>)
                             })
                         }
                     </Select>
                 </FormControl>
-                <FormControl className="assigned-bdm">
+                {/* <FormControl className="assigned-bdm">
                     <InputLabel id="assigned-bdm-select-label">Assignee</InputLabel>
                     <Select
                         labelId="assigned-bdm-select-label"
@@ -126,7 +122,7 @@ const InstanceFilters = (props: InputProps) => {
                             })
                         }
                     </Select>
-                </FormControl>
+                </FormControl> */}
             </div>
         </div>
     )

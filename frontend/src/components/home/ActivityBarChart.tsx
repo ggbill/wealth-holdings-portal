@@ -12,6 +12,11 @@ interface InputProps {
     title: string
 }
 
+const highConfidenceColor = '#57ab6e'
+const mediumConfidenceColor = '#FF8C42'
+const lowConfidenceColor = '#EE6055'
+const onHoldColor = '#a7a7a7'
+
 const ActivityBarChart = (props: InputProps) => {
 
     const getGreenCountDataset = () => {
@@ -49,6 +54,18 @@ const ActivityBarChart = (props: InputProps) => {
         }
     }
 
+    const getGreyCountDataset = () => {
+        if (props.activitySummaries.length) {
+            let greyCountDataset = []
+
+            props.activitySummaries.forEach(element => {
+                greyCountDataset.push(element.greyCount)
+            });
+
+            return (greyCountDataset)
+        }
+    }
+
     const getLabels = () => {
         if (props.activitySummaries.length) {
             let labels = []
@@ -62,24 +79,27 @@ const ActivityBarChart = (props: InputProps) => {
     }
 
     const data = {
-        // labels: ["Onboard Lead", "Initial Fee Payment", "High Level Due Diligence", "Heads of Terms", "Detailed Due Diligence",
-        //     "Formal Offer", "Transaction Agreement", "Final Fee Payment"],
         labels: getLabels(),
         datasets: [
             {
-                label: 'On Time',
+                label: highConfidenceColor,
                 data: getGreenCountDataset(),
                 backgroundColor: '#57ab6e',
             },
             {
-                label: 'At Risk',
+                label: mediumConfidenceColor,
                 data: getAmberCountDataset(),
                 backgroundColor: '#FF8C42',
             },
             {
-                label: 'Overdue',
+                label: lowConfidenceColor,
                 data: getRedCountDataset(),
                 backgroundColor: '#EE6055',
+            },
+            {
+                label: onHoldColor,
+                data: getGreyCountDataset(),
+                backgroundColor: '#a7a7a7',
             }
         ]
 
@@ -132,15 +152,49 @@ const ActivityBarChart = (props: InputProps) => {
             <h3>{props.title}</h3>
             <Card>
                 <CardContent>
-                    <Bar
+                    <span className="key-title">Key</span>
+                    <table className="summary-table">
+                        <tbody>
+                            <tr>
+                                <td className="label-cell">
+                                    <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: highConfidenceColor }}></div>
+                                        High Confidence
+                                    </div>
+                                </td>
+                                <td className="label-cell">
+                                    <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: mediumConfidenceColor }}></div>
+                                        Medium Confidence
+                                    </div>
+                                </td>
+                                <td className="label-cell">
+                                    <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: lowConfidenceColor }}></div>
+                                        Low Confidence
+                                    </div>
+                                </td>
+                                <td className="label-cell">
+                                    <div className="key-wrapper">
+                                        <div className="key" style={{ backgroundColor: onHoldColor }}></div>
+                                        On Hold
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className="chart-container">
+                       <Bar
                         data={data}
                         options={options}
-                    />
+                    /> 
+                    </div>
+                    
                 </CardContent>
                 <CardActions>
-                    {props.pathname ===  "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname ===  "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
-                    {props.pathname ===  "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "seller-onboarding" && <Button component={Link} to="/seller-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
+                    {props.pathname === "buyer-onboarding" && <Button component={Link} to="/buyer-onboarding/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
                 </CardActions>
             </Card>
 

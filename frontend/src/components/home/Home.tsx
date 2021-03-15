@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import './home.scss'
-import useCommonFunctions from '../../hooks/useCommonFunctions'
+// import useCommonFunctions from '../../hooks/useCommonFunctions'
 import useFetch from "../../hooks/useFetch"
 import Loading from '../shared/Loading'
 import TotalInstancesPieChart from './TotalInstancesPieChart'
@@ -12,15 +12,16 @@ import { FormControlLabel, Switch } from '@material-ui/core'
 
 const Home = () => {
     const isCancelled = useRef(false)
-    const settingsApi = useFetch("settings")
+    // const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
     const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
     const [completedCases, setCompletedCases] = useState<App.ActivityDetail[]>([])
+    const [closedCases, setClosedCases] = useState<App.ActivityDetail[]>([])
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
-    const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({ name: "", link: "", redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 })
-    const commonFunctions = useCommonFunctions()
+    const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({} as App.ActivitySummary)
+    // const commonFunctions = useCommonFunctions()
     const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
 
     let location = useLocation();
@@ -113,6 +114,7 @@ const Home = () => {
             .then(data => {
                 if (!isCancelled.current) {
                     setCompletedCases(data.filter(result => result.activityAction !== "Close Case"))
+                    setClosedCases(data.filter(result => result.activityAction === "Close Case"))
                     setLoading(false)
                 }
             })
@@ -125,50 +127,112 @@ const Home = () => {
     }
 
     const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: `${location.pathname.split("/")[1]}/all-instances`, redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-        let activitySummaries: App.ActivitySummary[] = []
+        let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: "", totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0 }
+        let tempActivitySummaries: App.ActivitySummary[] = []
 
-        settingsApi.get("getSettings")
-            .then((data: App.Setting[]) => {
-                if (!isCancelled.current) {
-                    data.filter(result => result.process === location.pathname.split("/")[1]).sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
-                        activitySummaries.push({
-                            name: setting.activityName,
-                            link: "",
-                            amberSla: setting.amberSla,
-                            redSla: setting.redSla,
-                            greenCount: 0,
-                            amberCount: 0,
-                            redCount: 0,
-                            totalCount: 0
-                        })
-                    });
+        if (location.pathname.split("/")[1] === "marriage-bureau") {
+            tempActivitySummaries =
+                [
+                    { name: "Introductions", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Heads of Terms", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Detailed Due Diligence", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Formal Offer", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Transaction Agreement", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Fee Payment", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 }
+                ]
+        } else if (location.pathname.split("/")[1] === "buyer-onboarding") {
+            tempActivitySummaries =
+                [
+                    { name: "Introductory Call", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Director Follow Up", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Buyer Due Diligence", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Buyer's Pack", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                ]
+        } else if (location.pathname.split("/")[1] === "seller-onboarding") {
+            tempActivitySummaries =
+                [
+                    { name: "Introductory Call", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Director Follow Up", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Seller Due Diligence", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                    { name: "Seller's Pack", link: "", greenCount: 0, amberCount: 0, redCount: 0, greyCount: 0, totalCount: 0 },
+                ]
+        }
 
-                    let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
-                    setActivitySummaries(tempActivitySummaries)
-
-                    tempActivitySummaries.forEach(tempActivitySummary => {
-                        tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-                        tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-                        tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-                        tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-                    });
-
-                    setTotalActivitySummary(tempTotalActivitySummary)
+        activeCases.forEach(activeCase => {
+            tempActivitySummaries.forEach(activitySummary => {
+                if (activeCase._current_step === activitySummary.name) {
+                    activitySummary.totalCount++
+                    if (activeCase.confidence === "HIGH") {
+                        activitySummary.greenCount++
+                    } else if (activeCase.confidence === "MEDIUM") {
+                        activitySummary.amberCount++
+                    } else if (activeCase.confidence === "LOW") {
+                        activitySummary.redCount++
+                    } else if (activeCase.confidence === "HOLD") {
+                        activitySummary.greyCount++
+                    }
                 }
-            })
-            .catch((err: Error) => {
-                if (!isCancelled.current) {
-                    console.log(err)
-                }
-            })
+            });
+        });
+
+        tempActivitySummaries.forEach(tempActivitySummary => {
+            tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+            tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+            tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+            tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+            tempTotalActivitySummary.greyCount += tempActivitySummary.greyCount
+        });
+
+        setActivitySummaries(tempActivitySummaries)
+        setTotalActivitySummary(tempTotalActivitySummary)
+
+
     }
+    // const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
+    //     let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: `${location.pathname.split("/")[1]}/all-instances`, redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
+    //     let activitySummaries: App.ActivitySummary[] = []
+
+    //     settingsApi.get("getSettings")
+    //         .then((data: App.Setting[]) => {
+    //             if (!isCancelled.current) {
+    //                 data.filter(result => result.process === location.pathname.split("/")[1]).sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
+    //                     activitySummaries.push({
+    //                         name: setting.activityName,
+    //                         link: "",
+    //                         amberSla: setting.amberSla,
+    //                         redSla: setting.redSla,
+    //                         greenCount: 0,
+    //                         amberCount: 0,
+    //                         redCount: 0,
+    //                         totalCount: 0
+    //                     })
+    //                 });
+
+    //                 let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
+    //                 setActivitySummaries(tempActivitySummaries)
+
+    //                 tempActivitySummaries.forEach(tempActivitySummary => {
+    //                     tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
+    //                     tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
+    //                     tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
+    //                     tempTotalActivitySummary.redCount += tempActivitySummary.redCount
+    //                 });
+
+    //                 setTotalActivitySummary(tempTotalActivitySummary)
+    //             }
+    //         })
+    //         .catch((err: Error) => {
+    //             if (!isCancelled.current) {
+    //                 console.log(err)
+    //             }
+    //         })
+    // }
 
     React.useEffect(() => {
-            return () => {
-                // console.log("return")
-                isCancelled.current = true;
-            };
+        return () => {
+            // console.log("return")
+            isCancelled.current = true;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
 
@@ -221,24 +285,39 @@ const Home = () => {
                     <div className="row-1">
                         {location.pathname.split("/")[1] === "marriage-bureau" &&
                             <TotalInstancesPieChart
-                                onTimeCount={totalActivitySummary.greenCount}
-                                atRiskCount={totalActivitySummary.amberCount}
-                                overdueCount={totalActivitySummary.redCount}
+                                activeCount={totalActivitySummary.greenCount + totalActivitySummary.amberCount + totalActivitySummary.redCount}
+                                onHoldCount={totalActivitySummary.greyCount}
                                 completeCount={completedCases.length}
+                                closedCount={closedCases.length}
                                 pathname={location.pathname.split("/")[1]}
                                 title="All Deals"
                             />
+                            // <TotalInstancesPieChart
+                            //     onTimeCount={totalActivitySummary.greenCount}
+                            //     atRiskCount={totalActivitySummary.amberCount}
+                            //     overdueCount={totalActivitySummary.redCount}
+                            //     completeCount={completedCases.length}
+                            //     pathname={location.pathname.split("/")[1]}
+                            //     title="All Deals"
+                            // />
                         }
                         {location.pathname.split("/")[1] !== "marriage-bureau" &&
                             <TotalInstancesPieChart
-                                onTimeCount={totalActivitySummary.greenCount}
-                                atRiskCount={totalActivitySummary.amberCount}
-                                overdueCount={totalActivitySummary.redCount}
+                                activeCount={totalActivitySummary.greenCount + totalActivitySummary.amberCount + totalActivitySummary.redCount}
+                                onHoldCount={totalActivitySummary.greyCount}
                                 completeCount={activeCases.filter(result => result._current_step === "Complete").length}
+                                closedCount={closedCases.length}
                                 pathname={location.pathname.split("/")[1]}
                                 title="Firms"
-
                             />
+                            // <TotalInstancesPieChart
+                            //     onTimeCount={totalActivitySummary.greenCount}
+                            //     atRiskCount={totalActivitySummary.amberCount}
+                            //     overdueCount={totalActivitySummary.redCount}
+                            //     completeCount={activeCases.filter(result => result._current_step === "Complete").length}
+                            //     pathname={location.pathname.split("/")[1]}
+                            //     title="Firms"
+                            // />
                         }
                         <ActivityBarChart
                             activitySummaries={activitySummaries}
