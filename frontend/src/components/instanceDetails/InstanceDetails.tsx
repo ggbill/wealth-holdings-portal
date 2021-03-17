@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import "./instanceDetails.scss"
 import useFetch from "../../hooks/useFetch"
-import { TextField, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Table, TableBody, TableCell, TableHead, TableRow, Paper, Button } from "@material-ui/core"
+import { TextField, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Button } from "@material-ui/core"
 import moment from 'moment'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelFunctions"
@@ -13,6 +13,7 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import useCommonFunctions from '../../hooks/useCommonFunctions'
+import RagIndicator from '../shared/RagIndicator'
 
 const InstanceDetails = ({ match }) => {
 
@@ -53,7 +54,6 @@ const InstanceDetails = ({ match }) => {
         buyerOnboardingApi.get(`getInstanceDetails/${match.params.id}`)
             .then(data => {
                 if (!isCancelled.current) {
-                    // console.log(data)
                     setInstanceDetails(data)
                     setLatestActivityDetail(data[data.length - 1])
                     setLoading(false)
@@ -138,7 +138,7 @@ const InstanceDetails = ({ match }) => {
                     <TextField
                         id="confidence"
                         label="Status"
-                        value={ commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
+                        value={commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
                         InputProps={{
                             disabled: true
                         }}
@@ -239,7 +239,7 @@ const InstanceDetails = ({ match }) => {
                     <TextField
                         id="confidence"
                         label="Status"
-                        value={ commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
+                        value={commonFunctions.formatConfidenceStatus(lastestActivityDetail.confidence) || ''}
                         InputProps={{
                             disabled: true
                         }}
@@ -273,15 +273,11 @@ const InstanceDetails = ({ match }) => {
                 </div>
             }
 
-
-
-            {/* <p>{JSON.stringify(instanceDetails)}</p> */}
-            {/* {(instanceDetails.length > 1) && <> */}
             <h2>Instance History</h2>
-            {instanceDetails.map((activityDetail: App.ActivityDetail) => (
-                <>
+            {instanceDetails.map((activityDetail: App.ActivityDetail, index) => (
+                <React.Fragment key={index}>
                     {/* {activityDetail._current_context[0].Name !== "Start" && */}
-                    <ExpansionPanel>
+                    <ExpansionPanel >
                         <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1bh-content"
@@ -310,10 +306,12 @@ const InstanceDetails = ({ match }) => {
                                     <span className="panel-header-completed-value">{activityDetail.completeActivityAction}</span> :
                                     !activityDetail.activityAction ? <span className="panel-header-completed-value">Complete Activity</span> : <span className="panel-header-completed-value">{activityDetail.activityAction}</span>
                                 }
-                                <span className="panel-header-completed-label">Completed By:</span>
+                                <span className="panel-header-completed-label">Actioned By:</span>
                                 <span className="panel-header-completed-value">{activityDetail._last_action_performed_by.Name}</span>
-                                <span className="panel-header-completed-label">Completed Date:</span>
+                                <span className="panel-header-completed-label">Actioned Date:</span>
                                 <span className="panel-header-completed-value">{moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</span>
+                                <span className="panel-header-completed-label">Status:</span>
+                                <div className="panel-header-completed-value"><RagIndicator ragStatus={activityDetail.confidence} widthPx={20} /></div>
                             </div>
 
                         </ExpansionPanelSummary>
@@ -323,7 +321,7 @@ const InstanceDetails = ({ match }) => {
                                     <div className="completion-details">
                                         <div className="data-section">
                                             <TextField
-                                                id="action"
+                                                // id="action"
                                                 label="Action"
                                                 value={activityDetail.activityAction || ''}
                                                 InputProps={{
@@ -331,7 +329,7 @@ const InstanceDetails = ({ match }) => {
                                                 }}
                                             />
                                             <TextField
-                                                id="completedBy"
+                                                // id="completedBy"
                                                 label="Completed By"
                                                 value={activityDetail._last_action_performed_by.Name || ''}
                                                 InputProps={{
@@ -339,7 +337,7 @@ const InstanceDetails = ({ match }) => {
                                                 }}
                                             />
                                             <TextField
-                                                id="completedDate"
+                                                // id="completedDate"
                                                 label="Completed Date"
                                                 value={moment(activityDetail._last_action_performed_at).format("HH:mm DD/MM/YYYY") || ''}
                                                 InputProps={{
@@ -357,7 +355,7 @@ const InstanceDetails = ({ match }) => {
                                         <div className="data-section">
                                             <h4>Firm Contact Details</h4>
                                             <TextField
-                                                id="primaryContact"
+                                                // id="primaryContact"
                                                 label="Primary Contact"
                                                 value={activityDetail.primaryContact || ''}
                                                 InputProps={{
@@ -365,7 +363,7 @@ const InstanceDetails = ({ match }) => {
                                                 }}
                                             />
                                             <TextField
-                                                id="preferredEmail"
+                                                // id="preferredEmail"
                                                 label="Preferred Email"
                                                 value={activityDetail.preferredEmail || ''}
                                                 InputProps={{
@@ -373,7 +371,7 @@ const InstanceDetails = ({ match }) => {
                                                 }}
                                             />
                                             <TextField
-                                                id="preferredPhone"
+                                                // id="preferredPhone"
                                                 label="Preferred Phone"
                                                 value={activityDetail.preferredPhone || ''}
                                                 InputProps={{
@@ -385,7 +383,7 @@ const InstanceDetails = ({ match }) => {
 
                                     <div className="data-section">
                                         <TextField
-                                            id="currentStatus"
+                                            // id="currentStatus"
                                             className="current-status"
                                             label="Status Section"
                                             value={activityDetail.currentStatus || ''}
@@ -395,10 +393,10 @@ const InstanceDetails = ({ match }) => {
                                             }}
                                         />
                                         <TextField
-                                            id="confidence"
+                                            // id="confidence"
                                             className="current-status"
                                             label="Status"
-                                            value={commonFunctions.formatConfidenceStatus( activityDetail.confidence) || ''}
+                                            value={commonFunctions.formatConfidenceStatus(activityDetail.confidence) || ''}
                                             InputProps={{
                                                 disabled: true
                                             }}
@@ -410,7 +408,7 @@ const InstanceDetails = ({ match }) => {
                                         <div className="data-section">
                                             {/* <h4>Firm Key Metrics</h4> */}
                                             <TextField
-                                                id="fundsAvailable"
+                                                // id="fundsAvailable"
                                                 label="Funds Available"
                                                 value={activityDetail.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.fundsAvailable) : 0}
                                                 InputProps={{
@@ -427,7 +425,7 @@ const InstanceDetails = ({ match }) => {
                                             <div className="data-section">
                                                 <h4>Firm Key Metrics</h4>
                                                 <TextField
-                                                    id="aum"
+                                                    // id="aum"
                                                     label="AUM"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.aum) || ''}
                                                     InputProps={{
@@ -436,7 +434,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="recurringFees"
+                                                    // id="recurringFees"
                                                     label="Recurring Fees"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.recurringFees) || ''}
                                                     InputProps={{
@@ -444,7 +442,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="turnover"
+                                                    // id="turnover"
                                                     label="Turnover"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.turnover) || ''}
                                                     InputProps={{
@@ -453,7 +451,7 @@ const InstanceDetails = ({ match }) => {
 
                                                 />
                                                 <TextField
-                                                    id="ebitda"
+                                                    // id="ebitda"
                                                     label="EBITDA"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.ebitda) || ''}
                                                     InputProps={{
@@ -461,7 +459,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="planners"
+                                                    // id="planners"
                                                     label="Planners"
                                                     value={new Intl.NumberFormat().format(activityDetail.planners) || ''}
                                                     InputProps={{
@@ -469,7 +467,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="customers"
+                                                    // id="customers"
                                                     label="Customers"
                                                     value={new Intl.NumberFormat().format(activityDetail.customers) || ''}
                                                     InputProps={{
@@ -477,7 +475,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="clients"
+                                                    // id="clients"
                                                     label="Clients"
                                                     value={new Intl.NumberFormat().format(activityDetail.clients) || ''}
                                                     InputProps={{
@@ -488,7 +486,7 @@ const InstanceDetails = ({ match }) => {
                                             <div className="data-section">
                                                 <h4>Offer Details</h4>
                                                 <TextField
-                                                    id="valuation"
+                                                    // id="valuation"
                                                     label="Valuation"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.valuation) || ''}
                                                     InputProps={{
@@ -496,7 +494,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="whFee"
+                                                    // id="whFee"
                                                     label="Wealth Holdings Fee"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.wealthHoldingsFee) || ''}
                                                     InputProps={{
@@ -504,7 +502,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="sbFee"
+                                                    // id="sbFee"
                                                     label="SimplyBiz Fee"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.simplyBizFee) || ''}
                                                     InputProps={{
@@ -512,7 +510,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="introducerFee"
+                                                    // id="introducerFee"
                                                     label="Introducer Fee"
                                                     value={new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activityDetail.introducerFee) || ''}
                                                     InputProps={{
@@ -520,7 +518,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="completionDate"
+                                                    // id="completionDate"
                                                     label="Completion Date"
                                                     value={moment(lastestActivityDetail.completionDate).format("DD/MM/YYYY") || ''}
                                                     InputProps={{
@@ -528,7 +526,7 @@ const InstanceDetails = ({ match }) => {
                                                     }}
                                                 />
                                                 <TextField
-                                                    id="purchaseType"
+                                                    // id="purchaseType"
                                                     label="Purchase Type"
                                                     value={activityDetail.purchaseType || ''}
                                                     InputProps={{
@@ -544,7 +542,7 @@ const InstanceDetails = ({ match }) => {
                                 <>
                                     <div className="data-section">
                                         <TextField
-                                            id="reason"
+                                            // id="reason"
                                             label="Reason"
                                             value={activityDetail.closeCaseReason || ''}
                                             InputProps={{
@@ -553,37 +551,42 @@ const InstanceDetails = ({ match }) => {
                                             className="full-width"
                                         />
                                         <TextField
-                                            id="description"
+                                            // id="description"
                                             label="Description"
                                             value={activityDetail.closeCaseDescription || ''}
                                             InputProps={{
                                                 disabled: true
                                             }}
                                             className="full-width"
+                                            multiline
                                         />
-                                        <TextField
-                                            id="isReEngage"
-                                            label="Re-Engage in Future?"
-                                            value={String(activityDetail.isReEngage) || ''}
-                                            InputProps={{
-                                                disabled: true
-                                            }}
-                                        />
-                                        <TextField
-                                            id="reEngageDate"
-                                            label="Re-engage Date Date"
-                                            value={moment(activityDetail.reEngageDate).format("DD/MM/YYYY") || ''}
-                                            InputProps={{
-                                                disabled: true
-                                            }}
-                                        />
+                                        {location.pathname.split("/")[1] !== "marriage-bureau" &&
+                                            <>
+                                                <TextField
+                                                    // id="isReEngage"
+                                                    label="Re-Engage in Future?"
+                                                    value={String(activityDetail.isReEngage) || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                                <TextField
+                                                    // id="reEngageDate"
+                                                    label="Re-engage Date Date"
+                                                    value={moment(activityDetail.reEngageDate).format("DD/MM/YYYY") || ''}
+                                                    InputProps={{
+                                                        disabled: true
+                                                    }}
+                                                />
+                                            </>
+                                        }
                                     </div>
                                 </>
                             }
                         </ExpansionPanelDetails>
                     </ExpansionPanel>
                     {/* } */}
-                </>
+                </React.Fragment>
             ))}
             {/* </>} */}
             <div className="button-container">

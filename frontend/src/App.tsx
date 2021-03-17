@@ -143,6 +143,7 @@ const App = () => {
                                     key={i}
                                     path={route.path}
                                     exact={route.exact}
+                                    // auth={auth}
                                     render={(props) => (auth.isAuthenticated() ? <route.component auth={auth} {...props} /> : <Redirect to={{ pathname: "/", search: "unauthorised" }} />)}
                                 />
                         </LayoutAuthenticated>

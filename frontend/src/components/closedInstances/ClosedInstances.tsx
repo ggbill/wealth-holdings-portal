@@ -12,7 +12,11 @@ import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExce
 import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
 import SummaryFigures from '../activePipeline/SummaryFigures'
 
-const ClosedInstances = () => {
+interface InputProps {
+    auth: any,
+}
+
+const ClosedInstances = (props: InputProps) => {
     const isCancelled = useRef(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -23,6 +27,8 @@ const ClosedInstances = () => {
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions()
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions()
     const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+    const { getProfile, isAuthenticated } = props.auth
 
     let location = useLocation();
 
@@ -93,6 +99,19 @@ const ClosedInstances = () => {
 
 
     useEffect(() => {
+        if (isAuthenticated() && !isCancelled.current) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                setAuthorisedUserProfile(profile)
+
+                if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
+                    setIsSimplyBizFilter(false)
+                }
+            });
+        }
+
         return () => {
             isCancelled.current = true;
         };
@@ -119,16 +138,20 @@ const ClosedInstances = () => {
 
     return (
         <div className="closed-instance-list">
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isSimplyBizFilter}
-                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
-                        name="isSimplyBizFilter"
+            {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                <div className="sb-filter-wrapper">
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isSimplyBizFilter}
+                                onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                                name="isSimplyBizFilter"
+                            />
+                        }
+                        label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
                     />
-                }
-                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
-            />
+                </div>
+            }
 
             {location.pathname.split("/")[1] === "marriage-bureau" &&
                 <div className="summary-figures-wrapper">

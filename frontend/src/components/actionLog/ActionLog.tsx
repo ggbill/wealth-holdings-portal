@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import useFetch from "../../hooks/useFetch"
 import { Link, useLocation } from 'react-router-dom'
 import { Table, TableBody, TableCell, TableHead, TableRow, Card, Button, CardContent, TablePagination, FormControlLabel, Switch } from "@material-ui/core"
@@ -9,7 +9,11 @@ import useMarriageBureauExcelFunctions from "../../hooks/useMarriageBureauExcelF
 import useBuyerOnboardingExcelFunctions from "../../hooks/useBuyerOnboardingExcelFunctions"
 import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingExcelFunctions"
 
-const ActionLog = () => {
+interface InputProps {
+    auth: any,
+}
+
+const ActionLog = (props: InputProps) => {
 
     const isCancelled = useRef(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -22,6 +26,8 @@ const ActionLog = () => {
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions()
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions()
     const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+    const { getProfile, isAuthenticated } = props.auth;
 
     let location = useLocation();
 
@@ -75,15 +81,29 @@ const ActionLog = () => {
         setPage(0);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
+        if (isAuthenticated() && !isCancelled.current) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                setAuthorisedUserProfile(profile)
+
+                if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
+                    setIsSimplyBizFilter(false)
+                }
+            });
+        }
+
         return () => {
             isCancelled.current = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         getActions()
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [isSimplyBizFilter]);
 
     if (error) {
@@ -101,20 +121,20 @@ const ActionLog = () => {
     return (
         <div className="action-log">
 
-            <div className="sb-filter-wrapper">
-                <FormControlLabel
-                control={
-                    <Switch
-                        checked={isSimplyBizFilter}
-                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
-                        name="isSimplyBizFilter"
+            {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                <div className="sb-filter-wrapper">
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isSimplyBizFilter}
+                                onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                                name="isSimplyBizFilter"
+                            />
+                        }
+                        label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
                     />
-                }
-                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
-            />
-            </div>
-
-            
+                </div>
+            }
 
             <Card>
                 <CardContent>

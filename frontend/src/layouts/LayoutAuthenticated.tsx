@@ -9,7 +9,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import SettingsIcon from '@material-ui/icons/Settings';
 import "./layoutAuthenticated.scss"
 
 interface InputProps {

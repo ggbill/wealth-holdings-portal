@@ -10,7 +10,11 @@ import { useLocation } from 'react-router-dom'
 import SummaryFigures from '../activePipeline/SummaryFigures'
 import { FormControlLabel, Switch } from '@material-ui/core'
 
-const Home = () => {
+interface InputProps {
+    auth: any
+}
+
+const Home = (props: InputProps) => {
     const isCancelled = useRef(false)
     // const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
@@ -22,7 +26,10 @@ const Home = () => {
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({} as App.ActivitySummary)
     // const commonFunctions = useCommonFunctions()
-    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(true)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+
+    const { getProfile, isAuthenticated } = props.auth;
 
     let location = useLocation();
 
@@ -188,49 +195,22 @@ const Home = () => {
 
 
     }
-    // const calculateActivitySummaries = (activeCases: App.ActivityDetail[]): void => {
-    //     let tempTotalActivitySummary: App.ActivitySummary = { name: "Total Instances", link: `${location.pathname.split("/")[1]}/all-instances`, redSla: 0, amberSla: 0, totalCount: 0, greenCount: 0, amberCount: 0, redCount: 0 }
-    //     let activitySummaries: App.ActivitySummary[] = []
-
-    //     settingsApi.get("getSettings")
-    //         .then((data: App.Setting[]) => {
-    //             if (!isCancelled.current) {
-    //                 data.filter(result => result.process === location.pathname.split("/")[1]).sort((a, b) => a.orderNumber - b.orderNumber).forEach(setting => {
-    //                     activitySummaries.push({
-    //                         name: setting.activityName,
-    //                         link: "",
-    //                         amberSla: setting.amberSla,
-    //                         redSla: setting.redSla,
-    //                         greenCount: 0,
-    //                         amberCount: 0,
-    //                         redCount: 0,
-    //                         totalCount: 0
-    //                     })
-    //                 });
-
-    //                 let tempActivitySummaries = commonFunctions.calculateActivitySummaries(activeCases, activitySummaries)
-    //                 setActivitySummaries(tempActivitySummaries)
-
-    //                 tempActivitySummaries.forEach(tempActivitySummary => {
-    //                     tempTotalActivitySummary.totalCount += tempActivitySummary.totalCount
-    //                     tempTotalActivitySummary.greenCount += tempActivitySummary.greenCount
-    //                     tempTotalActivitySummary.amberCount += tempActivitySummary.amberCount
-    //                     tempTotalActivitySummary.redCount += tempActivitySummary.redCount
-    //                 });
-
-    //                 setTotalActivitySummary(tempTotalActivitySummary)
-    //             }
-    //         })
-    //         .catch((err: Error) => {
-    //             if (!isCancelled.current) {
-    //                 console.log(err)
-    //             }
-    //         })
-    // }
 
     React.useEffect(() => {
+        if (isAuthenticated() && !isCancelled.current) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                setAuthorisedUserProfile(profile)
+
+                if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
+                    setIsSimplyBizFilter(false)
+                }
+            });
+        }
+
         return () => {
-            // console.log("return")
             isCancelled.current = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps  
@@ -260,16 +240,19 @@ const Home = () => {
         <>
             {activeCases &&
                 <div className="content home-page">
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={isSimplyBizFilter}
-                                onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
-                                name="isSimplyBizFilter"
-                            />
-                        }
-                        label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
-                    />
+                    {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={isSimplyBizFilter}
+                                    onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                                    name="isSimplyBizFilter"
+                                />
+                            }
+                            label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
+                        />
+                    }
+
                     {(location.pathname.split("/")[1] === "marriage-bureau" || location.pathname.split("/")[1] === "buyer-onboarding") &&
                         <div className="summary-figures-wrapper">
                             <SummaryFigures
@@ -292,14 +275,6 @@ const Home = () => {
                                 pathname={location.pathname.split("/")[1]}
                                 title="All Deals"
                             />
-                            // <TotalInstancesPieChart
-                            //     onTimeCount={totalActivitySummary.greenCount}
-                            //     atRiskCount={totalActivitySummary.amberCount}
-                            //     overdueCount={totalActivitySummary.redCount}
-                            //     completeCount={completedCases.length}
-                            //     pathname={location.pathname.split("/")[1]}
-                            //     title="All Deals"
-                            // />
                         }
                         {location.pathname.split("/")[1] !== "marriage-bureau" &&
                             <TotalInstancesPieChart
@@ -310,14 +285,6 @@ const Home = () => {
                                 pathname={location.pathname.split("/")[1]}
                                 title="Firms"
                             />
-                            // <TotalInstancesPieChart
-                            //     onTimeCount={totalActivitySummary.greenCount}
-                            //     atRiskCount={totalActivitySummary.amberCount}
-                            //     overdueCount={totalActivitySummary.redCount}
-                            //     completeCount={activeCases.filter(result => result._current_step === "Complete").length}
-                            //     pathname={location.pathname.split("/")[1]}
-                            //     title="Firms"
-                            // />
                         }
                         <ActivityBarChart
                             activitySummaries={activitySummaries}

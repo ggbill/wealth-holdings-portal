@@ -9,7 +9,7 @@ interface InputProps {
     setFilteredActiveCases: (filteredActiveCases: App.ActivityDetail[]) => void
     setTableFilters: (tableFilters: App.TableFilters) => void
     tableFilters: App.TableFilters
-    path: string
+    // path: string
     isFilterApplied: () => boolean
     clearAllFilters: () => void
     pathname: string
@@ -17,7 +17,7 @@ interface InputProps {
 
 const InstanceFilters = (props: InputProps) => {
     const [uniqueActivityNames, setUniqueActivityNames] = useState<string[]>([])
-    const [uniqueBdmNames, setUniqueBdmNames] = useState<string[]>([])
+    // const [uniqueBdmNames, setUniqueBdmNames] = useState<string[]>([])
     const [uniqueRagStatuses, setUniqueRagStatuses] = useState<string[]>([])
 
     const commonFunctions = useCommonFunctions()
@@ -30,8 +30,8 @@ const InstanceFilters = (props: InputProps) => {
         let uniqueRagStatuses: string[] = props.activeCases.map(activeCase => activeCase.confidence)
         setUniqueRagStatuses([...new Set(uniqueRagStatuses)])
 
-        let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
-        setUniqueBdmNames([...new Set(uniqueBdmNames)])
+        // let uniqueBdmNames: string[] = props.activeCases.map(activeCase => activeCase._current_assigned_to.Name)
+        // setUniqueBdmNames([...new Set(uniqueBdmNames)])
     }
 
     const filterActiveCases = (): void => {
@@ -40,8 +40,8 @@ const InstanceFilters = (props: InputProps) => {
         filteredActiveCases = filteredActiveCases.filter(activeCase => {
             return (
                 (props.tableFilters.currentActivity === "All" || activeCase._current_step === props.tableFilters.currentActivity) &&
-                (props.tableFilters.ragStatus === "All" || activeCase.confidence === props.tableFilters.ragStatus) &&
-                (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm)
+                (props.tableFilters.ragStatus === "All" || activeCase.confidence === props.tableFilters.ragStatus)
+                // (props.tableFilters.assignedBdm === "All" || activeCase._current_assigned_to.Name === props.tableFilters.assignedBdm)
             )
         });
 
@@ -106,23 +106,6 @@ const InstanceFilters = (props: InputProps) => {
                         }
                     </Select>
                 </FormControl>
-                {/* <FormControl className="assigned-bdm">
-                    <InputLabel id="assigned-bdm-select-label">Assignee</InputLabel>
-                    <Select
-                        labelId="assigned-bdm-select-label"
-                        id="assigned-bdm-select"
-                        name="assignedBdm"
-                        value={props.tableFilters.assignedBdm}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="All">All</MenuItem>
-                        {
-                            uniqueBdmNames.map((bdmName: string, index: number) => {
-                                return (<MenuItem className="highlighted" key={index} value={bdmName}>{bdmName}</MenuItem>)
-                            })
-                        }
-                    </Select>
-                </FormControl> */}
             </div>
         </div>
     )

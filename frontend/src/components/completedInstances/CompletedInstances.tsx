@@ -12,7 +12,11 @@ import _ from "lodash"
 import moment from 'moment'
 import SummaryFigures from '../activePipeline/SummaryFigures'
 
-const CompletedInstances = () => {
+interface InputProps {
+    auth: any,
+}
+
+const CompletedInstances = (props: InputProps) => {
 
     const isCancelled = useRef(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -21,6 +25,8 @@ const CompletedInstances = () => {
     const [columnToSort, setColumnToSort] = useState("_created_at")
     const [sortDirection, setSortDirection] = useState("desc")
     const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+    const { getProfile, isAuthenticated } = props.auth;
 
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
@@ -103,6 +109,19 @@ const CompletedInstances = () => {
 
 
     useEffect(() => {
+        if (isAuthenticated() && !isCancelled.current) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                setAuthorisedUserProfile(profile)
+
+                if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
+                    setIsSimplyBizFilter(false)
+                }
+            });
+        }
+
         return () => {
             isCancelled.current = true;
         };
@@ -129,16 +148,20 @@ const CompletedInstances = () => {
     return (
         <div className="closed-instance-list">
 
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isSimplyBizFilter}
-                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
-                        name="isSimplyBizFilter"
+            {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                <div className="sb-filter-wrapper">
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={isSimplyBizFilter}
+                                onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                                name="isSimplyBizFilter"
+                            />
+                        }
+                        label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
                     />
-                }
-                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
-            />
+                </div>
+            }
 
             <div className="summary-figures-wrapper">
                 <SummaryFigures

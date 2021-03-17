@@ -7,7 +7,6 @@ import useSellerOnboardingExcelFunctions from "../../hooks/useSellerOnboardingEx
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, FormControlLabel, Switch } from "@material-ui/core"
 import Loading from '../shared/Loading'
 import moment from 'moment'
-import useCommonFunctions from '../../hooks/useCommonFunctions'
 import InstanceFilters from './InstanceFilters'
 import SummaryFigures from './SummaryFigures'
 import _ from "lodash"
@@ -17,11 +16,12 @@ import { Link } from 'react-router-dom'
 import RagIndicator from '../shared/RagIndicator'
 import { useLocation } from 'react-router-dom'
 
-const ActivePipeline = ({ match }) => {
+interface InputProps {
+    auth: any,
+}
+
+const ActivePipeline = (props: InputProps) => {
     const isCancelled = useRef(false)
-    // const marriageBureauApi = useFetch("marriage-bureau")
-    // const buyerOnboardingApi = useFetch("buyer-onboarding")
-    // const sellerOnboardingApi = useFetch("seller-onboarding")
     const settingsApi = useFetch("settings")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
@@ -31,11 +31,12 @@ const ActivePipeline = ({ match }) => {
     const [sortDirection, setSortDirection] = useState("desc")
     const [tableFilters, setTableFilters] = useState<App.TableFilters>({ currentActivity: "All", assignedBdm: "All", ragStatus: "All", representing: "All" })
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
-    const commonFunctions = useCommonFunctions()
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
     const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
+    const { getProfile, isAuthenticated } = props.auth;
 
     let location = useLocation();
 
@@ -149,6 +150,26 @@ const ActivePipeline = ({ match }) => {
         }
     }
 
+    React.useEffect(() => {
+        if (isAuthenticated() && !isCancelled.current) {
+            getProfile((err, profile) => {
+                if (err) {
+                    console.log(err)
+                }
+                setAuthorisedUserProfile(profile)
+
+                if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
+                    setIsSimplyBizFilter(false)
+                }
+            });
+        }
+
+        return () => {
+            isCancelled.current = true;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
+    }, []);
+
     useEffect(() => {
 
         if (columnToSort === "ragStatus") {
@@ -182,10 +203,6 @@ const ActivePipeline = ({ match }) => {
         getActivitySummaries()
         getLatestDataForActiveCases()
 
-        // return () => {
-        //     isCancelled.current = true;
-        // };
-
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [isSimplyBizFilter]);
 
@@ -204,16 +221,18 @@ const ActivePipeline = ({ match }) => {
     return (
         <div className="instance-list">
 
-            <FormControlLabel
-                control={
-                    <Switch
-                        checked={isSimplyBizFilter}
-                        onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
-                        name="isSimplyBizFilter"
-                    />
-                }
-                label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
-            />
+            {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={isSimplyBizFilter}
+                            onChange={() => setIsSimplyBizFilter(!isSimplyBizFilter)}
+                            name="isSimplyBizFilter"
+                        />
+                    }
+                    label={`Display SimplyBiz Data Only: ${isSimplyBizFilter.valueOf()}`}
+                />
+            }
 
             <InstanceFilters
                 activeCases={activeCases}
@@ -221,7 +240,7 @@ const ActivePipeline = ({ match }) => {
                 setFilteredActiveCases={setFilteredActiveCases}
                 setTableFilters={setTableFilters}
                 tableFilters={tableFilters}
-                path={match.path}
+                // path={props.match.path}
                 isFilterApplied={isFilterApplied}
                 clearAllFilters={clearAllFilters}
                 pathname={location.pathname.split("/")[1]}
@@ -303,7 +322,7 @@ const ActivePipeline = ({ match }) => {
                                         </div>
                                     </div>
                                 </TableCell>
-                                
+
                                 // <TableCell className="hide-on-mobile">
                                 //     <div className="table-header-wrapper">
                                 //         <div onClick={() => handleSort("assignedBdm")} className="tableHeaderCell">
@@ -337,7 +356,7 @@ const ActivePipeline = ({ match }) => {
                                 </TableCell>
                                 {location.pathname.split("/")[1] === "buyer-onboarding" &&
                                     <TableCell className="hide-on-mobile" align="center">{activeCase.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activeCase.fundsAvailable) : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(0)}</TableCell>
-                                    
+
                                     // <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
                                 }
 
@@ -348,7 +367,7 @@ const ActivePipeline = ({ match }) => {
             </Paper>
             <div className="button-container">
                 {location.pathname.split("/")[1] === "marriage-bureau" && <Button className="wh-button" variant="contained" onClick={() => marriageBureauExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
-                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => {sellerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries); console.log(filteredActiveCases)}}>Export</Button>}
+                {location.pathname.split("/")[1] === "seller-onboarding" && <Button className="wh-button" variant="contained" onClick={() => { sellerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries); console.log(filteredActiveCases) }}>Export</Button>}
                 {location.pathname.split("/")[1] === "buyer-onboarding" && <Button className="wh-button" variant="contained" onClick={() => buyerOnboardingExcelFunctions.generateInstanceList(filteredActiveCases, activitySummaries)}>Export</Button>}
             </div>
         </div >
