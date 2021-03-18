@@ -27,7 +27,7 @@ const ActivePipeline = (props: InputProps) => {
     const [error, setError] = useState<string>("")
     const [activeCases, setActiveCases] = useState<App.ActivityDetail[]>([])
     const [filteredActiveCases, setFilteredActiveCases] = useState<App.ActivityDetail[]>([])
-    const [columnToSort, setColumnToSort] = useState("_created_at")
+    const [columnToSort, setColumnToSort] = useState("_last_action_performed_at")
     const [sortDirection, setSortDirection] = useState("desc")
     const [tableFilters, setTableFilters] = useState<App.TableFilters>({ currentActivity: "All", assignedBdm: "All", ragStatus: "All", representing: "All" })
     const [activitySummaries, setActivitySummaries] = useState<App.ActivitySummary[]>([])
@@ -92,24 +92,24 @@ const ActivePipeline = (props: InputProps) => {
                         if (location.pathname.split("/")[1] === "marriage-bureau") {
                             setActiveCases(data.filter((activeCase) =>
                                 activeCase.isSimplyBizDeal === true
-                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
 
                             setFilteredActiveCases(data.filter((activeCase) =>
                                 activeCase.isSimplyBizDeal === true
-                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
 
                         } else {
                             setActiveCases(data.filter((activeCase) =>
                                 (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
-                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
 
                             setFilteredActiveCases(data.filter((activeCase) =>
                                 (activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true")
-                            ).sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                            ).sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
                         }
                     } else {
-                        setActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
-                        setFilteredActiveCases(data.sort((a, b) => new Date(b._created_at).getTime() - new Date(a._created_at).getTime()))
+                        setActiveCases(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
+                        setFilteredActiveCases(data.sort((a, b) => new Date(b._last_action_performed_at).getTime() - new Date(a._last_action_performed_at).getTime()))
                     }
 
                     setLoading(false)
@@ -173,11 +173,17 @@ const ActivePipeline = (props: InputProps) => {
     useEffect(() => {
 
         if (columnToSort === "ragStatus") {
-
             setFilteredActiveCases(_.orderBy(filteredActiveCases,
                 function (item: App.ActivityDetail) {
                     return (item.confidence);
                     // return (commonFunctions.determineRAGStatus(item, activitySummaries));
+                },
+                sortDirection))
+
+        } else if (columnToSort === "_last_action_performed_at") {
+            setFilteredActiveCases(_.orderBy(filteredActiveCases,
+                function (item: App.ActivityDetail) {
+                    return (new Date(item._last_action_performed_at).getTime());
                 },
                 sortDirection))
         } else if (columnToSort === "assignedBdm") {
@@ -287,8 +293,20 @@ const ActivePipeline = (props: InputProps) => {
                             </TableCell>
                             <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" >
-                                    <div onClick={() => handleSort("_created_at")} className="tableHeaderCell">
+                                    <div onClick={() => handleSort("_last_action_performed_at")} className="tableHeaderCell">
                                         <span>Activity Start Date</span>
+                                        {
+                                            columnToSort === "_last_action_performed_at" ? (
+                                                sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+                                            ) : null
+                                        }
+                                    </div>
+                                </div>
+                            </TableCell>
+                            <TableCell className="hide-on-mobile">
+                                <div className="table-header-wrapper" >
+                                    <div onClick={() => handleSort("_created_at")} className="tableHeaderCell">
+                                        <span>Process Start Date</span>
                                         {
                                             columnToSort === "_created_at" ? (
                                                 sortDirection === 'asc' ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
@@ -297,6 +315,7 @@ const ActivePipeline = (props: InputProps) => {
                                     </div>
                                 </div>
                             </TableCell>
+
                             <TableCell className="hide-on-mobile">
                                 <div className="table-header-wrapper" >
                                     <div onClick={() => handleSort("ragStatus")} className="tableHeaderCell">
@@ -309,7 +328,7 @@ const ActivePipeline = (props: InputProps) => {
                                     </div>
                                 </div>
                             </TableCell>
-                            {location.pathname.split("/")[1] === "buyer-onboarding" &&
+                            {/* {location.pathname.split("/")[1] === "buyer-onboarding" &&
                                 <TableCell className="hide-on-mobile">
                                     <div className="table-header-wrapper">
                                         <div onClick={() => handleSort("fundsAvailable")} className="tableHeaderCell">
@@ -335,7 +354,7 @@ const ActivePipeline = (props: InputProps) => {
                                 //         </div>
                                 //     </div>
                                 // </TableCell>
-                            }
+                            } */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -349,16 +368,32 @@ const ActivePipeline = (props: InputProps) => {
                                 {location.pathname.split("/")[1] === "seller-onboarding" && <TableCell><Link to={'/seller-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
                                 {location.pathname.split("/")[1] === "buyer-onboarding" && <TableCell><Link to={'/buyer-onboarding/instance-details/' + activeCase._id}>{activeCase.firmName}</Link></TableCell>}
                                 <TableCell align="center">{activeCase._current_step}</TableCell>
-                                <TableCell className="hide-on-mobile" align="center">{moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}</TableCell>
+                                <TableCell className="hide-on-mobile" align="center">
+                                    <div className="date-wrapper">
+                                        <span>{`${moment(activeCase._last_action_performed_at).format("HH:mm DD/MM/YYYY")}`}</span>
+                                        {!isSimplyBizFilter &&
+                                            <span style={{ fontSize: "0.8em" }}>{` (${moment.duration(moment(moment().startOf('day')).diff(activeCase._last_action_performed_at)).asDays().toFixed(1)} days ago)`}</span>
+                                        }
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hide-on-mobile" align="center">
+                                    <div className="date-wrapper">
+                                        <span>{`${moment(activeCase._created_at).format("HH:mm DD/MM/YYYY")}`}</span>
+                                        {!isSimplyBizFilter &&
+                                            <span style={{ fontSize: "0.8em" }}>{` (${moment.duration(moment(moment().startOf('day')).diff(activeCase._created_at)).asDays().toFixed(1)} days ago)`}</span>
+                                        }
+                                    </div>
+                                </TableCell>
+
                                 <TableCell className="hide-on-mobile" align="center">
                                     <RagIndicator ragStatus={activeCase.confidence} widthPx={30} />
                                     {/* <RagIndicator ragStatus={commonFunctions.determineRAGStatus(activeCase, activitySummaries)} widthPx={30} /> */}
                                 </TableCell>
-                                {location.pathname.split("/")[1] === "buyer-onboarding" &&
+                                {/* {location.pathname.split("/")[1] === "buyer-onboarding" &&
                                     <TableCell className="hide-on-mobile" align="center">{activeCase.fundsAvailable ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(activeCase.fundsAvailable) : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(0)}</TableCell>
 
                                     // <TableCell className="hide-on-mobile" align="center">{activeCase._current_assigned_to.Name}</TableCell>
-                                }
+                                } */}
 
                             </TableRow>
                         ))}
