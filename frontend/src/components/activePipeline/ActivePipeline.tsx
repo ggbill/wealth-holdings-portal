@@ -34,7 +34,7 @@ const ActivePipeline = (props: InputProps) => {
     const marriageBureauExcelFunctions = useMarriageBureauExcelFunctions();
     const buyerOnboardingExcelFunctions = useBuyerOnboardingExcelFunctions();
     const sellerOnboardingExcelFunctions = useSellerOnboardingExcelFunctions();
-    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(false)
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(true)
     const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
     const { getProfile, isAuthenticated } = props.auth;
 
@@ -228,6 +228,7 @@ const ActivePipeline = (props: InputProps) => {
         <>
             {activeCases.length > 1 &&
                 <div className="instance-list">
+                    {isSimplyBizFilter.valueOf()}
 
                     {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
                         <FormControlLabel
