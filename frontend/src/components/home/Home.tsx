@@ -26,7 +26,7 @@ const Home = (props: InputProps) => {
     const [actions, setActions] = useState<App.ActivityDetail[]>([])
     const [totalActivitySummary, setTotalActivitySummary] = useState<App.ActivitySummary>({} as App.ActivitySummary)
     // const commonFunctions = useCommonFunctions()
-    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(true)
+    const [isSimplyBizFilter, setIsSimplyBizFilter] = useState<boolean>(null)
     const [authorisedUserProfile, setAuthorisedUserProfile] = useState<any>(null)
 
     const { getProfile, isAuthenticated } = props.auth;
@@ -206,6 +206,8 @@ const Home = (props: InputProps) => {
 
                 if (profile && profile.name !== "a.morley@simplybiz.co.uk") {
                     setIsSimplyBizFilter(false)
+                }else{
+                    setIsSimplyBizFilter(true)
                 }
             });
         }
@@ -217,9 +219,12 @@ const Home = (props: InputProps) => {
     }, []);
 
     React.useEffect(() => {
-        getCompletedCases()
-        getLatestDataForActiveCases()
-        getActions()
+        if (isSimplyBizFilter !== null){
+            getCompletedCases()
+            getLatestDataForActiveCases()
+            getActions()
+        }
+        
 
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [isSimplyBizFilter]);
@@ -238,9 +243,9 @@ const Home = (props: InputProps) => {
 
     return (
         <>
-            {activeCases &&
+            {activeCases.length > 0 &&
                 <div className="content home-page">
-                    {authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
+                    {isSimplyBizFilter !== null && authorisedUserProfile && authorisedUserProfile.name !== "a.morley@simplybiz.co.uk" &&
                         <FormControlLabel
                             control={
                                 <Switch
