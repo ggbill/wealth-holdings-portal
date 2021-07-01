@@ -62,15 +62,17 @@ const ClosedInstances = (props: InputProps) => {
                     if (isSimplyBizFilter) {
                         if (location.pathname.split("/")[1] === "marriage-bureau") {
                             setClosedCases(data.filter((activeCase) =>
-                                (activeCase.isSimplyBizDeal === true && activeCase.activityAction === "Close Case")
+                                (activeCase.isSimplyBizDeal === true && (activeCase.activityAction === "Close Case" || activeCase.completeActivityAction === "Close Case"))
                             ))
                         } else {
                             setClosedCases(data.filter((activeCase) =>
-                                ((activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true") && activeCase.activityAction === "Close Case")
+                                ((activeCase.isSimplyBizMember === true || activeCase.isSimplyBizMember === "true") && (activeCase.activityAction === "Close Case" || activeCase.completeActivityAction === "Close Case"))
                             ))
                         }
                     } else {
-                        setClosedCases(data.filter(result => result.activityAction === "Close Case"))
+                        // console.log(data.filter(result => (result.activityAction === "Close Case" || result.completeActivityAction === "Close Case")))
+                        // console.log(data.filter(result => ( result.completeActivityAction === "Close Case")))
+                        setClosedCases(data.filter(result => (result.activityAction === "Close Case" || result.completeActivityAction === "Close Case")))
                     }
 
                     setLoading(false)
