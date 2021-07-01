@@ -316,7 +316,7 @@ const InstanceDetails = ({ match }) => {
 
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
-                            {activityDetail.activityAction !== "Close Case" &&
+                            {(activityDetail.activityAction !== "Close Case" && activityDetail.completeActivityAction !== "Close Case") &&
                                 <>
                                     <div className="completion-details">
                                         <div className="data-section">
@@ -538,7 +538,7 @@ const InstanceDetails = ({ match }) => {
                                     }
                                 </>
                             }
-                            {activityDetail.activityAction === "Close Case" &&
+                            {(activityDetail.activityAction === "Close Case" || activityDetail.completeActivityAction === "Close Case") &&
                                 <>
                                     <div className="data-section">
                                         <TextField
