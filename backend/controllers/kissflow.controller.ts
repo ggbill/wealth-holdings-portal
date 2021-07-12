@@ -63,7 +63,7 @@ export namespace KissFlowController {
                 finalTransactionReferenceNumber: webhookBody.Transaction_Reference_Number_1,
                 currentStatus: webhookBody.Current_Status,
                 confidence: determineConfidence(webhookBody.Confidence),
-                activityAction: webhookBody.Activity_Action
+                activityAction: webhookBody.Activity_Action,
             }, function (err, webhook: IMarriageBureauWebhook) {
                 if (err) {
                     console.log(err);

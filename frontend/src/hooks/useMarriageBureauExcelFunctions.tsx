@@ -43,7 +43,7 @@ const useExcelFunctions = () => {
             worksheet.addRow([
                 activeCase.buyer,
                 activeCase.seller,
-                moment(activeCase._submitted_at).format("HH:mm DD/MM/YYYY"),
+                moment(activeCase._created_at).format("HH:mm DD/MM/YYYY"),
                 commonFunctions.formatConfidenceStatus(activeCase.confidence),
                 // commonFunctions.determineRAGStatus(activeCase, activitySummaries),
                 activeCase.currentStatus,
@@ -53,7 +53,7 @@ const useExcelFunctions = () => {
                 activeCase.wealthHoldingsFee,
                 activeCase.simplyBizFee,
                 activeCase.introducerFee,
-                moment(activeCase.completionDate).format("HH:mm DD/MM/YYYY"),
+                moment(activeCase.completionDate).format("DD/MM/YYYY"),
                 activeCase.aum,
                 activeCase.recurringFees,
                 activeCase.turnover,

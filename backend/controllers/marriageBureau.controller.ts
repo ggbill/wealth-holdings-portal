@@ -36,6 +36,7 @@ export namespace MarriageBureauController {
                         valuation: { $last: "$valuation" },
                         currentStatus: { $last: "$currentStatus" },
                         confidence: { $last: "$confidence" },
+                        completionDate: { $last: "$completionDate" }
                     },
                 },
                 { $sort: { _last_action_performed_at: -1 } },
@@ -64,6 +65,7 @@ export namespace MarriageBureauController {
                         valuation: { $first: "$valuation" },
                         currentStatus: { $first: "$currentStatus" },
                         confidence: { $first: "$confidence" },
+                        completionDate: { $last: "$completionDate" }
                     }
                 }], function (err, result) {
                     if (err) {
