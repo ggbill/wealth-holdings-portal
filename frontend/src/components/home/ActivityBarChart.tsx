@@ -136,7 +136,7 @@ const ActivityBarChart = (props: InputProps) => {
                             }
                         }
                     });
-                    return instances
+                    return instances.sort()
                 }
             }
         },
