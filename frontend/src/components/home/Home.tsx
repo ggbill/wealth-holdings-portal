@@ -293,6 +293,7 @@ const Home = (props: InputProps) => {
                         }
                         <ActivityBarChart
                             activitySummaries={activitySummaries}
+                            activeCases={activeCases}
                             pathname={location.pathname.split("/")[1]}
                             title="Pipeline - Activity Breakdown"
                         />

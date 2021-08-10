@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 
 interface InputProps {
     activitySummaries: App.ActivitySummary[]
+    activeCases: App.ActivityDetail[]
     pathname: string
     title: string
 }
@@ -82,24 +83,24 @@ const ActivityBarChart = (props: InputProps) => {
         labels: getLabels(),
         datasets: [
             {
-                label: highConfidenceColor,
+                label: "HIGH",
                 data: getGreenCountDataset(),
-                backgroundColor: '#57ab6e',
+                backgroundColor: highConfidenceColor,
             },
             {
-                label: mediumConfidenceColor,
+                label: "MEDIUM",
                 data: getAmberCountDataset(),
-                backgroundColor: '#FF8C42',
+                backgroundColor: mediumConfidenceColor,
             },
             {
-                label: lowConfidenceColor,
+                label: "LOW",
                 data: getRedCountDataset(),
-                backgroundColor: '#EE6055',
+                backgroundColor: lowConfidenceColor,
             },
             {
-                label: onHoldColor,
+                label: "HOLD",
                 data: getGreyCountDataset(),
-                backgroundColor: '#a7a7a7',
+                backgroundColor: onHoldColor,
             }
         ]
 
@@ -122,7 +123,22 @@ const ActivityBarChart = (props: InputProps) => {
             display: false
         },
         tooltips: {
-            enabled: false
+            callbacks: {
+                label: function (tooltipItem, data) {
+                    let instances = []
+                    props.activeCases.forEach(activeCase => {
+                        if (activeCase._current_step === tooltipItem.xLabel) {
+                            if (activeCase.confidence === data.datasets[tooltipItem.datasetIndex].label) {
+                                { props.pathname === "marriage-bureau" &&  instances.push(`${activeCase.buyer} purchasing ${activeCase.seller}`)}
+                                { props.pathname === "seller-onboarding" && instances.push(activeCase.firmName) }
+                                { props.pathname === "buyer-onboarding" &&  instances.push(activeCase.firmName)}
+                                
+                            }
+                        }
+                    });
+                    return instances
+                }
+            }
         },
         responsive: true,
         maintainAspectRatio: false,
@@ -184,12 +200,12 @@ const ActivityBarChart = (props: InputProps) => {
                         </tbody>
                     </table>
                     <div className="chart-container">
-                       <Bar
-                        data={data}
-                        options={options}
-                    /> 
+                        <Bar
+                            data={data}
+                            options={options}
+                        />
                     </div>
-                    
+
                 </CardContent>
                 <CardActions>
                     {props.pathname === "marriage-bureau" && <Button component={Link} to="/marriage-bureau/active-pipeline">Pipeline <NavigateNextIcon /></Button>}
