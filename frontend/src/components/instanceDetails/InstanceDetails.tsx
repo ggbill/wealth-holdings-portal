@@ -14,6 +14,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import useCommonFunctions from '../../hooks/useCommonFunctions'
 import RagIndicator from '../shared/RagIndicator'
+import SummaryFigures from '../activePipeline/SummaryFigures'
 
 const InstanceDetails = ({ match }) => {
 
@@ -95,6 +96,8 @@ const InstanceDetails = ({ match }) => {
             setError("Unknown url")
         }
 
+
+
         return () => {
             isCancelled.current = true;
         };
@@ -116,7 +119,7 @@ const InstanceDetails = ({ match }) => {
 
     return (
         <div className="instance-details">
-            <h2>Overview</h2>
+            <h3>Overview</h3>
             {lastestActivityDetail && location.pathname.split("/")[1] !== "marriage-bureau" &&
                 <div className="summary-details-wrapper">
                     <TextField
@@ -260,7 +263,7 @@ const InstanceDetails = ({ match }) => {
                 />
             </div>}
 
-            {lastestActivityDetail && location.pathname.split("/")[1] === "buyer-onboarding" &&
+            {/* {lastestActivityDetail && location.pathname.split("/")[1] === "buyer-onboarding" &&
                 <div className="summary-details-wrapper">
                     <TextField
                         id="fundsAvailable"
@@ -271,9 +274,24 @@ const InstanceDetails = ({ match }) => {
                         }}
                     />
                 </div>
+            } */}
+
+            {lastestActivityDetail && (location.pathname.split("/")[1] === "marriage-bureau" ||
+            location.pathname.split("/")[1] === "buyer-onboarding") &&
+                <div className="summary-figures-wrapper">
+                    <SummaryFigures
+                        activeCases={[lastestActivityDetail]}
+                        isFilterApplied={() => false}
+                        clearAllFilters={() => false}
+                        pathname={location.pathname.split("/")[1]}
+                        title="Summary Figures"
+                    />
+                </div>
             }
 
-            <h2>Instance History</h2>
+
+
+            <h3>Instance History</h3>
             {instanceDetails.map((activityDetail: App.ActivityDetail, index) => (
                 <React.Fragment key={index}>
                     {/* {activityDetail._current_context[0].Name !== "Start" && */}
